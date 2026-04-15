@@ -3,186 +3,203 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ATEŞOĞLU MARKET</title>
+<title>ATEŞOĞLU MARKET PRO</title>
 
 <style>
-body { font-family:Arial; background:#111; color:#fff; padding:15px; }
+body { font-family:Arial; background:#111; color:#fff; padding:10px; }
 h1 { text-align:center; color:#00d084; }
 input, button {
  width:100%; padding:10px; margin:5px 0;
  border:none; border-radius:8px;
 }
-button { background:#00d084; color:white; font-weight:bold; }
+button { background:#00d084; color:white; }
 .card { background:#222; padding:10px; margin-top:10px; border-radius:10px; }
-.tabs button { width:32%; margin:2px; }
+.tabs button { width:24%; }
 .page { display:none; }
-.row { display:flex; gap:5px; }
-.row input { flex:1; }
-.topbar { display:flex; justify-content:space-between; align-items:center; }
-.badge { background:#333; padding:6px 10px; border-radius:10px; }
 </style>
 
-<!-- Excel -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://unpkg.com/html5-qrcode"></script>
 
 </head>
 
 <body>
 
-<h1>🛒 ATEŞOĞLU MARKET</h1>
-
-<div class="topbar">
-  <div class="badge">Kasa: <b id="kasaToplam">0 ₺</b></div>
-  <div class="badge">Ürün: <b id="urunSayisi">0</b></div>
+<div id="loginPage">
+<h2>🔐 Giriş</h2>
+<input id="user" placeholder="Kullanıcı">
+<input id="pass" type="password" placeholder="Şifre">
+<button onclick="login()">Giriş</button>
 </div>
 
+<div id="app" style="display:none">
+
+<h1>🛒 ATEŞOĞLU MARKET PRO</h1>
+
 <div class="tabs">
-<button onclick="show('urunler')">Ürünler</button>
+<button onclick="show('urun')">Ürün</button>
 <button onclick="show('satis')">Satış</button>
+<button onclick="show('barkod')">Barkod</button>
 <button onclick="show('rapor')">Rapor</button>
 </div>
 
-<!-- ÜRÜNLER -->
-<div id="urunler" class="page">
-<h3>Ürün Ekle</h3>
-
-<input id="urunAd" placeholder="Ürün adı">
-<input id="urunFiyat" type="number" placeholder="Fiyat (₺)">
-<input id="urunStok" type="number" placeholder="Stok">
-
+<!-- ÜRÜN -->
+<div id="urun" class="page">
+<input id="ad" placeholder="Ürün adı">
+<input id="fiyat" type="number" placeholder="Fiyat">
+<input id="stok" type="number" placeholder="Stok">
+<input id="kod" placeholder="Barkod (isteğe bağlı)">
 <button onclick="urunEkle()">Ekle</button>
-
-<h3>Ürün Listesi</h3>
 <div id="urunList"></div>
 </div>
 
 <!-- SATIŞ -->
 <div id="satis" class="page">
-<h3>Satış (POS)</h3>
-
-<input id="ara" placeholder="Ürün ara" onkeyup="urunAra()">
-
-<div id="urunSecim"></div>
+<input id="ara" placeholder="Ara" onkeyup="filtre()">
+<div id="urunSec"></div>
 
 <h3>Sepet</h3>
 <div id="sepet"></div>
 
-<h3>Toplam: <span id="toplam">0 ₺</span></h3>
+<h3>Toplam: <span id="toplam">0</span> ₺</h3>
+<button onclick="satis()">Satışı Bitir</button>
+</div>
 
-<button onclick="satisTamamla()">Satışı Tamamla</button>
+<!-- BARKOD -->
+<div id="barkod" class="page">
+<button onclick="kamera()">Kamera Aç</button>
+<div id="reader"></div>
 </div>
 
 <!-- RAPOR -->
 <div id="rapor" class="page">
-<h3>Rapor</h3>
+<canvas id="chart"></canvas>
+<button onclick="excel()">Excel indir</button>
+</div>
 
-<div id="raporAlan"></div>
-
-<button onclick="excelExport()">Excel indir</button>
 </div>
 
 <script>
 
-let urunler = JSON.parse(localStorage.getItem("urunler")) || [];
+let urunler = JSON.parse(localStorage.getItem("urunler"))||[];
 let sepet = [];
-let kasa = JSON.parse(localStorage.getItem("kasa")) || 0;
+let kasa = Number(localStorage.getItem("kasa"))||0;
 
-function save(){
- localStorage.setItem("urunler", JSON.stringify(urunler));
- localStorage.setItem("kasa", JSON.stringify(kasa));
+// LOGIN
+function login(){
+ if(user.value=="admin" && pass.value=="1234"){
+  loginPage.style.display="none";
+  app.style.display="block";
+  show("urun");
+ }
 }
 
+// SAYFA
 function show(id){
  document.querySelectorAll(".page").forEach(x=>x.style.display="none");
  document.getElementById(id).style.display="block";
  render();
 }
 
+// KAYDET
+function save(){
+ localStorage.setItem("urunler",JSON.stringify(urunler));
+ localStorage.setItem("kasa",kasa);
+}
+
 // ÜRÜN EKLE
 function urunEkle(){
  urunler.push({
-  ad: urunAd.value,
-  fiyat: Number(urunFiyat.value),
-  stok: Number(urunStok.value)
+  ad:ad.value,
+  fiyat:Number(fiyat.value),
+  stok:Number(stok.value),
+  kod:kod.value
  });
  save(); render();
 }
 
-// ÜRÜN LİSTE
+// RENDER
 function render(){
- document.getElementById("urunList").innerHTML =
- urunler.map((u,i)=>`
- <div class="card">
- ${u.ad} - ${u.fiyat} ₺ - Stok: ${u.stok}
- </div>`).join("");
 
- document.getElementById("urunSecim").innerHTML =
- urunler.map((u,i)=>`
- <div class="card" onclick="sepeteEkle(${i})">
- ${u.ad} - ${u.fiyat} ₺
- </div>`).join("");
+ urunList.innerHTML = urunler.map(u=>
+ `<div class="card">${u.ad} - ${u.fiyat}₺ - Stok:${u.stok}</div>`
+ ).join("");
 
- document.getElementById("sepet").innerHTML =
- sepet.map(s=>`
- <div class="card">${s.ad} - ${s.fiyat} ₺</div>`).join("");
+ urunSec.innerHTML = urunler.map((u,i)=>
+ `<div class="card" onclick="sepeteEkle(${i})">${u.ad}</div>`
+ ).join("");
 
- let toplam = sepet.reduce((a,b)=>a+b.fiyat,0);
- document.getElementById("toplam").innerText = toplam + " ₺";
+ sepet.innerHTML = sepet.map(s=>
+ `<div class="card">${s.ad} - ${s.fiyat}</div>`
+ ).join("");
 
- document.getElementById("kasaToplam").innerText = kasa + " ₺";
- document.getElementById("urunSayisi").innerText = urunler.length;
+ let t = sepet.reduce((a,b)=>a+b.fiyat,0);
+ toplam.innerText = t;
 
- document.getElementById("raporAlan").innerHTML = `
- Toplam Kasa: ${kasa} ₺<br>
- Ürün Sayısı: ${urunler.length}`;
+ grafik();
 }
 
-// SEPETE EKLE
+// SEPET
 function sepeteEkle(i){
- if(urunler[i].stok <= 0){
-  alert("Stok yok!");
-  return;
- }
+ if(urunler[i].stok<=0) return alert("Stok yok");
  sepet.push(urunler[i]);
  render();
 }
 
-// SATIŞ TAMAMLA
-function satisTamamla(){
- let toplam = sepet.reduce((a,b)=>a+b.fiyat,0);
-
+// SATIŞ
+function satis(){
+ let t = sepet.reduce((a,b)=>a+b.fiyat,0);
  sepet.forEach(s=>{
   let u = urunler.find(x=>x.ad==s.ad);
   if(u) u.stok--;
  });
-
- kasa += toplam;
- sepet = [];
-
+ kasa += t;
+ sepet=[];
  save(); render();
 }
 
-// ÜRÜN ARAMA
-function urunAra(){
+// ARAMA
+function filtre(){
  let q = ara.value.toLowerCase();
- document.getElementById("urunSecim").innerHTML =
- urunler.filter(u=>u.ad.toLowerCase().includes(q))
- .map((u,i)=>`
- <div class="card" onclick="sepeteEkle(${i})">
- ${u.ad} - ${u.fiyat} ₺
- </div>`).join("");
+ urunSec.innerHTML = urunler
+ .filter(u=>u.ad.toLowerCase().includes(q))
+ .map((u,i)=>`<div class="card" onclick="sepeteEkle(${i})">${u.ad}</div>`)
+ .join("");
 }
 
-// EXCEL EXPORT
-function excelExport(){
+// BARKOD
+function kamera(){
+ new Html5Qrcode("reader").start(
+  { facingMode:"environment" },
+  { fps:10 },
+  code=>{
+   let u = urunler.find(x=>x.kod==code);
+   if(u){ sepet.push(u); render(); }
+  }
+ );
+}
+
+// GRAFİK
+function grafik(){
+ new Chart(document.getElementById("chart"),{
+  type:"bar",
+  data:{
+   labels:["Ürün","Kasa"],
+   datasets:[{data:[urunler.length,kasa]}]
+  }
+ });
+}
+
+// EXCEL
+function excel(){
  let ws = XLSX.utils.json_to_sheet(urunler);
  let wb = XLSX.utils.book_new();
- XLSX.utils.book_append_sheet(wb, ws, "Ürünler");
+ XLSX.utils.book_append_sheet(wb, ws, "Market");
  XLSX.writeFile(wb, "market.xlsx");
 }
 
-// BAŞLANGIÇ
-show("urunler");
+show("urun");
 
 </script>
 
