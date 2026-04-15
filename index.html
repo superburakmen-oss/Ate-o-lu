@@ -25,6 +25,14 @@ button { background:#00d084; color:white; cursor:pointer; }
 
 .tabs button { width:24%; }
 .page { display:none; }
+
+.small-info {
+ background:#1a1a1a;
+ padding:10px;
+ border-radius:10px;
+ margin:10px 0;
+ color:#00d084;
+}
 </style>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
@@ -46,6 +54,10 @@ button { background:#00d084; color:white; cursor:pointer; }
 
 <h1>🛒 ATEŞOĞLU MARKET PRO</h1>
 
+<div class="small-info">
+💰 KASA: <b id="kasaText">0</b> ₺
+</div>
+
 <div class="tabs">
 <button onclick="show('urun')">Ürün</button>
 <button onclick="show('satis')">Satış</button>
@@ -58,7 +70,7 @@ button { background:#00d084; color:white; cursor:pointer; }
 <input id="ad" placeholder="Ürün adı">
 <input id="fiyat" type="number" placeholder="Fiyat">
 <input id="stok" type="number" placeholder="Stok">
-<input id="kod" placeholder="Barkod (isteğe bağlı)">
+<input id="kod" placeholder="Barkod">
 
 <button onclick="urunEkle()">Ekle</button>
 <button onclick="tumStokSifirla()">🧨 Tüm Stokları Sıfırla</button>
@@ -69,13 +81,18 @@ button { background:#00d084; color:white; cursor:pointer; }
 <!-- SATIŞ -->
 <div id="satis" class="page">
 <input id="ara" placeholder="Ara" onkeyup="filtre()">
+
 <div id="urunSec"></div>
 
-<h3>Sepet</h3>
+<h3>🛒 Sepet</h3>
 <div id="sepet"></div>
 
 <h3>Toplam: <span id="toplam">0</span> ₺</h3>
+
 <button onclick="satis()">Satışı Bitir</button>
+
+<div id="fatura" class="card"></div>
+
 </div>
 
 <!-- BARKOD -->
@@ -133,17 +150,16 @@ function urunEkle(){
  render();
 }
 
-// 🗑️ TEK ÜRÜN SİL
+// 🗑️ SİL
 function urunSil(i){
  urunler.splice(i,1);
  save();
  render();
 }
 
-// 🧨 TÜM STOK SIFIRLA
+// 🧨 SIFIRLA
 function tumStokSifirla(){
- if(!confirm("TÜM ÜRÜNLER SİLİNECEK. Emin misin?")) return;
-
+ if(!confirm("Tüm ürünler silinecek")) return;
  urunler = [];
  save();
  render();
@@ -152,8 +168,10 @@ function tumStokSifirla(){
 // 📊 RENDER
 function render(){
 
+ kasaText.innerText = kasa;
+
  urunList.innerHTML = urunler.map((u,i)=>
- `<div class="card" style="background:${u.stok<=0?'#8b0000':'#222'}">
+ `<div class="card">
   ${u.ad} - ${u.fiyat}₺ - Stok:${u.stok}
   <button onclick="urunSil(${i})">Sil</button>
  </div>`
@@ -163,9 +181,7 @@ function render(){
  `<div class="card" onclick="sepeteEkle(${i})">${u.ad}</div>`
  ).join("");
 
- sepet.innerHTML = sepet.map(s=>
- `<div class="card">${s.ad} - ${s.fiyat}</div>`
- ).join("");
+ sepetRender();
 
  let t = sepet.reduce((a,b)=>a+b.fiyat,0);
  toplam.innerText = t;
@@ -173,11 +189,27 @@ function render(){
  grafik();
 }
 
-// 🛒 SEPETE EKLE (STOK KONTROL)
+// 🛒 SEPET RENDER (SİLME DESTEKLİ)
+function sepetRender(){
+ sepet.innerHTML = sepet.map((s,i)=>
+ `<div class="card">
+  ${s.ad} - ${s.fiyat}₺
+  <button onclick="sepettenSil(${i})">❌</button>
+ </div>`
+ ).join("");
+}
+
+// ❌ SEPETTEN SİL
+function sepettenSil(i){
+ sepet.splice(i,1);
+ render();
+}
+
+// ➕ SEPETE EKLE
 function sepeteEkle(i){
 
  if(urunler[i].stok <= 0){
-  alert("❌ Bu ürünün stoğu bitmiştir!");
+  alert("Stok bitmiş");
   return;
  }
 
@@ -185,32 +217,36 @@ function sepeteEkle(i){
  render();
 }
 
-// 💰 SATIŞ (STOK KORUMALI)
+// 💰 SATIŞ + FATURA
 function satis(){
 
- let stokSorun = false;
-
- sepet.forEach(s=>{
-  let u = urunler.find(x=>x.ad == s.ad);
-
-  if(u){
-   if(u.stok <= 0){
-    stokSorun = true;
-   } else {
-    u.stok--;
-   }
-  }
- });
-
- if(stokSorun){
-  alert("❌ Satış iptal edildi: Stok problemi var!");
-  render();
+ if(sepet.length === 0){
+  alert("Sepet boş");
   return;
  }
 
- kasa += sepet.reduce((a,b)=>a+b.fiyat,0);
+ let toplamTutar = sepet.reduce((a,b)=>a+b.fiyat,0);
 
+ let faturaHTML = `
+ <h3>🧾 FATURA</h3>
+ <hr>
+ ${sepet.map(s=>`<div>${s.ad} - ${s.fiyat}₺</div>`).join("")}
+ <hr>
+ <b>TOPLAM: ${toplamTutar} ₺</b>
+ `;
+
+ fatura.innerHTML = faturaHTML;
+
+ sepet.forEach(s=>{
+  let u = urunler.find(x=>x.ad == s.ad);
+  if(u && u.stok > 0){
+   u.stok--;
+  }
+ });
+
+ kasa += toplamTutar;
  sepet = [];
+
  save();
  render();
 }
@@ -233,10 +269,7 @@ function kamera(){
   code=>{
    let u = urunler.find(x=>x.kod==code);
    if(u){
-    if(u.stok <= 0){
-     alert("❌ Stok bitmiş!");
-     return;
-    }
+    if(u.stok <= 0) return alert("Stok yok");
     sepet.push({...u});
     render();
    }
