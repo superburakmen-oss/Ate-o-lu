@@ -1,103 +1,234 @@
-//////////////////////////////
-// ATEŞOĞLU MARKET PRO
-// STOK YÖNETİM MODÜLÜ
-//////////////////////////////
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ATEŞOĞLU MARKET PRO</title>
 
-const STORAGE_KEY = "atesogluStocks";
+<style>
+body { font-family:Arial; background:#111; color:#fff; padding:10px; }
+h1 { text-align:center; color:#00d084; }
+input, button {
+ width:100%; padding:10px; margin:5px 0;
+ border:none; border-radius:8px;
+}
+button { background:#00d084; color:white; }
+.card { background:#222; padding:10px; margin-top:10px; border-radius:10px; }
+.tabs button { width:24%; }
+.page { display:none; }
+</style>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://unpkg.com/html5-qrcode"></script>
 
-// 📦 STOKLARI ÇEK
-function getStocks() {
-    return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+</head>
+
+<body>
+
+<div id="loginPage">
+<h2>🔐 Giriş</h2>
+<input id="user" placeholder="Kullanıcı">
+<input id="pass" type="password" placeholder="Şifre">
+<button onclick="login()">Giriş</button>
+</div>
+
+<div id="app" style="display:none">
+
+<h1>🛒 ATEŞOĞLU MARKET PRO</h1>
+
+<div class="tabs">
+<button onclick="show('urun')">Ürün</button>
+<button onclick="show('satis')">Satış</button>
+<button onclick="show('barkod')">Barkod</button>
+<button onclick="show('rapor')">Rapor</button>
+</div>
+
+<!-- ÜRÜN -->
+<div id="urun" class="page">
+<input id="ad" placeholder="Ürün adı">
+<input id="fiyat" type="number" placeholder="Fiyat">
+<input id="stok" type="number" placeholder="Stok">
+<input id="kod" placeholder="Barkod (isteğe bağlı)">
+
+<button onclick="urunEkle()">Ekle</button>
+<button onclick="tumStokSifirla()">🧨 Tüm Stokları Sıfırla</button>
+
+<div id="urunList"></div>
+</div>
+
+<!-- SATIŞ -->
+<div id="satis" class="page">
+<input id="ara" placeholder="Ara" onkeyup="filtre()">
+<div id="urunSec"></div>
+
+<h3>Sepet</h3>
+<div id="sepet"></div>
+
+<h3>Toplam: <span id="toplam">0</span> ₺</h3>
+<button onclick="satis()">Satışı Bitir</button>
+</div>
+
+<!-- BARKOD -->
+<div id="barkod" class="page">
+<button onclick="kamera()">Kamera Aç</button>
+<div id="reader"></div>
+</div>
+
+<!-- RAPOR -->
+<div id="rapor" class="page">
+<canvas id="chart"></canvas>
+<button onclick="excel()">Excel indir</button>
+</div>
+
+</div>
+
+<script>
+
+let urunler = JSON.parse(localStorage.getItem("urunler"))||[];
+let sepet = [];
+let kasa = Number(localStorage.getItem("kasa"))||0;
+
+// LOGIN
+function login(){
+ if(user.value=="admin" && pass.value=="1234"){
+  loginPage.style.display="none";
+  app.style.display="block";
+  show("urun");
+ }
 }
 
-
-// 💾 STOKLARI KAYDET
-function saveStocks(stocks) {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(stocks));
+// SAYFA
+function show(id){
+ document.querySelectorAll(".page").forEach(x=>x.style.display="none");
+ document.getElementById(id).style.display="block";
+ render();
 }
 
-
-// ➕ STOK EKLE (varsa artır, yoksa ekle)
-function addStock(name, qty) {
-    let stocks = getStocks();
-
-    let existing = stocks.find(item => item.name === name);
-
-    if (existing) {
-        existing.quantity += Number(qty);
-    } else {
-        stocks.push({
-            name: name,
-            quantity: Number(qty)
-        });
-    }
-
-    saveStocks(stocks);
-    renderStocks();
+// KAYDET
+function save(){
+ localStorage.setItem("urunler",JSON.stringify(urunler));
+ localStorage.setItem("kasa",kasa);
 }
 
-
-// 🗑️ TEK STOK SİL
-function deleteStock(index) {
-    let stocks = getStocks();
-
-    stocks.splice(index, 1);
-
-    saveStocks(stocks);
-    renderStocks();
+// ÜRÜN EKLE
+function urunEkle(){
+ urunler.push({
+  ad:ad.value,
+  fiyat:Number(fiyat.value),
+  stok:Number(stok.value),
+  kod:kod.value
+ });
+ save();
+ render();
 }
 
+// 🗑️ TEK ÜRÜN SİL
+function urunSil(i){
+ urunler.splice(i,1);
+ save();
+ render();
+}
 
 // 🧨 TÜM STOKLARI SIFIRLA
-function deleteAllStocks() {
-    if (!confirm("TÜM ATEŞOĞLU MARKET STOKLARI SİLİNECEK. Emin misin?")) return;
+function tumStokSifirla(){
+ if(!confirm("TÜM ÜRÜNLER SİLİNECEK. Emin misin?")) return;
 
-    localStorage.removeItem(STORAGE_KEY);
-
-    renderStocks();
+ urunler = [];
+ save();
+ render();
 }
 
+// RENDER
+function render(){
 
-// 📊 STOK LİSTELE
-function renderStocks() {
-    let stocks = getStocks();
-    let table = document.getElementById("stockTable");
+ urunList.innerHTML = urunler.map((u,i)=>
+ `<div class="card">
+  ${u.ad} - ${u.fiyat}₺ - Stok:${u.stok}
+  <button onclick="urunSil(${i})">Sil</button>
+ </div>`
+ ).join("");
 
-    if (!table) return;
+ urunSec.innerHTML = urunler.map((u,i)=>
+ `<div class="card" onclick="sepeteEkle(${i})">${u.ad}</div>`
+ ).join("");
 
-    table.innerHTML = "";
+ sepet.innerHTML = sepet.map(s=>
+ `<div class="card">${s.ad} - ${s.fiyat}</div>`
+ ).join("");
 
-    stocks.forEach((item, i) => {
-        table.innerHTML += `
-            <tr>
-                <td>${item.name}</td>
-                <td>${item.quantity}</td>
-                <td>
-                    <button onclick="deleteStock(${i})">Sil</button>
-                </td>
-            </tr>
-        `;
-    });
+ let t = sepet.reduce((a,b)=>a+b.fiyat,0);
+ toplam.innerText = t;
+
+ grafik();
 }
 
-
-// 🧾 INPUT'TAN STOK EKLE (UI bağlantısı)
-function addStockFromUI() {
-    let name = document.getElementById("productName").value;
-    let qty = document.getElementById("productQty").value;
-
-    if (!name || !qty) {
-        alert("Ürün adı ve miktar gir");
-        return;
-    }
-
-    addStock(name, qty);
-
-    document.getElementById("productName").value = "";
-    document.getElementById("productQty").value = "";
+// SEPET
+function sepeteEkle(i){
+ if(urunler[i].stok<=0) return alert("Stok yok");
+ sepet.push({...urunler[i]});
+ render();
 }
 
+// SATIŞ
+function satis(){
+ let t = sepet.reduce((a,b)=>a+b.fiyat,0);
 
-// 🚀 BAŞLAT
-renderStocks();
+ sepet.forEach(s=>{
+  let u = urunler.find(x=>x.ad==s.ad);
+  if(u) u.stok--;
+ });
+
+ kasa += t;
+ sepet=[];
+ save();
+ render();
+}
+
+// ARAMA
+function filtre(){
+ let q = ara.value.toLowerCase();
+
+ urunSec.innerHTML = urunler
+ .filter(u=>u.ad.toLowerCase().includes(q))
+ .map((u,i)=>`<div class="card" onclick="sepeteEkle(${i})">${u.ad}</div>`)
+ .join("");
+}
+
+// BARKOD
+function kamera(){
+ new Html5Qrcode("reader").start(
+  { facingMode:"environment" },
+  { fps:10 },
+  code=>{
+   let u = urunler.find(x=>x.kod==code);
+   if(u){ sepet.push({...u}); render(); }
+  }
+ );
+}
+
+// GRAFİK
+function grafik(){
+ new Chart(document.getElementById("chart"),{
+  type:"bar",
+  data:{
+   labels:["Ürün","Kasa"],
+   datasets:[{data:[urunler.length,kasa]}]
+  }
+ });
+}
+
+// EXCEL
+function excel(){
+ let ws = XLSX.utils.json_to_sheet(urunler);
+ let wb = XLSX.utils.book_new();
+ XLSX.utils.book_append_sheet(wb, ws, "Market");
+ XLSX.writeFile(wb, "market.xlsx");
+}
+
+show("urun");
+
+</script>
+
+</body>
+</html>
