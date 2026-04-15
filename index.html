@@ -8,33 +8,16 @@
 <style>
 body { font-family:Arial; background:#111; color:#fff; padding:10px; }
 h1 { text-align:center; color:#00d084; }
-
-input, button {
- width:100%; padding:10px; margin:5px 0;
- border:none; border-radius:8px;
-}
-
+input, button { width:100%; padding:10px; margin:5px 0; border:none; border-radius:8px; }
 button { background:#00d084; color:white; cursor:pointer; }
-
-.card {
- background:#222;
- padding:10px;
- margin-top:10px;
- border-radius:10px;
-}
-
+.card { background:#222; padding:10px; margin-top:10px; border-radius:10px; }
 .page { display:none; }
-
-.small-info{
- background:#1a1a1a;
- padding:10px;
- border-radius:10px;
- margin:10px 0;
- color:#00d084;
-}
+.small-info{ background:#1a1a1a; padding:10px; border-radius:10px; margin:10px 0; color:#00d084; }
 </style>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://unpkg.com/html5-qrcode"></script>
 
 </head>
 
@@ -52,20 +35,19 @@ button { background:#00d084; color:white; cursor:pointer; }
 <h1>🛒 ATEŞOĞLU MARKET PRO</h1>
 
 <div class="small-info">
-💰 Nakit: <b id="nakitText">0</b> ₺<br>
-💳 POS: <b id="posText">0</b> ₺
-<button onclick="kasaSifirla()">Kasaları Sıfırla</button>
+💰 KASA: <b id="kasaText">0</b> ₺
+<button onclick="kasaSifirla()">Kasayı Sıfırla</button>
 </div>
 
 <button onclick="show('urun')">Ürün</button>
 <button onclick="show('satis')">Satış</button>
-<button onclick="show('rapor')">Rapor</button>
 
 <!-- ÜRÜN -->
 <div id="urun" class="page">
 <input id="ad" placeholder="Ürün adı">
 <input id="fiyat" type="number" placeholder="Fiyat">
 <input id="stok" type="number" placeholder="Stok">
+
 <button onclick="urunEkle()">Ekle</button>
 <div id="urunList"></div>
 </div>
@@ -80,18 +62,10 @@ button { background:#00d084; color:white; cursor:pointer; }
 
 <h3>Toplam: <span id="toplam">0</span> ₺</h3>
 
-<button onclick="odemeTip='Nakit'">💵 Nakit</button>
-<button onclick="odemeTip='POS'">💳 POS</button>
-
 <button onclick="satis()">Satışı Bitir</button>
 
 <div id="fatura" class="card"></div>
 
-</div>
-
-<!-- RAPOR -->
-<div id="rapor" class="page">
-<div id="raporPanel"></div>
 </div>
 
 </div>
@@ -100,13 +74,7 @@ button { background:#00d084; color:white; cursor:pointer; }
 
 let urunler = JSON.parse(localStorage.getItem("urunler")) || [];
 let sepet = [];
-
-let nakitKasa = Number(localStorage.getItem("nakitKasa")) || 0;
-let posKasa = Number(localStorage.getItem("posKasa")) || 0;
-
-let satislar = JSON.parse(localStorage.getItem("satislar")) || [];
-
-let odemeTip = null;
+let kasa = Number(localStorage.getItem("kasa")) || 0;
 
 // LOGIN
 function login(){
@@ -127,9 +95,7 @@ function show(id){
 // SAVE
 function save(){
  localStorage.setItem("urunler", JSON.stringify(urunler));
- localStorage.setItem("nakitKasa", nakitKasa);
- localStorage.setItem("posKasa", posKasa);
- localStorage.setItem("satislar", JSON.stringify(satislar));
+ localStorage.setItem("kasa", kasa);
 }
 
 // ÜRÜN EKLE
@@ -142,25 +108,17 @@ function urunEkle(){
  save(); render();
 }
 
-// KASA SIFIRLA
-function kasaSifirla(){
- if(!confirm("Kasalar sıfırlanacak")) return;
- nakitKasa=0;
- posKasa=0;
- save(); render();
-}
-
-// 🛒 AKILLI SEPET
+// 🛒 EKLE (AKILLI)
 function sepeteEkle(i){
 
  let u = urunler[i];
 
- if(u.stok<=0){
+ if(u.stok <= 0){
   alert("Stok yok");
   return;
  }
 
- let mevcut = sepet.find(x=>x.ad==u.ad);
+ let mevcut = sepet.find(x=>x.ad == u.ad);
 
  if(mevcut){
   if(mevcut.adet >= u.stok){
@@ -170,9 +128,9 @@ function sepeteEkle(i){
   mevcut.adet++;
  } else {
   sepet.push({
-   ad:u.ad,
-   fiyat:u.fiyat,
-   adet:1
+   ad: u.ad,
+   fiyat: u.fiyat,
+   adet: 1
   });
  }
 
@@ -181,9 +139,9 @@ function sepeteEkle(i){
 
 // ➕
 function adetArtir(i){
- let u = urunler.find(x=>x.ad==sepet[i].ad);
+ let u = urunler.find(x=>x.ad == sepet[i].ad);
 
- if(sepet[i].adet>=u.stok){
+ if(sepet[i].adet >= u.stok){
   alert("Stok bitti");
   return;
  }
@@ -195,9 +153,11 @@ function adetArtir(i){
 // ➖
 function adetAzalt(i){
  sepet[i].adet--;
- if(sepet[i].adet<=0){
+
+ if(sepet[i].adet <= 0){
   sepet.splice(i,1);
  }
+
  render();
 }
 
@@ -209,71 +169,27 @@ function satis(){
   return;
  }
 
- if(!odemeTip){
-  alert("Ödeme seç");
-  return;
- }
-
  let toplamTutar = sepet.reduce((a,b)=>a+(b.fiyat*b.adet),0);
- let tarih = new Date().toLocaleString();
-
- if(odemeTip=="Nakit"){
-  nakitKasa += toplamTutar;
- } else {
-  posKasa += toplamTutar;
- }
 
  sepet.forEach(s=>{
   let u = urunler.find(x=>x.ad==s.ad);
   if(u) u.stok -= s.adet;
  });
 
- satislar.push({
-  tarih,
-  toplam: toplamTutar,
-  odeme: odemeTip
- });
-
- fatura.innerHTML = `
- <h3>🧾 FİŞ</h3>
- ${sepet.map(s=>`${s.ad} - ${s.adet} x ${s.fiyat}₺`).join("<br>")}
- <hr>
- TOPLAM: ${toplamTutar} ₺<br>
- Ödeme: ${odemeTip}<br>
- ${tarih}
- `;
-
- sepet=[];
- odemeTip=null;
+ kasa += toplamTutar;
+ sepet = [];
 
  save();
  render();
 }
 
-// RAPOR
-function rapor(){
-
- let toplam = satislar.reduce((a,b)=>a+b.toplam,0);
-
- raporPanel.innerHTML = `
- <h3>📊 RAPOR</h3>
- Toplam: ${toplam} ₺<br>
- Nakit: ${nakitKasa} ₺<br>
- POS: ${posKasa} ₺<br>
- Satış Sayısı: ${satislar.length}
- `;
-}
-
 // RENDER
 function render(){
 
- nakitText.innerText = nakitKasa;
- posText.innerText = posKasa;
+ kasaText.innerText = kasa;
 
  urunList.innerHTML = urunler.map(u=>
- `<div class="card" style="background:${u.stok<=0?'#8b0000':u.stok<5?'#b8860b':'#222'}">
- ${u.ad} - ${u.fiyat}₺ - Stok:${u.stok}
- </div>`
+ `<div class="card">${u.ad} - ${u.stok}</div>`
  ).join("");
 
  urunSec.innerHTML = urunler.map((u,i)=>
@@ -282,17 +198,15 @@ function render(){
 
  sepet.innerHTML = sepet.map((s,i)=>
  `<div class="card">
- ${s.ad}<br>
- ${s.adet} x ${s.fiyat}₺
- <br>
- <button onclick="adetArtir(${i})">➕</button>
- <button onclick="adetAzalt(${i})">➖</button>
+  ${s.ad} <br>
+  ${s.adet} x ${s.fiyat}₺
+  <br>
+  <button onclick="adetArtir(${i})">➕</button>
+  <button onclick="adetAzalt(${i})">➖</button>
  </div>`
  ).join("");
 
  toplam.innerText = sepet.reduce((a,b)=>a+(b.fiyat*b.adet),0);
-
- rapor();
 }
 
 show("urun");
