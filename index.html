@@ -18,19 +18,7 @@ button { background:#ff6600; color:white; }
 .page { display:none; }
 </style>
 </head>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js"></script>
 
-<script>
-const firebaseConfig = {
-  apiKey: "BURAYA",
-  authDomain: "BURAYA",
-  projectId: "BURAYA",
-};
-
-const app = firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
-</script>
 <body>
 
 <div id="loginPage">
@@ -144,6 +132,18 @@ function render(){
 }
 
 </script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js"></script>
 
+<script>
+const firebaseConfig = {
+  apiKey: "BURAYA",
+  authDomain: "BURAYA",
+  projectId: "BURAYA",
+};
+
+const app = firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+</script>
 </body>
 </html>
