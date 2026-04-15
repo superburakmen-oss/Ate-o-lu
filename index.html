@@ -8,61 +8,25 @@
 <style>
 body { font-family:Arial; background:#111; color:#fff; padding:10px; }
 h1 { text-align:center; color:#00d084; }
-
-input, button {
- width:100%; padding:10px; margin:5px 0;
- border:none; border-radius:8px;
-}
-
-button { background:#00d084; color:white; cursor:pointer; }
-
-.card {
- background:#222;
- padding:10px;
- margin-top:10px;
- border-radius:10px;
-}
-
-.tabs button { width:24%; }
+input, button { width:100%; padding:10px; margin:5px 0; border:none; border-radius:8px; }
+button { background:#00d084; color:white; }
+.card { background:#222; padding:10px; margin-top:10px; border-radius:10px; }
 .page { display:none; }
-
-.small-info{
- background:#1a1a1a;
- padding:10px;
- border-radius:10px;
- margin:10px 0;
- color:#00d084;
-}
 </style>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="https://unpkg.com/html5-qrcode"></script>
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 
 </head>
 
 <body>
 
-<div id="loginPage">
-<h2>🔐 Giriş</h2>
-<input id="user" placeholder="Kullanıcı">
-<input id="pass" type="password" placeholder="Şifre">
-<button onclick="login()">Giriş</button>
-</div>
-
-<div id="app" style="display:none">
-
 <h1>🛒 ATEŞOĞLU MARKET PRO</h1>
 
-<div class="small-info">
-💰 KASA: <b id="kasaText">0</b> ₺
-<button onclick="kasaSifirla()">Kasayı Sıfırla</button>
-</div>
-
-<div class="tabs">
+<div>
 <button onclick="show('urun')">Ürün</button>
 <button onclick="show('satis')">Satış</button>
-<button onclick="show('barkod')">Barkod</button>
 <button onclick="show('rapor')">Rapor</button>
 </div>
 
@@ -71,18 +35,12 @@ button { background:#00d084; color:white; cursor:pointer; }
 <input id="ad" placeholder="Ürün adı">
 <input id="fiyat" type="number" placeholder="Fiyat">
 <input id="stok" type="number" placeholder="Stok">
-<input id="kod" placeholder="Barkod">
-
 <button onclick="urunEkle()">Ekle</button>
-<button onclick="tumStokSifirla()">Tüm Stokları Sıfırla</button>
-
 <div id="urunList"></div>
 </div>
 
 <!-- SATIŞ -->
 <div id="satis" class="page">
-<input id="ara" placeholder="Ara" onkeyup="filtre()">
-
 <div id="urunSec"></div>
 
 <h3>Sepet</h3>
@@ -94,62 +52,62 @@ button { background:#00d084; color:white; cursor:pointer; }
 <button onclick="odemeTip='POS'">POS</button>
 
 <button onclick="satis()">Satışı Bitir</button>
+<button onclick="fisYazdir()">🖨️ Fiş Yazdır</button>
 
-<div id="fatura" class="card"></div>
+<div id="fatura"></div>
 </div>
 
 <!-- RAPOR -->
 <div id="rapor" class="page">
-<canvas id="chart"></canvas>
-
-<div id="raporPanel" class="card"></div>
-
+<div id="raporPanel"></div>
 <button onclick="raporSifirla()">Raporu Sıfırla</button>
-<button onclick="grafikSifirla()">Grafiği Sıfırla</button>
-</div>
-
 </div>
 
 <script>
 
-let urunler = JSON.parse(localStorage.getItem("urunler")) || [];
+// 🔥 FIREBASE CONFIG BURAYA
+const firebaseConfig = {
+  apiKey: "BURAYA",
+  authDomain: "BURAYA",
+  projectId: "BURAYA"
+};
+
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
+// DATA
+let urunler = [];
 let sepet = [];
-let kasa = Number(localStorage.getItem("kasa")) || 0;
-let satislar = JSON.parse(localStorage.getItem("satislar")) || [];
+let satislar = [];
 let odemeTip = null;
 
-function save(){
- localStorage.setItem("urunler", JSON.stringify(urunler));
- localStorage.setItem("kasa", kasa);
- localStorage.setItem("satislar", JSON.stringify(satislar));
-}
-
-function login(){
- if(user.value=="admin" && pass.value=="1234"){
-  loginPage.style.display="none";
-  app.style.display="block";
-  show("urun");
- }
-}
-
+// SAYFA
 function show(id){
  document.querySelectorAll(".page").forEach(x=>x.style.display="none");
  document.getElementById(id).style.display="block";
- render();
 }
 
-// ➕ ÜRÜN EKLE
+// ÜRÜN EKLE
 function urunEkle(){
- urunler.push({
+ db.collection("urunler").add({
   ad: ad.value,
   fiyat: Number(fiyat.value),
-  stok: Number(stok.value),
-  kod: kod.value
+  stok: Number(stok.value)
  });
- save(); render();
 }
 
-// 🛒 ADETLİ EKLE
+// CANLI ÜRÜNLER
+db.collection("urunler").onSnapshot(snap=>{
+ urunler=[];
+ snap.forEach(doc=>{
+  let u=doc.data();
+  u.id=doc.id;
+  urunler.push(u);
+ });
+ render();
+});
+
+// SEPETE EKLE (ADETLİ)
 function sepeteEkle(i){
 
  let miktar = prompt("Kaç adet?");
@@ -158,7 +116,7 @@ function sepeteEkle(i){
  miktar = Number(miktar);
 
  if(urunler[i].stok < miktar){
-  alert("Yetersiz stok!");
+  alert("Stok yok");
   return;
  }
 
@@ -171,89 +129,40 @@ function sepeteEkle(i){
  render();
 }
 
-// 💰 SATIŞ
+// SATIŞ
 function satis(){
 
- if(!odemeTip) return alert("Ödeme tipi seç");
- if(sepet.length===0) return alert("Sepet boş");
+ if(!odemeTip) return alert("Ödeme seç");
 
  let toplamTutar = sepet.reduce((a,b)=>a+(b.fiyat*b.adet),0);
- let tarih = new Date().toLocaleString();
 
- fatura.innerHTML = `
- <h3>FATURA</h3>
- ${sepet.map(s=>`${s.ad} x ${s.adet}`).join("<br>")}
- <hr>
- ${toplamTutar} ₺
- <br>${tarih}
- `;
-
- sepet.forEach(s=>{
-  let u = urunler.find(x=>x.ad==s.ad);
-  if(u) u.stok -= s.adet;
- });
-
- kasa += toplamTutar;
-
- satislar.push({
-  tarih,
+ let veri = {
+  tarih: new Date().toLocaleString(),
   toplam: toplamTutar,
+  odeme: odemeTip,
   urunler: sepet
- });
+ };
 
- sepet=[];
- odemeTip=null;
+ db.collection("satislar").add(veri);
 
- save();
- render();
+ sepet=[]; odemeTip=null;
 }
 
-// 📊 RAPOR
-function raporRender(){
+// RAPOR
+db.collection("satislar").onSnapshot(snap=>{
+ satislar=[];
+ snap.forEach(doc=>satislar.push(doc.data()));
 
  let gelir = satislar.reduce((a,b)=>a+b.toplam,0);
 
- let urunMap = {};
+ raporPanel.innerHTML = "Toplam Gelir: "+gelir+" ₺";
+});
 
- satislar.forEach(s=>{
-  s.urunler.forEach(u=>{
-   urunMap[u.ad] = (urunMap[u.ad]||0)+u.adet;
-  });
- });
-
- raporPanel.innerHTML = `
- Toplam Gelir: ${gelir} ₺<br>
- ${Object.entries(urunMap).map(x=>x[0]+" : "+x[1]).join("<br>")}
- `;
-}
-
-// 🧨 RAPOR SIFIRLA
-function raporSifirla(){
- if(!confirm("Rapor silinecek")) return;
- satislar=[];
- save(); render();
-}
-
-// 📉 GRAFİK SIFIRLA
-function grafikSifirla(){
- if(!confirm("Grafik sıfırlanacak")) return;
- kasa=0;
- save(); render();
-}
-
-// 💰 KASA SIFIRLA
-function kasaSifirla(){
- kasa=0;
- save(); render();
-}
-
-// 📊 RENDER
+// RENDER
 function render(){
 
- kasaText.innerText = kasa;
-
  urunList.innerHTML = urunler.map((u,i)=>
- `<div class="card">${u.ad} - ${u.fiyat}₺ - Stok:${u.stok}</div>`
+ `<div class="card">${u.ad} (${u.stok})</div>`
  ).join("");
 
  urunSec.innerHTML = urunler.map((u,i)=>
@@ -265,17 +174,21 @@ function render(){
  ).join("");
 
  toplam.innerText = sepet.reduce((a,b)=>a+(b.fiyat*b.adet),0);
-
- raporRender();
 }
 
-// 🔍 ARAMA
-function filtre(){
- let q = ara.value.toLowerCase();
- urunSec.innerHTML = urunler
- .filter(u=>u.ad.toLowerCase().includes(q))
- .map((u,i)=>`<div class="card" onclick="sepeteEkle(${i})">${u.ad}</div>`)
- .join("");
+// FİŞ
+function fisYazdir(){
+ let win = window.open();
+ win.document.write(sepet.map(s=>s.ad+" x "+s.adet).join("<br>"));
+ win.print();
+}
+
+// RAPOR SIFIRLA
+function raporSifirla(){
+ if(!confirm("Silinsin mi?")) return;
+ db.collection("satislar").get().then(snap=>{
+  snap.forEach(doc=>doc.ref.delete());
+ });
 }
 
 show("urun");
