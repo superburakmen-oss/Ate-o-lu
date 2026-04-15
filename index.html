@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Çılgın Pilavcı</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Çılgın Pilavcı PRO</title>
 
 <style>
 body{
@@ -13,25 +13,33 @@ body{
     color:white;
 }
 
-/* HEADER */
 header{
     background:linear-gradient(90deg,orange,#ff5e00);
-    padding:20px;
+    padding:15px;
     text-align:center;
 }
-header h1{
-    margin:0;
-    color:black;
-    font-size:28px;
-    font-weight:bold;
+header h1{margin:0;color:black}
+
+nav{
+    display:flex;
+    gap:5px;
+    padding:10px;
+    background:#1a1a1a;
 }
+nav button{
+    flex:1;
+    padding:10px;
+    border:none;
+    background:orange;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+section{display:none;padding:10px}
+.active{display:block}
 
 /* MENU */
-.container{
-    padding:15px;
-}
-
-.menu{
+.grid{
     display:grid;
     grid-template-columns:1fr 1fr;
     gap:10px;
@@ -44,61 +52,35 @@ header h1{
     border-radius:10px;
 }
 
-.card h3{
-    margin:0;
-    color:orange;
-}
-
-.price{
-    color:#ccc;
-    margin:5px 0;
-}
-
 button{
-    width:100%;
-    padding:8px;
-    background:orange;
-    border:none;
-    font-weight:bold;
     cursor:pointer;
-    border-radius:6px;
 }
 
 /* CART */
 .cart{
-    margin-top:20px;
     background:#1a1a1a;
     padding:10px;
     border-radius:10px;
     border:1px solid orange;
 }
 
-.cart h2{
-    color:orange;
-}
-
-.cart-item{
-    display:flex;
-    justify-content:space-between;
-    border-bottom:1px solid #333;
-    padding:5px 0;
-}
-
-.total{
-    margin-top:10px;
-    font-size:18px;
-    color:orange;
-}
-
-.whatsapp{
-    margin-top:10px;
-    background:#25D366;
-    color:white;
-    padding:10px;
-    border:none;
+/* ADMIN */
+input{
     width:100%;
-    border-radius:8px;
-    font-weight:bold;
+    padding:10px;
+    margin:5px 0;
+}
+
+/* ORDERS */
+.order{
+    background:#222;
+    padding:10px;
+    margin:5px 0;
+    border-left:4px solid orange;
+}
+.small{
+    font-size:12px;
+    color:#aaa;
 }
 </style>
 </head>
@@ -106,109 +88,188 @@ button{
 <body>
 
 <header>
-    <h1>🔥 ÇILGIN PİLAVCI 🔥</h1>
-    <p>Lezzetin Çılgın Hali</p>
+<h1>🔥 ÇILGIN PİLAVCI PRO 🔥</h1>
 </header>
 
-<div class="container">
+<nav>
+<button onclick="show('menu')">Menu</button>
+<button onclick="show('cart')">Sepet</button>
+<button onclick="show('admin')">Admin</button>
+<button onclick="show('kitchen')">Mutfak</button>
+</nav>
 
-    <div class="menu">
-        <div class="card">
-            <h3>Tavuk Pilav</h3>
-            <div class="price">80 TL</div>
-            <button onclick="add('Tavuk Pilav',80)">Ekle</button>
-        </div>
+<!-- MENU -->
+<section id="menu" class="active">
+<h2>Menü</h2>
+<div class="grid" id="menuList"></div>
+</section>
 
-        <div class="card">
-            <h3>Double Tavuk Pilav</h3>
-            <div class="price">110 TL</div>
-            <button onclick="add('Double Tavuk Pilav',110)">Ekle</button>
-        </div>
+<!-- CART -->
+<section id="cart">
+<h2>Sepet</h2>
+<div class="cart" id="cartList"></div>
+<h3 id="total">Toplam: 0 TL</h3>
+<button onclick="createOrder()">Siparişi Gönder</button>
+</section>
 
-        <div class="card">
-            <h3>Ayran</h3>
-            <div class="price">20 TL</div>
-            <button onclick="add('Ayran',20)">Ekle</button>
-        </div>
+<!-- ADMIN -->
+<section id="admin">
+<h2>Admin Panel</h2>
 
-        <div class="card">
-            <h3>Turşu</h3>
-            <div class="price">15 TL</div>
-            <button onclick="add('Turşu',15)">Ekle</button>
-        </div>
-    </div>
+<input id="name" placeholder="Ürün adı">
+<input id="price" placeholder="Fiyat">
+<button onclick="addProduct()">Ürün Ekle</button>
 
-    <div class="cart">
-        <h2>🛒 Sepet</h2>
-        <div id="cart"></div>
-        <div class="total" id="total">Toplam: 0 TL</div>
+<hr>
 
-        <button class="whatsapp" onclick="sendOrder()">
-            WhatsApp ile Sipariş Ver
-        </button>
-    </div>
+<div id="adminList"></div>
+</section>
 
-</div>
+<!-- KITCHEN -->
+<section id="kitchen">
+<h2>Mutfak Paneli</h2>
+<div id="orders"></div>
+</section>
 
 <script>
-let cart = [];
 
-function add(name, price){
-    cart.push({name,price});
-    render();
-    save();
+let menu = JSON.parse(localStorage.getItem("menu")) || [
+    {name:"Tavuk Pilav",price:80},
+    {name:"Double Pilav",price:110},
+    {name:"Ayran",price:20}
+];
+
+let cart = [];
+let orders = JSON.parse(localStorage.getItem("orders")) || [];
+
+function save(){
+    localStorage.setItem("menu",JSON.stringify(menu));
+    localStorage.setItem("orders",JSON.stringify(orders));
 }
 
-function render(){
-    let html = "";
-    let total = 0;
+/* NAV */
+function show(id){
+    document.querySelectorAll("section").forEach(s=>s.classList.remove("active"));
+    document.getElementById(id).classList.add("active");
+    renderAll();
+}
 
-    cart.forEach((item,i)=>{
-        total += item.price;
-        html += `
-        <div class="cart-item">
-            <span>${item.name}</span>
-            <span>${item.price} TL</span>
+/* MENU */
+function renderMenu(){
+    let html="";
+    menu.forEach((m,i)=>{
+        html+=`
+        <div class="card">
+            <b>${m.name}</b><br>
+            ${m.price} TL<br><br>
+            <button onclick="addCart(${i})">Ekle</button>
+        </div>`;
+    });
+    document.getElementById("menuList").innerHTML=html;
+}
+
+function addCart(i){
+    cart.push(menu[i]);
+    renderCart();
+}
+
+/* CART */
+function renderCart(){
+    let html="";
+    let total=0;
+
+    cart.forEach((c,i)=>{
+        total+=c.price;
+        html+=`
+        <div>
+            ${c.name} - ${c.price} TL
         </div>`;
     });
 
-    document.getElementById("cart").innerHTML = html;
-    document.getElementById("total").innerText = "Toplam: " + total + " TL";
+    document.getElementById("cartList").innerHTML=html;
+    document.getElementById("total").innerText="Toplam: "+total+" TL";
 }
 
-function save(){
-    localStorage.setItem("cart", JSON.stringify(cart));
+function createOrder(){
+    if(cart.length==0) return alert("Sepet boş!");
+
+    let order = {
+        id:Date.now(),
+        items:[...cart],
+        status:"Hazırlanıyor"
+    };
+
+    orders.push(order);
+    cart=[];
+    save();
+    alert("Sipariş alındı!");
+    renderAll();
 }
 
-function load(){
-    let data = localStorage.getItem("cart");
-    if(data){
-        cart = JSON.parse(data);
-        render();
-    }
+/* ADMIN */
+function addProduct(){
+    let n=document.getElementById("name").value;
+    let p=parseInt(document.getElementById("price").value);
+
+    if(!n||!p) return;
+
+    menu.push({name:n,price:p});
+    save();
+    renderAll();
 }
 
-function sendOrder(){
-    if(cart.length === 0){
-        alert("Sepet boş!");
-        return;
-    }
+function deleteProduct(i){
+    menu.splice(i,1);
+    save();
+    renderAll();
+}
 
-    let msg = "🔥 Çılgın Pilavcı Sipariş 🔥%0A";
-    let total = 0;
-
-    cart.forEach(item=>{
-        msg += "- " + item.name + " " + item.price + " TL%0A";
-        total += item.price;
+function renderAdmin(){
+    let html="";
+    menu.forEach((m,i)=>{
+        html+=`
+        <div class="card">
+            ${m.name} - ${m.price} TL
+            <button onclick="deleteProduct(${i})">Sil</button>
+        </div>`;
     });
-
-    msg += "%0AToplam: " + total + " TL";
-
-    let phone = "905xxxxxxxxx"; // BURAYA NUMARA YAZ
-    window.open(`https://wa.me/${phone}?text=${msg}`, "_blank");
+    document.getElementById("adminList").innerHTML=html;
 }
 
-load();
+/* KITCHEN */
+function finishOrder(id){
+    orders = orders.map(o=>{
+        if(o.id==id) o.status="Hazırlandı";
+        return o;
+    });
+    save();
+    renderAll();
+}
+
+function renderKitchen(){
+    let html="";
+    orders.forEach(o=>{
+        html+=`
+        <div class="order">
+            <b>#${o.id}</b><br>
+            ${o.items.map(i=>i.name).join(", ")}<br>
+            <span class="small">${o.status}</span><br><br>
+            <button onclick="finishOrder(${o.id})">Hazırlandı</button>
+        </div>`;
+    });
+    document.getElementById("orders").innerHTML=html;
+}
+
+/* MAIN */
+function renderAll(){
+    renderMenu();
+    renderCart();
+    renderAdmin();
+    renderKitchen();
+}
+
+renderAll();
+
 </script>
 
 </body>
