@@ -3,67 +3,33 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Çılgın Pilavcı V3</title>
+<title>Çılgın Pilavcı V4</title>
 
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 
 <style>
-body{
-    margin:0;
-    font-family:Arial;
-    background:#0f0f0f;
-    color:white;
-}
-
-header{
-    background:linear-gradient(90deg,orange,#ff5e00);
-    padding:15px;
-    text-align:center;
-}
+body{margin:0;font-family:Arial;background:#0f0f0f;color:white}
+header{background:linear-gradient(90deg,orange,#ff5e00);padding:15px;text-align:center}
 header h1{margin:0;color:black}
 
-nav{
-    display:flex;
-    gap:5px;
-    padding:10px;
-    background:#1a1a1a;
-}
-nav button{
-    flex:1;
-    padding:10px;
-    border:none;
-    background:orange;
-    font-weight:bold;
-    cursor:pointer;
-}
+nav{display:flex;gap:5px;padding:10px;background:#1a1a1a}
+nav button{flex:1;padding:10px;border:none;background:orange;font-weight:bold;cursor:pointer}
 
 section{display:none;padding:10px}
 .active{display:block}
 
-.card{
-    background:#1c1c1c;
-    border:1px solid orange;
-    padding:10px;
-    margin:5px 0;
-    border-radius:10px;
-}
+.card{background:#1c1c1c;border:1px solid orange;padding:10px;margin:5px 0;border-radius:10px}
+input{width:100%;padding:10px;margin:5px 0}
 
-input{
-    width:100%;
-    padding:10px;
-    margin:5px 0;
-}
-button{
-    cursor:pointer;
-}
+.badge{color:orange;font-weight:bold}
 </style>
 </head>
 
 <body>
 
 <header>
-<h1>🔥 ÇILGIN PİLAVCI V3 🔥</h1>
+<h1>🔥 ÇILGIN PİLAVCI V4 🔥</h1>
 </header>
 
 <nav>
@@ -73,8 +39,10 @@ button{
 <button onclick="show('orders')">Siparişler</button>
 </nav>
 
+<!-- MENU -->
 <section id="menu" class="active"></section>
 
+<!-- CART -->
 <section id="cart">
 <h2>Sepet</h2>
 <div id="cartList"></div>
@@ -82,14 +50,23 @@ button{
 <button onclick="createOrder()">Sipariş Ver</button>
 </section>
 
+<!-- ADMIN -->
 <section id="admin">
 <h2>Admin Panel</h2>
+
+<input id="loginPass" placeholder="Admin şifre">
+<button onclick="login()">Giriş</button>
+
+<div id="adminPanel" style="display:none">
 <input id="pname" placeholder="Ürün adı">
 <input id="pprice" placeholder="Fiyat">
 <button onclick="addProduct()">Ürün Ekle</button>
 <div id="adminList"></div>
+</div>
+
 </section>
 
+<!-- ORDERS -->
 <section id="orders">
 <h2>Siparişler</h2>
 <div id="orderList"></div>
@@ -97,7 +74,6 @@ button{
 
 <script>
 
-/* 🔥 FIREBASE CONFIG (BURAYI DOLDUR) */
 const firebaseConfig = {
   apiKey: "XXXX",
   authDomain: "XXXX",
@@ -113,6 +89,8 @@ const db = firebase.firestore();
 /* DATA */
 let cart = [];
 let products = [];
+let isAdmin = false;
+let orderCounter = 1000;
 
 /* NAV */
 function show(id){
@@ -120,17 +98,29 @@ function show(id){
     document.getElementById(id).classList.add("active");
 }
 
-/* 🔥 PRODUCTS */
+/* LOGIN */
+function login(){
+    let pass=document.getElementById("loginPass").value;
+    if(pass==="1234"){
+        isAdmin=true;
+        document.getElementById("adminPanel").style.display="block";
+        alert("Admin giriş başarılı 🔥");
+    }else{
+        alert("Hatalı şifre");
+    }
+}
+
+/* PRODUCTS */
 function loadProducts(){
     db.collection("products").onSnapshot(snap=>{
-        products = [];
-        let html = "";
+        products=[];
+        let html="";
 
         snap.forEach(doc=>{
-            let d = doc.data();
+            let d=doc.data();
             products.push({id:doc.id,...d});
 
-            html += `
+            html+=`
             <div class="card">
                 <b>${d.name}</b><br>
                 ${d.price} TL<br><br>
@@ -138,14 +128,14 @@ function loadProducts(){
             </div>`;
         });
 
-        document.getElementById("menu").innerHTML = html;
+        document.getElementById("menu").innerHTML=html;
         renderAdmin();
     });
 }
 
 /* CART */
 function addCart(id){
-    let p = products.find(x=>x.id===id);
+    let p=products.find(x=>x.id===id);
     cart.push(p);
     renderCart();
 }
@@ -155,8 +145,8 @@ function renderCart(){
     let total=0;
 
     cart.forEach(c=>{
-        total += Number(c.price);
-        html += `<div>${c.name} - ${c.price} TL</div>`;
+        total+=Number(c.price);
+        html+=`<div>${c.name} - ${c.price} TL</div>`;
     });
 
     document.getElementById("cartList").innerHTML=html;
@@ -165,9 +155,12 @@ function renderCart(){
 
 /* ORDER */
 function createOrder(){
-    if(cart.length==0) return alert("Sepet boş!");
+    if(cart.length===0) return alert("Sepet boş!");
+
+    orderCounter++;
 
     db.collection("orders").add({
+        orderNo:orderCounter,
         items:cart,
         status:"Hazırlanıyor",
         time:Date.now()
@@ -175,7 +168,6 @@ function createOrder(){
 
     cart=[];
     renderCart();
-    alert("Sipariş gönderildi 🔥");
 }
 
 /* ADMIN */
@@ -187,21 +179,6 @@ function addProduct(){
         name,
         price:Number(price)
     });
-
-    document.getElementById("pname").value="";
-    document.getElementById("pprice").value="";
-}
-
-/* DELETE (basit) */
-function renderAdmin(){
-    let html="";
-    products.forEach(p=>{
-        html += `
-        <div class="card">
-            ${p.name} - ${p.price} TL
-        </div>`;
-    });
-    document.getElementById("adminList").innerHTML=html;
 }
 
 /* ORDERS */
@@ -213,10 +190,11 @@ function loadOrders(){
         snap.forEach(doc=>{
             let d=doc.data();
 
-            html += `
+            html+=`
             <div class="card">
-                <b>${d.status}</b><br>
-                ${d.items.map(i=>i.name).join(", ")}
+                <span class="badge">#${d.orderNo}</span><br>
+                ${d.items.map(i=>i.name).join(", ")}<br>
+                <b>${d.status}</b>
             </div>`;
         });
 
