@@ -8,12 +8,21 @@
 <style>
 body { font-family:Arial; background:#111; color:#fff; padding:10px; }
 h1 { text-align:center; color:#00d084; }
+
 input, button {
  width:100%; padding:10px; margin:5px 0;
  border:none; border-radius:8px;
 }
-button { background:#00d084; color:white; }
-.card { background:#222; padding:10px; margin-top:10px; border-radius:10px; }
+
+button { background:#00d084; color:white; cursor:pointer; }
+
+.card {
+ background:#222;
+ padding:10px;
+ margin-top:10px;
+ border-radius:10px;
+}
+
 .tabs button { width:24%; }
 .page { display:none; }
 </style>
@@ -85,9 +94,9 @@ button { background:#00d084; color:white; }
 
 <script>
 
-let urunler = JSON.parse(localStorage.getItem("urunler"))||[];
+let urunler = JSON.parse(localStorage.getItem("urunler")) || [];
 let sepet = [];
-let kasa = Number(localStorage.getItem("kasa"))||0;
+let kasa = Number(localStorage.getItem("kasa")) || 0;
 
 // LOGIN
 function login(){
@@ -107,18 +116,19 @@ function show(id){
 
 // KAYDET
 function save(){
- localStorage.setItem("urunler",JSON.stringify(urunler));
- localStorage.setItem("kasa",kasa);
+ localStorage.setItem("urunler", JSON.stringify(urunler));
+ localStorage.setItem("kasa", kasa);
 }
 
 // ÜRÜN EKLE
 function urunEkle(){
  urunler.push({
-  ad:ad.value,
-  fiyat:Number(fiyat.value),
-  stok:Number(stok.value),
-  kod:kod.value
+  ad: ad.value,
+  fiyat: Number(fiyat.value),
+  stok: Number(stok.value),
+  kod: kod.value
  });
+
  save();
  render();
 }
@@ -130,7 +140,7 @@ function urunSil(i){
  render();
 }
 
-// 🧨 TÜM STOKLARI SIFIRLA
+// 🧨 TÜM STOK SIFIRLA
 function tumStokSifirla(){
  if(!confirm("TÜM ÜRÜNLER SİLİNECEK. Emin misin?")) return;
 
@@ -139,11 +149,11 @@ function tumStokSifirla(){
  render();
 }
 
-// RENDER
+// 📊 RENDER
 function render(){
 
  urunList.innerHTML = urunler.map((u,i)=>
- `<div class="card">
+ `<div class="card" style="background:${u.stok<=0?'#8b0000':'#222'}">
   ${u.ad} - ${u.fiyat}₺ - Stok:${u.stok}
   <button onclick="urunSil(${i})">Sil</button>
  </div>`
@@ -163,29 +173,49 @@ function render(){
  grafik();
 }
 
-// SEPET
+// 🛒 SEPETE EKLE (STOK KONTROL)
 function sepeteEkle(i){
- if(urunler[i].stok<=0) return alert("Stok yok");
+
+ if(urunler[i].stok <= 0){
+  alert("❌ Bu ürünün stoğu bitmiştir!");
+  return;
+ }
+
  sepet.push({...urunler[i]});
  render();
 }
 
-// SATIŞ
+// 💰 SATIŞ (STOK KORUMALI)
 function satis(){
- let t = sepet.reduce((a,b)=>a+b.fiyat,0);
+
+ let stokSorun = false;
 
  sepet.forEach(s=>{
-  let u = urunler.find(x=>x.ad==s.ad);
-  if(u) u.stok--;
+  let u = urunler.find(x=>x.ad == s.ad);
+
+  if(u){
+   if(u.stok <= 0){
+    stokSorun = true;
+   } else {
+    u.stok--;
+   }
+  }
  });
 
- kasa += t;
- sepet=[];
+ if(stokSorun){
+  alert("❌ Satış iptal edildi: Stok problemi var!");
+  render();
+  return;
+ }
+
+ kasa += sepet.reduce((a,b)=>a+b.fiyat,0);
+
+ sepet = [];
  save();
  render();
 }
 
-// ARAMA
+// 🔍 ARAMA
 function filtre(){
  let q = ara.value.toLowerCase();
 
@@ -195,19 +225,26 @@ function filtre(){
  .join("");
 }
 
-// BARKOD
+// 📷 BARKOD
 function kamera(){
  new Html5Qrcode("reader").start(
   { facingMode:"environment" },
   { fps:10 },
   code=>{
    let u = urunler.find(x=>x.kod==code);
-   if(u){ sepet.push({...u}); render(); }
+   if(u){
+    if(u.stok <= 0){
+     alert("❌ Stok bitmiş!");
+     return;
+    }
+    sepet.push({...u});
+    render();
+   }
   }
  );
 }
 
-// GRAFİK
+// 📊 GRAFİK
 function grafik(){
  new Chart(document.getElementById("chart"),{
   type:"bar",
@@ -218,7 +255,7 @@ function grafik(){
  });
 }
 
-// EXCEL
+// 📁 EXCEL
 function excel(){
  let ws = XLSX.utils.json_to_sheet(urunler);
  let wb = XLSX.utils.book_new();
