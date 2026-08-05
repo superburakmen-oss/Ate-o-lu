@@ -198,60 +198,75 @@
         .fatura-total { border-top: 2px solid var(--primary); padding-top: 10px; margin-top: 10px; font-size: 1.2em; font-weight: 700; }
 
         /* BARKOD SCANNER */
-        .barkod-scanner-container {
-            width: 100%; max-width: 400px; margin: 15px auto;
-            border-radius: 15px; overflow: hidden;
-            border: 3px solid var(--primary); background: #000;
+        .scanner-wrapper {
+            width: 100%;
+            max-width: 500px;
+            margin: 15px auto;
+            border-radius: 15px;
+            overflow: hidden;
+            border: 3px solid var(--primary);
+            background: #000;
             position: relative;
         }
         
-        .barkod-scanner-container video {
+        .scanner-wrapper video {
+            width: 100% !important;
+            height: auto !important;
+            display: block !important;
+            max-height: 300px;
+            object-fit: cover;
+        }
+
+        .scanner-viewport {
+            width: 100%;
+            max-width: 500px;
+            margin: 15px auto;
+            border-radius: 15px;
+            overflow: hidden;
+            border: 3px solid var(--primary);
+            background: #000;
+            position: relative;
+            min-height: 250px;
+        }
+
+        .scanner-viewport video {
             width: 100% !important;
             height: auto !important;
             display: block !important;
         }
 
-        #readerStok, #readerSatis, #readerGenel {
-            width: 100% !important;
-            min-height: 250px;
+        .scanner-viewport canvas {
+            display: none;
         }
 
-        /* HTML5-QRCode still override */
-        #readerStok video, #readerSatis video, #readerGenel video {
-            width: 100% !important;
-            height: auto !important;
-            object-fit: cover !important;
+        .scanner-overlay-line {
+            position: absolute;
+            top: 50%;
+            left: 10%;
+            width: 80%;
+            height: 2px;
+            background: rgba(0, 255, 0, 0.8);
+            box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+            z-index: 10;
+            pointer-events: none;
+            animation: scanMove 2s ease-in-out infinite;
         }
 
-        #readerStok img, #readerSatis img, #readerGenel img {
-            display: none !important;
+        @keyframes scanMove {
+            0%, 100% { top: 30%; }
+            50% { top: 70%; }
         }
 
         .scanner-status {
             text-align: center; padding: 10px; font-weight: 600; font-size: 0.9em;
         }
-        .scanner-active { color: var(--primary); animation: pulse 1.5s infinite; }
+        .scanner-active { color: #00ff00; animation: pulse 1.5s infinite; }
         .scanner-inactive { color: var(--text-secondary); }
 
         .scanner-result {
             background: var(--card); padding: 15px; border-radius: 10px;
             margin-top: 10px; text-align: center; border: 1px solid var(--border);
             min-height: 50px; display: flex; align-items: center; justify-content: center;
-        }
-
-        /* SCANNER OVERLAY */
-        .scanner-overlay {
-            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            width: 250px; height: 3px;
-            background: rgba(0, 208, 132, 0.8);
-            box-shadow: 0 0 20px rgba(0, 208, 132, 0.6);
-            animation: scanLine 2s ease-in-out infinite;
-            z-index: 10; pointer-events: none;
-        }
-
-        @keyframes scanLine {
-            0%, 100% { top: 30%; }
-            50% { top: 70%; }
         }
 
         .chart-container { background: var(--card); padding: 20px; border-radius: 15px; margin: 15px 0; }
@@ -301,6 +316,12 @@
         .urun-secim-card { cursor: pointer; transition: all 0.2s; }
         .urun-secim-card:active { transform: scale(0.98); }
 
+        .manual-barkod-input {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
         @media (max-width: 480px) {
             .form-row { grid-template-columns: 1fr; }
             .tabs { flex-wrap: wrap; }
@@ -312,8 +333,8 @@
         }
     </style>
 
-    <!-- HTML5 QR Code Scanner - CDN -->
-    <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js">
+    <!-- ZXing Barkod Okuyucu -->
+    <script src="https://unpkg.com/@zxing/library@0.20.0/umd/index.min.js">
     </script>
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js">
@@ -411,17 +432,17 @@
                                 📷 Barkod Okut
                             </button>
                         </label>
-                        <input class="form-input" id="kod" placeholder="Barkod (opsiyonel veya okutun)">
+                        <input class="form-input" id="kod" placeholder="Barkod (opsiyonel veya manuel girin)">
                     </div>
                     
                     <!-- Stok Barkod Okuyucu -->
                     <div id="stokScannerArea" style="display:none; margin-bottom:15px;">
-                        <div class="barkod-scanner-container">
-                            <div class="scanner-overlay"></div>
-                            <div id="readerStok"></div>
+                        <div class="scanner-viewport" id="stokScannerViewport">
+                            <div class="scanner-overlay-line"></div>
+                            <video id="stokVideo" playsinline autoplay muted style="width:100%;"></video>
                         </div>
                         <div class="scanner-status scanner-active" id="stokScannerStatus">
-                            🔍 Kamera aktif - Barkod okutun...
+                            🔍 Kamera aktif - Barkodu kameraya gösterin...
                         </div>
                         <button class="btn-sm btn-danger" style="width:100%; margin-top:5px;" 
                                 onclick="barkodOkuDurdur('stok')">
@@ -445,16 +466,18 @@
             <!-- SATIŞ SAYFASI -->
             <div id="satis" class="page">
                 <div class="card" style="margin-bottom:15px;">
-                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
                         <h4>📷 Hızlı Barkod Okutma</h4>
-                        <button class="btn-sm btn-info" onclick="barkodOkuSatis()" id="btnBarkodSatis">
-                            📷 Barkod Okut
-                        </button>
+                        <div>
+                            <button class="btn-sm btn-info" onclick="barkodOkuSatis()" id="btnBarkodSatis">
+                                📷 Barkod Okut
+                            </button>
+                        </div>
                     </div>
                     <div id="satisScannerArea" style="display:none; margin-top:10px;">
-                        <div class="barkod-scanner-container">
-                            <div class="scanner-overlay"></div>
-                            <div id="readerSatis"></div>
+                        <div class="scanner-viewport" id="satisScannerViewport">
+                            <div class="scanner-overlay-line"></div>
+                            <video id="satisVideo" playsinline autoplay muted style="width:100%;"></video>
                         </div>
                         <div class="scanner-status scanner-active" id="satisScannerStatus">
                             🔍 Kamera aktif - Ürün barkodu okutun...
@@ -499,7 +522,7 @@
                 <div class="card" style="text-align:center;">
                     <h3>📷 Barkod Okuyucu</h3>
                     <p style="color:var(--text-secondary); margin:10px 0;">
-                        Ürün barkodunu kameraya gösterin
+                        Ürün barkodunu kameraya gösterin veya manuel girin
                     </p>
                     
                     <div style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-bottom:15px;">
@@ -511,9 +534,9 @@
                         </button>
                     </div>
                     
-                    <div class="barkod-scanner-container">
-                        <div class="scanner-overlay"></div>
-                        <div id="readerGenel"></div>
+                    <div class="scanner-viewport" id="genelScannerViewport" style="display:none;">
+                        <div class="scanner-overlay-line"></div>
+                        <video id="genelVideo" playsinline autoplay muted style="width:100%;"></video>
                     </div>
                     
                     <div class="scanner-status scanner-inactive" id="genelScannerStatus">
@@ -523,11 +546,16 @@
                     <div class="scanner-result" id="genelScannerResult">
                         <span style="color:var(--text-secondary);">Okunan barkod burada görünecek</span>
                     </div>
+
+                    <div class="manual-barkod-input" style="margin-top:15px;">
+                        <input class="form-input" id="manuelBarkod" placeholder="Veya barkod numarasını yazın" style="flex:1;">
+                        <button class="btn-sm btn-success" onclick="manuelBarkodSorgula()">🔍 Sorgula</button>
+                    </div>
                     
                     <div style="margin-top:10px; padding:10px; background:var(--card); border-radius:10px;">
                         <small style="color:var(--warning);">
-                            💡 <b>İpucu:</b> Telefonunuzdaki veya bilgisayarınızdaki kamera ile barkodları okutabilirsiniz. 
-                            EAN-13, UPC, Code-128, QR Code gibi tüm barkod formatları desteklenir.
+                            💡 <b>İpucu:</b> EAN-13, UPC, Code-128, QR Code gibi tüm barkod formatları desteklenir.
+                            Kamerayı açtıktan sonra barkodu net bir şekilde gösterin.
                         </small>
                     </div>
                 </div>
@@ -582,14 +610,14 @@
                 
                 <div class="admin-section">
                     <h3>🖼️ Market Logosu</h3>
-                    <p style="color:var(--text-secondary); margin-bottom:15px;">Marketiniz için özel logo yükleyin (PNG, JPG, GIF, SVG)</p>
+                    <p style="color:var(--text-secondary); margin-bottom:15px;">Marketiniz için özel logo yükleyin</p>
                     <div class="logo-preview" id="logoPreview">
                         <span style="font-size:50px; color:var(--text-secondary);">🛒</span>
                     </div>
                     <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;">
-                        <button class="btn-sm btn-primary" onclick="document.getElementById('logoFileInput').click()">📁 Dosyadan Logo Seç</button>
+                        <button class="btn-sm btn-primary" onclick="document.getElementById('logoFileInput').click()">📁 Logo Seç</button>
                         <input type="file" id="logoFileInput" accept="image/*" onchange="logoYukle(this)">
-                        <button class="btn-sm btn-warning" onclick="logoSifirla()">🔄 Varsayılana Dön</button>
+                        <button class="btn-sm btn-warning" onclick="logoSifirla()">🔄 Sıfırla</button>
                     </div>
                 </div>
 
@@ -627,17 +655,17 @@
                 <div class="admin-section">
                     <h3>🌙 Arkaplan</h3>
                     <div class="form-row">
-                        <div class="form-group"><label class="form-label">Arkaplan Rengi</label><input type="color" id="bgColor" value="#0a0a0a" onchange="arkaplanDegistir()"></div>
-                        <div class="form-group"><label class="form-label">Kart Rengi</label><input type="color" id="cardColor" value="#1a1a1a" onchange="arkaplanDegistir()"></div>
+                        <div class="form-group"><label class="form-label">Arkaplan</label><input type="color" id="bgColor" value="#0a0a0a" onchange="arkaplanDegistir()"></div>
+                        <div class="form-group"><label class="form-label">Kart</label><input type="color" id="cardColor" value="#1a1a1a" onchange="arkaplanDegistir()"></div>
                     </div>
                 </div>
 
                 <div class="admin-section">
                     <h3>💾 Veri Yönetimi</h3>
                     <div style="display:flex; gap:10px; flex-wrap:wrap;">
-                        <button class="btn-sm btn-warning" onclick="verileriYedekle()">📥 Yedekle (JSON)</button>
+                        <button class="btn-sm btn-warning" onclick="verileriYedekle()">📥 Yedekle</button>
                         <button class="btn-sm btn-primary" onclick="yedektenYukle()">📤 Yedek Yükle</button>
-                        <button class="btn-sm btn-danger" onclick="tumVerileriSifirla()">🧨 Tüm Verileri Sıfırla</button>
+                        <button class="btn-sm btn-danger" onclick="tumVerileriSifirla()">🧨 Sıfırla</button>
                     </div>
                 </div>
             </div>
@@ -659,13 +687,10 @@
         let kasa = Number(localStorage.getItem("kasa")) || 0;
         let sonSatislar = JSON.parse(localStorage.getItem("sonSatislar") || "[]");
         
-        // Barkod scanner instances - HER BİRİ AYRI
-        let scannerStok = null;
-        let scannerSatis = null;
-        let scannerGenel = null;
-        
-        // Aktif scanner takibi
-        let aktifScanner = null; // 'stok', 'satis', 'genel' veya null
+        // ZXing Barkod Okuyucu
+        let codeReader = null;
+        let aktifScannerTip = null; // 'stok', 'satis', 'genel'
+        let scannerStream = null;
         
         // Chart instances
         let stokChartInstance = null;
@@ -797,7 +822,9 @@
 
         function cikisYap() {
             if (confirm('Çıkış yapmak istediğinize emin misiniz?')) {
-                tumScannerlariDurdur();
+                barkodOkuDurdur('stok');
+                barkodOkuDurdur('satis');
+                barkodOkuDurdur('genel');
                 document.getElementById('app').style.display = 'none';
                 document.getElementById('loginPage').style.display = 'flex';
                 sepet = [];
@@ -824,134 +851,61 @@
             if (id === 'faturalar') faturaGecmisiGoster();
             if (id === 'admin') temalariYukle();
             
-            // Sadece ilgili sayfadaki scanner'ı açık bırak, diğerlerini kapat
+            // Scanner'ları yönet
             if (id !== 'urun') barkodOkuDurdur('stok');
             if (id !== 'satis') barkodOkuDurdur('satis');
             if (id !== 'barkod') barkodOkuDurdur('genel');
         }
 
-        // ============ TÜM SCANNER'LARI DURDUR ============
-        function tumScannerlariDurdur() {
-            barkodOkuDurdur('stok');
-            barkodOkuDurdur('satis');
-            barkodOkuDurdur('genel');
-        }
-
-        // ============ BARKOD OKUYUCU - YENİDEN YAZILDI ============
+        // ============ ZXing BARKOD OKUYUCU ============
         
-        function barkodOkutmaBaslat(elementId, onSuccess, onError) {
-            // Önceki instance'ı temizle
-            const element = document.getElementById(elementId);
-            if (!element) {
-                console.error(`${elementId} elementi bulunamadı!`);
-                return null;
-            }
-            
-            // Elementi temizle
-            element.innerHTML = '';
-            
-            // Yeni scanner oluştur
-            const scanner = new Html5Qrcode(elementId);
-            
-            const config = {
-                fps: 10,
-                qrbox: { width: 250, height: 150 },
-                aspectRatio: 1.333,
-                formatsToSupport: [
-                    Html5QrcodeSupportedFormats.EAN_13,
-                    Html5QrcodeSupportedFormats.EAN_8,
-                    Html5QrcodeSupportedFormats.UPC_A,
-                    Html5QrcodeSupportedFormats.UPC_E,
-                    Html5QrcodeSupportedFormats.CODE_128,
-                    Html5QrcodeSupportedFormats.CODE_39,
-                    Html5QrcodeSupportedFormats.CODE_93,
-                    Html5QrcodeSupportedFormats.CODABAR,
-                    Html5QrcodeSupportedFormats.ITF,
-                    Html5QrcodeSupportedFormats.QR_CODE,
-                    Html5QrcodeSupportedFormats.DATA_MATRIX,
-                    Html5QrcodeSupportedFormats.AZTEC,
-                    Html5QrcodeSupportedFormats.PDF_417,
-                ]
-            };
-            
-            scanner.start(
-                { facingMode: "environment" },
-                config,
-                (decodedText, decodedResult) => {
-                    console.log(`✅ Barkod okundu [${elementId}]:`, decodedText);
-                    if (onSuccess) onSuccess(decodedText, decodedResult);
-                },
-                (errorMessage) => {
-                    // Sessizce devam et - sürekli tarama için hataları yok say
-                }
-            ).then(() => {
-                console.log(`✅ Scanner başlatıldı: ${elementId}`);
-            }).catch(err => {
-                console.error(`❌ Scanner başlatılamadı [${elementId}]:`, err);
-                if (onError) onError(err);
-            });
-            
-            return scanner;
-        }
-
-        function barkodOkuStok() {
+        async function barkodOkuStok() {
             const scannerArea = document.getElementById('stokScannerArea');
             
-            // Eğer zaten açıksa kapat
             if (scannerArea.style.display === 'block') {
                 barkodOkuDurdur('stok');
                 return;
             }
             
             // Diğer scanner'ları durdur
-            if (aktifScanner && aktifScanner !== 'stok') {
-                barkodOkuDurdur(aktifScanner);
+            if (aktifScannerTip && aktifScannerTip !== 'stok') {
+                barkodOkuDurdur(aktifScannerTip);
             }
             
             scannerArea.style.display = 'block';
             document.getElementById('btnBarkodStok').textContent = '📷 Okumayı Durdur';
-            document.getElementById('stokScannerStatus').textContent = '🔍 Kamera aktif - Barkod okutun...';
+            document.getElementById('stokScannerStatus').textContent = '🔍 Kamera açılıyor...';
             document.getElementById('stokScannerStatus').className = 'scanner-status scanner-active';
             
-            // Önceki scanner'ı temizle
-            if (scannerStok) {
-                if (scannerStok.isScanning) {
-                    scannerStok.stop().catch(() => {});
-                }
-                scannerStok = null;
-            }
-            
-            scannerStok = barkodOkutmaBaslat('readerStok',
-                (decodedText) => {
-                    // Barkod okundu!
-                    document.getElementById('kod').value = decodedText;
-                    document.getElementById('stokScannerStatus').textContent = `✅ Okundu: ${decodedText}`;
+            try {
+                await scannerBaslat('stokVideo', (barkod) => {
+                    document.getElementById('kod').value = barkod;
+                    document.getElementById('stokScannerStatus').textContent = `✅ Okundu: ${barkod}`;
                     document.getElementById('stokScannerStatus').className = 'scanner-status';
                     document.getElementById('stokScannerStatus').style.color = 'var(--primary)';
                     
-                    const mevcutUrun = urunler.find(u => u.kod === decodedText);
+                    const mevcutUrun = urunler.find(u => u.kod === barkod);
                     if (mevcutUrun) {
                         document.getElementById('stokScannerStatus').textContent += ` (Ürün: ${mevcutUrun.ad})`;
                     }
                     
-                    toast(`✅ Barkod: ${decodedText}`);
-                    
-                    // 1.5 saniye sonra kapat
+                    toast(`✅ Barkod: ${barkod}`);
                     setTimeout(() => barkodOkuDurdur('stok'), 1500);
-                },
-                (err) => {
-                    document.getElementById('stokScannerStatus').textContent = '❌ Kamera hatası!';
-                    document.getElementById('stokScannerStatus').className = 'scanner-status';
-                    document.getElementById('stokScannerStatus').style.color = 'var(--danger)';
-                    toast('⚠️ Kamera başlatılamadı!', 'error');
-                    barkodOkuDurdur('stok');
-                }
-            );
-            
-            aktifScanner = 'stok';
+                });
+                
+                aktifScannerTip = 'stok';
+                document.getElementById('stokScannerStatus').textContent = '🔍 Kamera aktif - Barkodu gösterin...';
+            } catch (err) {
+                console.error('Stok scanner hatası:', err);
+                document.getElementById('stokScannerStatus').textContent = '❌ Kamera başlatılamadı!';
+                document.getElementById('stokScannerStatus').className = 'scanner-status';
+                document.getElementById('stokScannerStatus').style.color = 'var(--danger)';
+                toast('⚠️ Kamera erişimi reddedildi veya kullanılamıyor!', 'error');
+                barkodOkuDurdur('stok');
+            }
         }
 
-        function barkodOkuSatis() {
+        async function barkodOkuSatis() {
             const scannerArea = document.getElementById('satisScannerArea');
             
             if (scannerArea.style.display === 'block') {
@@ -959,26 +913,19 @@
                 return;
             }
             
-            if (aktifScanner && aktifScanner !== 'satis') {
-                barkodOkuDurdur(aktifScanner);
+            if (aktifScannerTip && aktifScannerTip !== 'satis') {
+                barkodOkuDurdur(aktifScannerTip);
             }
             
             scannerArea.style.display = 'block';
             document.getElementById('btnBarkodSatis').textContent = '📷 Okumayı Durdur';
-            document.getElementById('satisScannerStatus').textContent = '🔍 Kamera aktif - Ürün barkodu okutun...';
+            document.getElementById('satisScannerStatus').textContent = '🔍 Kamera açılıyor...';
             document.getElementById('satisScannerStatus').className = 'scanner-status scanner-active';
             document.getElementById('satisScannerResult').innerHTML = '<span style="color:var(--text-secondary);">Barkod bekleniyor...</span>';
             
-            if (scannerSatis) {
-                if (scannerSatis.isScanning) {
-                    scannerSatis.stop().catch(() => {});
-                }
-                scannerSatis = null;
-            }
-            
-            scannerSatis = barkodOkutmaBaslat('readerSatis',
-                (decodedText) => {
-                    const urun = urunler.find(u => u.kod === decodedText);
+            try {
+                await scannerBaslat('satisVideo', (barkod) => {
+                    const urun = urunler.find(u => u.kod === barkod);
                     const resultEl = document.getElementById('satisScannerResult');
                     const statusEl = document.getElementById('satisScannerStatus');
                     
@@ -1001,54 +948,48 @@
                     } else {
                         resultEl.innerHTML = `
                             <div style="color:var(--danger);">
-                                ❌ Kayıtsız barkod: <b>${decodedText}</b>
+                                ❌ Kayıtsız barkod: <b>${barkod}</b>
                             </div>
                         `;
-                        statusEl.textContent = `❌ Tanımsız: ${decodedText}`;
+                        statusEl.textContent = `❌ Tanımsız: ${barkod}`;
                         statusEl.className = 'scanner-status';
                         statusEl.style.color = 'var(--danger)';
                         toast('⚠️ Ürün bulunamadı!', 'warning');
                     }
-                },
-                (err) => {
-                    document.getElementById('satisScannerStatus').textContent = '❌ Kamera hatası!';
-                    document.getElementById('satisScannerStatus').className = 'scanner-status';
-                    document.getElementById('satisScannerStatus').style.color = 'var(--danger)';
-                    toast('⚠️ Kamera başlatılamadı!', 'error');
-                    barkodOkuDurdur('satis');
-                }
-            );
-            
-            aktifScanner = 'satis';
+                });
+                
+                aktifScannerTip = 'satis';
+                document.getElementById('satisScannerStatus').textContent = '🔍 Kamera aktif - Ürün barkodu okutun...';
+            } catch (err) {
+                console.error('Satis scanner hatası:', err);
+                document.getElementById('satisScannerStatus').textContent = '❌ Kamera başlatılamadı!';
+                document.getElementById('satisScannerStatus').className = 'scanner-status';
+                document.getElementById('satisScannerStatus').style.color = 'var(--danger)';
+                toast('⚠️ Kamera erişimi reddedildi!', 'error');
+                barkodOkuDurdur('satis');
+            }
         }
 
-        function barkodOkuGenel() {
-            // Eğer zaten açıksa kapat
-            if (scannerGenel && scannerGenel.isScanning) {
+        async function barkodOkuGenel() {
+            if (aktifScannerTip === 'genel') {
                 barkodOkuDurdur('genel');
                 return;
             }
             
-            if (aktifScanner && aktifScanner !== 'genel') {
-                barkodOkuDurdur(aktifScanner);
+            if (aktifScannerTip && aktifScannerTip !== 'genel') {
+                barkodOkuDurdur(aktifScannerTip);
             }
             
-            document.getElementById('genelScannerStatus').textContent = '🔍 Kamera aktif - Barkod okutun...';
+            document.getElementById('genelScannerViewport').style.display = 'block';
+            document.getElementById('genelScannerStatus').textContent = '🔍 Kamera açılıyor...';
             document.getElementById('genelScannerStatus').className = 'scanner-status scanner-active';
             document.getElementById('genelScannerResult').innerHTML = '<span style="color:var(--text-secondary);">Barkod bekleniyor...</span>';
             document.getElementById('btnBarkodGenel').disabled = true;
             document.getElementById('btnBarkodGenelDurdur').disabled = false;
             
-            if (scannerGenel) {
-                if (scannerGenel.isScanning) {
-                    scannerGenel.stop().catch(() => {});
-                }
-                scannerGenel = null;
-            }
-            
-            scannerGenel = barkodOkutmaBaslat('readerGenel',
-                (decodedText) => {
-                    const urun = urunler.find(u => u.kod === decodedText);
+            try {
+                await scannerBaslat('genelVideo', (barkod) => {
+                    const urun = urunler.find(u => u.kod === barkod);
                     const resultEl = document.getElementById('genelScannerResult');
                     const statusEl = document.getElementById('genelScannerStatus');
                     
@@ -1066,35 +1007,113 @@
                     } else {
                         resultEl.innerHTML = `
                             <div style="color:var(--warning);">
-                                ⚠️ Kayıtsız barkod: <b>${decodedText}</b>
-                                <br><small>Bu barkod sisteme kayıtlı değil</small>
+                                ⚠️ Kayıtsız barkod: <b>${barkod}</b>
                             </div>
                         `;
-                        statusEl.textContent = `⚠️ Tanımsız: ${decodedText}`;
+                        statusEl.textContent = `⚠️ Tanımsız: ${barkod}`;
                         statusEl.className = 'scanner-status';
                         statusEl.style.color = 'var(--warning)';
                     }
-                },
-                (err) => {
-                    document.getElementById('genelScannerStatus').textContent = '❌ Kamera hatası!';
-                    document.getElementById('genelScannerStatus').className = 'scanner-status';
-                    document.getElementById('genelScannerStatus').style.color = 'var(--danger)';
-                    toast('⚠️ Kamera başlatılamadı!', 'error');
-                    barkodOkuDurdur('genel');
-                }
-            );
+                });
+                
+                aktifScannerTip = 'genel';
+                document.getElementById('genelScannerStatus').textContent = '🔍 Kamera aktif - Barkodu gösterin...';
+            } catch (err) {
+                console.error('Genel scanner hatası:', err);
+                document.getElementById('genelScannerStatus').textContent = '❌ Kamera başlatılamadı!';
+                document.getElementById('genelScannerStatus').className = 'scanner-status';
+                document.getElementById('genelScannerStatus').style.color = 'var(--danger)';
+                toast('⚠️ Kamera erişimi reddedildi!', 'error');
+                barkodOkuDurdur('genel');
+            }
+        }
+
+        async function scannerBaslat(videoElementId, onBarkodOkundu) {
+            // Önceki okuyucuyu durdur
+            if (codeReader) {
+                try { codeReader.stop(); } catch(e) {}
+                codeReader = null;
+            }
             
-            aktifScanner = 'genel';
+            // Stream'i durdur
+            if (scannerStream) {
+                scannerStream.getTracks().forEach(track => track.stop());
+                scannerStream = null;
+            }
+            
+            const videoElement = document.getElementById(videoElementId);
+            if (!videoElement) throw new Error('Video elementi bulunamadı');
+            
+            // ZXing okuyucu oluştur
+            codeReader = new ZXing.BrowserMultiFormatReader();
+            
+            // Desteklenen formatları ayarla
+            const hints = new Map();
+            const formats = [
+                ZXing.BarcodeFormat.EAN_13,
+                ZXing.BarcodeFormat.EAN_8,
+                ZXing.BarcodeFormat.UPC_A,
+                ZXing.BarcodeFormat.UPC_E,
+                ZXing.BarcodeFormat.CODE_128,
+                ZXing.BarcodeFormat.CODE_39,
+                ZXing.BarcodeFormat.CODE_93,
+                ZXing.BarcodeFormat.CODABAR,
+                ZXing.BarcodeFormat.ITF,
+                ZXing.BarcodeFormat.QR_CODE,
+                ZXing.BarcodeFormat.DATA_MATRIX,
+                ZXing.BarcodeFormat.PDF_417,
+                ZXing.BarcodeFormat.AZTEC
+            ];
+            hints.set(ZXing.DecodeHintType.POSSIBLE_FORMATS, formats);
+            
+            // Kamera stream'ini al
+            scannerStream = await navigator.mediaDevices.getUserMedia({
+                video: { facingMode: "environment", width: { ideal: 640 }, height: { ideal: 480 } }
+            });
+            
+            videoElement.srcObject = scannerStream;
+            videoElement.setAttribute('playsinline', 'true');
+            await videoElement.play();
+            
+            console.log('✅ Kamera başlatıldı, barkod okumaya hazır...');
+            
+            // Barkod okumayı başlat
+            codeReader.decodeFromVideoElement(videoElement, (result, err) => {
+                if (result) {
+                    const barkod = result.text;
+                    console.log('✅ Barkod okundu:', barkod);
+                    if (onBarkodOkundu) onBarkodOkundu(barkod);
+                }
+            });
         }
 
         function barkodOkuDurdur(tip) {
-            if (tip === 'stok') {
-                if (scannerStok && scannerStok.isScanning) {
-                    scannerStok.stop().then(() => {
-                        console.log('Stok scanner durduruldu');
-                    }).catch(err => console.log('Durdurma hatası:', err));
+            // Okuyucuyu durdur
+            if (codeReader) {
+                try { 
+                    codeReader.stop();
+                    codeReader = null;
+                } catch(e) {
+                    console.log('Okuyucu durdurma hatası:', e);
                 }
-                scannerStok = null;
+            }
+            
+            // Kamera stream'ini durdur
+            if (scannerStream) {
+                scannerStream.getTracks().forEach(track => track.stop());
+                scannerStream = null;
+            }
+            
+            // Video elementlerini temizle
+            ['stokVideo', 'satisVideo', 'genelVideo'].forEach(id => {
+                const video = document.getElementById(id);
+                if (video && video.srcObject) {
+                    video.srcObject.getTracks().forEach(track => track.stop());
+                    video.srcObject = null;
+                }
+            });
+            
+            if (tip === 'stok') {
                 document.getElementById('stokScannerArea').style.display = 'none';
                 document.getElementById('btnBarkodStok').textContent = '📷 Barkod Okut';
                 document.getElementById('stokScannerStatus').textContent = '';
@@ -1103,12 +1122,6 @@
             }
             
             if (tip === 'satis') {
-                if (scannerSatis && scannerSatis.isScanning) {
-                    scannerSatis.stop().then(() => {
-                        console.log('Satis scanner durduruldu');
-                    }).catch(err => console.log('Durdurma hatası:', err));
-                }
-                scannerSatis = null;
                 document.getElementById('satisScannerArea').style.display = 'none';
                 document.getElementById('btnBarkodSatis').textContent = '📷 Barkod Okut';
                 document.getElementById('satisScannerStatus').textContent = '';
@@ -1117,12 +1130,7 @@
             }
             
             if (tip === 'genel') {
-                if (scannerGenel && scannerGenel.isScanning) {
-                    scannerGenel.stop().then(() => {
-                        console.log('Genel scanner durduruldu');
-                    }).catch(err => console.log('Durdurma hatası:', err));
-                }
-                scannerGenel = null;
+                document.getElementById('genelScannerViewport').style.display = 'none';
                 document.getElementById('genelScannerStatus').textContent = '⏸️ Kamera kapalı';
                 document.getElementById('genelScannerStatus').className = 'scanner-status scanner-inactive';
                 document.getElementById('genelScannerStatus').style.color = '';
@@ -1130,7 +1138,33 @@
                 document.getElementById('btnBarkodGenelDurdur').disabled = true;
             }
             
-            if (aktifScanner === tip) aktifScanner = null;
+            if (aktifScannerTip === tip) aktifScannerTip = null;
+        }
+
+        function manuelBarkodSorgula() {
+            const barkod = document.getElementById('manuelBarkod').value.trim();
+            if (!barkod) { toast('⚠️ Barkod girin!', 'warning'); return; }
+            
+            const urun = urunler.find(u => u.kod === barkod);
+            const resultEl = document.getElementById('genelScannerResult');
+            const statusEl = document.getElementById('genelScannerStatus');
+            
+            if (urun) {
+                resultEl.innerHTML = `
+                    <div style="color:var(--primary);">
+                        ✅ <b>${urun.ad}</b><br>
+                        Fiyat: ${urun.fiyat.toFixed(2)} ₺ | Stok: ${urun.stok} adet
+                    </div>
+                `;
+                statusEl.textContent = `✅ Bulundu: ${urun.ad}`;
+                statusEl.className = 'scanner-status';
+                statusEl.style.color = 'var(--primary)';
+            } else {
+                resultEl.innerHTML = `<div style="color:var(--warning);">⚠️ Kayıtsız barkod: <b>${barkod}</b></div>`;
+                statusEl.textContent = `⚠️ Tanımsız: ${barkod}`;
+                statusEl.className = 'scanner-status';
+                statusEl.style.color = 'var(--warning)';
+            }
         }
 
         // ============ ÜRÜN İŞLEMLERİ ============
@@ -1160,38 +1194,35 @@
 
         function urunSil(index) {
             if (confirm(`"${urunler[index].ad}" silinecek. Onaylıyor musunuz?`)) {
-                const ad = urunler[index].ad;
                 urunler.splice(index, 1);
                 save(); render();
-                toast(`🗑️ "${ad}" silindi.`, 'warning');
+                toast('🗑️ Ürün silindi.', 'warning');
             }
         }
 
         function stokGuncelle(index) {
-            const urun = urunler[index];
-            const yeniStok = prompt(`"${urun.ad}" stok:`, urun.stok);
+            const yeniStok = prompt('Yeni stok:', urunler[index].stok);
             if (yeniStok === null) return;
             const stok = parseInt(yeniStok);
             if (isNaN(stok) || stok < 0) { toast('⚠️ Geçersiz!', 'warning'); return; }
-            urun.stok = stok;
+            urunler[index].stok = stok;
             save(); render();
-            toast(`✅ "${urun.ad}" stok: ${stok}`);
+            toast('✅ Stok güncellendi!');
         }
 
         function fiyatGuncelle(index) {
-            const urun = urunler[index];
-            const yeniFiyat = prompt(`"${urun.ad}" fiyat:`, urun.fiyat);
+            const yeniFiyat = prompt('Yeni fiyat:', urunler[index].fiyat);
             if (yeniFiyat === null) return;
             const fiyat = parseFloat(yeniFiyat);
             if (isNaN(fiyat) || fiyat < 0) { toast('⚠️ Geçersiz!', 'warning'); return; }
-            urun.fiyat = fiyat;
+            urunler[index].fiyat = fiyat;
             save(); render();
-            toast(`✅ "${urun.ad}" fiyat: ${fiyat.toFixed(2)} ₺`);
+            toast('✅ Fiyat güncellendi!');
         }
 
         function tumStokSifirla() {
-            if (urunler.length === 0) { toast('⚠️ Ürün yok!', 'warning'); return; }
-            if (confirm(`${urunler.length} ürün silinecek! Onaylıyor musunuz?`)) {
+            if (urunler.length === 0) return;
+            if (confirm('Tüm ürünler silinecek! Onaylıyor musunuz?')) {
                 urunler = [];
                 save(); render();
                 toast('🧨 Tüm ürünler silindi!', 'error');
@@ -1209,8 +1240,8 @@
         }
 
         function kasaSifirla() {
-            if (kasa === 0) { toast('⚠️ Kasa zaten sıfır!', 'warning'); return; }
-            if (confirm(`Kasa (${kasa.toFixed(2)} ₺) sıfırlansın mı?`)) {
+            if (kasa === 0) return;
+            if (confirm('Kasa sıfırlansın mı?')) {
                 kasa = 0;
                 save(); render();
                 toast('🧨 Kasa sıfırlandı!', 'warning');
@@ -1247,23 +1278,15 @@
             render();
         }
 
-        function sepettenTamamenCikar(i) {
-            sepet.splice(i, 1);
-            render();
-        }
+        function sepettenTamamenCikar(i) { sepet.splice(i, 1); render(); }
 
         function sepetiBosalt() {
-            if (sepet.length === 0) { toast('⚠️ Sepet boş!', 'warning'); return; }
-            if (confirm('Sepet boşaltılsın mı?')) {
-                sepet = [];
-                render();
-                toast('🗑️ Sepet boşaltıldı.');
-            }
+            if (sepet.length === 0) return;
+            if (confirm('Sepet boşaltılsın mı?')) { sepet = []; render(); }
         }
 
         function satis() {
             if (sepet.length === 0) { toast('⚠️ Sepet boş!', 'warning'); return; }
-
             const toplamTutar = sepet.reduce((a, b) => a + (b.fiyat * b.adet), 0);
             const tarih = new Date();
             const faturaNo = 'FTR-' + tarih.getTime().toString().slice(-8);
@@ -1274,29 +1297,15 @@
             });
 
             kasa += toplamTutar;
-
-            sonSatislar.unshift({
-                faturaNo,
-                tarih: tarih.toISOString(),
-                urunler: sepet.map(s => ({ ad: s.ad, fiyat: s.fiyat, adet: s.adet })),
-                toplam: toplamTutar
-            });
+            sonSatislar.unshift({ faturaNo, tarih: tarih.toISOString(), urunler: [...sepet], toplam: toplamTutar });
             if (sonSatislar.length > 100) sonSatislar.pop();
 
             document.getElementById('fatura').innerHTML = `
                 <div class="fatura-card">
-                    <div class="fatura-header">
-                        <h2>🧾 ${marketAdi}</h2>
-                        <p style="color:var(--text-secondary);">Fatura No: ${faturaNo}</p>
-                        <p style="color:var(--text-secondary);">Tarih: ${tarih.toLocaleString('tr-TR')}</p>
-                    </div>
-                    ${sepet.map(s => `<div class="fatura-item"><span>${s.ad} x${s.adet}</span><span>${(s.fiyat * s.adet).toFixed(2)} ₺</span></div>`).join('')}
-                    <div class="fatura-total" style="display:flex; justify-content:space-between;">
-                        <span>TOPLAM</span>
-                        <span style="color:var(--primary);">${toplamTutar.toFixed(2)} ₺</span>
-                    </div>
-                </div>
-            `;
+                    <div class="fatura-header"><h2>🧾 ${marketAdi}</h2><p>Fatura No: ${faturaNo}</p><p>${tarih.toLocaleString('tr-TR')}</p></div>
+                    ${sepet.map(s => `<div class="fatura-item"><span>${s.ad} x${s.adet}</span><span>${(s.fiyat*s.adet).toFixed(2)} ₺</span></div>`).join('')}
+                    <div class="fatura-total" style="display:flex;justify-content:space-between;"><span>TOPLAM</span><span style="color:var(--primary);">${toplamTutar.toFixed(2)} ₺</span></div>
+                </div>`;
             
             sepet = [];
             save(); render();
@@ -1308,28 +1317,19 @@
             const q = document.getElementById('ara').value.toLowerCase();
             const urunSec = document.getElementById('urunSec');
             if (!urunSec) return;
-            
             const filtrelenmis = urunler.filter(u => u.ad.toLowerCase().includes(q) || u.kod.includes(q));
-            
             if (filtrelenmis.length === 0) {
-                urunSec.innerHTML = `<div class="card" style="text-align:center; color:var(--text-secondary);">🔍 Sonuç bulunamadı</div>`;
+                urunSec.innerHTML = `<div class="card" style="text-align:center;">🔍 Sonuç bulunamadı</div>`;
                 return;
             }
-            
-            urunSec.innerHTML = filtrelenmis.map((u) => {
-                const gercekIndex = urunler.indexOf(u);
-                const stokClass = u.stok === 0 ? 'stock-out' : u.stok < 5 ? 'stock-low' : '';
-                return `
-                    <div class="card urun-secim-card" onclick="sepeteEkle(${gercekIndex})" style="cursor:pointer;">
-                        <div class="card-header">
-                            <span class="card-title">📦 ${u.ad}</span>
-                            <span class="card-price">${u.fiyat.toFixed(2)} ₺</span>
-                        </div>
-                        <span class="card-stock ${stokClass}">📊 Stok: ${u.stok} ${u.stok === 0 ? '❌' : u.stok < 5 ? '⚠️' : '✅'}</span>
-                        ${u.kod ? `<br><span style="font-size:0.8em; color:#666;">🏷️ ${u.kod}</span>` : ''}
-                        <div style="margin-top:8px;"><span style="color:var(--primary); font-weight:600;">🛒 Sepete Ekle</span></div>
-                    </div>
-                `;
+            urunSec.innerHTML = filtrelenmis.map(u => {
+                const i = urunler.indexOf(u);
+                return `<div class="card urun-secim-card" onclick="sepeteEkle(${i})" style="cursor:pointer;">
+                    <div class="card-header"><span class="card-title">📦 ${u.ad}</span><span class="card-price">${u.fiyat.toFixed(2)} ₺</span></div>
+                    <span class="card-stock ${u.stok===0?'stock-out':u.stok<5?'stock-low':''}">📊 Stok: ${u.stok} ${u.stok===0?'❌':u.stok<5?'⚠️':'✅'}</span>
+                    ${u.kod?`<br><span style="font-size:0.8em;color:#666;">🏷️ ${u.kod}</span>`:''}
+                    <div style="margin-top:8px;"><span style="color:var(--primary);">🛒 Sepete Ekle</span></div>
+                </div>`;
             }).join('');
         }
 
@@ -1338,29 +1338,19 @@
             const container = document.getElementById('faturaGecmisiList');
             let list = sonSatislar;
             if (filtre) list = sonSatislar.filter(f => f.faturaNo.toLowerCase().includes(filtre) || new Date(f.tarih).toLocaleString('tr-TR').includes(filtre));
-
             if (list.length === 0) {
-                container.innerHTML = `<div class="card" style="text-align:center; color:var(--text-secondary); padding:30px;">📋 Fatura bulunamadı</div>`;
+                container.innerHTML = `<div class="card" style="text-align:center;padding:30px;">📋 Fatura bulunamadı</div>`;
                 return;
             }
-
-            container.innerHTML = `
-                <div style="overflow-x:auto;">
-                    <table class="fatura-tablo">
-                        <thead><tr><th>Fatura No</th><th>Tarih</th><th>Ürün</th><th>Toplam</th><th>Detay</th></tr></thead>
-                        <tbody>
-                            ${list.map(f => `
-                                <tr>
-                                    <td><b>${f.faturaNo}</b></td>
-                                    <td>${new Date(f.tarih).toLocaleString('tr-TR')}</td>
-                                    <td>${f.urunler.reduce((a,b) => a + b.adet, 0)} adet</td>
-                                    <td style="color:var(--primary); font-weight:700;">${f.toplam.toFixed(2)} ₺</td>
-                                    <td><button class="btn-sm btn-primary" onclick="faturaDetayGoster(${sonSatislar.indexOf(f)})">👁️ Görüntüle</button></td>
-                                </tr>
-                            `).join('')}
-                        </tbody>
-                    </table>
-                </div>`;
+            container.innerHTML = `<div style="overflow-x:auto;"><table class="fatura-tablo">
+                <thead><tr><th>Fatura No</th><th>Tarih</th><th>Ürün</th><th>Toplam</th><th>Detay</th></tr></thead>
+                <tbody>${list.map(f => `<tr>
+                    <td><b>${f.faturaNo}</b></td>
+                    <td>${new Date(f.tarih).toLocaleString('tr-TR')}</td>
+                    <td>${f.urunler.reduce((a,b)=>a+b.adet,0)} adet</td>
+                    <td style="color:var(--primary);">${f.toplam.toFixed(2)} ₺</td>
+                    <td><button class="btn-sm btn-primary" onclick="faturaDetayGoster(${sonSatislar.indexOf(f)})">👁️</button></td>
+                </tr>`).join('')}</tbody></table></div>`;
         }
 
         function faturaFiltrele() { faturaGecmisiGoster(document.getElementById('faturaAra').value.toLowerCase()); }
@@ -1369,99 +1359,50 @@
             const f = sonSatislar[index];
             if (!f) return;
             document.getElementById('faturaModalIcerik').innerHTML = `
-                <div class="fatura-card" style="border:none; margin:0;">
-                    <div class="fatura-header">
-                        <h2>🧾 ${marketAdi}</h2>
-                        <p>Fatura No: ${f.faturaNo}</p>
-                        <p>Tarih: ${new Date(f.tarih).toLocaleString('tr-TR')}</p>
-                    </div>
+                <div class="fatura-card" style="border:none;margin:0;">
+                    <div class="fatura-header"><h2>🧾 ${marketAdi}</h2><p>${f.faturaNo}</p><p>${new Date(f.tarih).toLocaleString('tr-TR')}</p></div>
                     ${f.urunler.map(u => `<div class="fatura-item"><span>${u.ad} x${u.adet}</span><span>${(u.fiyat*u.adet).toFixed(2)} ₺</span></div>`).join('')}
-                    <div class="fatura-total" style="display:flex; justify-content:space-between;"><span>TOPLAM</span><span style="color:var(--primary); font-size:1.3em;">${f.toplam.toFixed(2)} ₺</span></div>
+                    <div class="fatura-total" style="display:flex;justify-content:space-between;"><span>TOPLAM</span><span style="color:var(--primary);font-size:1.3em;">${f.toplam.toFixed(2)} ₺</span></div>
                 </div>
-                <button class="btn-sm btn-danger" style="margin-top:15px; width:100%;" onclick="faturaSil(${index})">🗑️ Bu Faturayı Sil</button>
-            `;
+                <button class="btn-sm btn-danger" style="margin-top:15px;width:100%;" onclick="faturaSil(${index})">🗑️ Sil</button>`;
             document.getElementById('faturaModal').classList.add('active');
         }
 
         function modalKapat() { document.getElementById('faturaModal').classList.remove('active'); }
-        
-        function faturaSil(index) {
-            if (confirm('Fatura silinsin mi?')) {
-                sonSatislar.splice(index, 1);
-                save();
-                modalKapat();
-                faturaGecmisiGoster();
-                toast('🗑️ Fatura silindi.', 'warning');
-            }
-        }
-
-        function faturaGecmisiTemizle() {
-            if (sonSatislar.length === 0) return;
-            if (confirm(`${sonSatislar.length} fatura silinecek!`)) {
-                sonSatislar = [];
-                save();
-                faturaGecmisiGoster();
-                render();
-                toast('🧨 Faturalar silindi!', 'error');
-            }
-        }
+        function faturaSil(i) { if(confirm('Silinsin mi?')){ sonSatislar.splice(i,1); save(); modalKapat(); faturaGecmisiGoster(); toast('🗑️ Silindi.','warning'); } }
+        function faturaGecmisiTemizle() { if(sonSatislar.length&&confirm('Tüm faturalar silinecek!')){ sonSatislar=[]; save(); faturaGecmisiGoster(); render(); toast('🧨 Silindi!','error'); } }
 
         function faturaGecmisiExcel() {
-            if (sonSatislar.length === 0) { toast('⚠️ Fatura yok!', 'warning'); return; }
-            const data = sonSatislar.map((f, i) => ({
-                'No': i+1, 'Fatura No': f.faturaNo,
-                'Tarih': new Date(f.tarih).toLocaleString('tr-TR'),
-                'Ürünler': f.urunler.map(u => `${u.ad} x${u.adet}`).join(', '),
-                'Adet': f.urunler.reduce((a,b) => a+b.adet, 0),
-                'Toplam': f.toplam.toFixed(2)
-            }));
-            const ws = XLSX.utils.json_to_sheet(data);
-            const wb = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(wb, ws, "Faturalar");
-            XLSX.writeFile(wb, `Faturalar_${new Date().toISOString().slice(0,10)}.xlsx`);
+            if(!sonSatislar.length) return;
+            const ws = XLSX.utils.json_to_sheet(sonSatislar.map((f,i)=>({'No':i+1,'Fatura':f.faturaNo,'Tarih':new Date(f.tarih).toLocaleString('tr-TR'),'Ürünler':f.urunler.map(u=>`${u.ad}x${u.adet}`).join(', '),'Toplam':f.toplam.toFixed(2)})));
+            const wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb,ws,"Faturalar");
+            XLSX.writeFile(wb,`Faturalar_${new Date().toISOString().slice(0,10)}.xlsx`);
             toast('📥 Excel indirildi!');
         }
 
         // ============ VERİ YÖNETİMİ ============
         function verileriYedekle() {
-            const yedek = { urunler, kasa, sonSatislar, temaRengi, marketAdi, logoData, bgColor, cardColor, yedekTarihi: new Date().toISOString() };
-            const blob = new Blob([JSON.stringify(yedek, null, 2)], { type: 'application/json' });
-            const a = document.createElement('a');
-            a.href = URL.createObjectURL(blob);
-            a.download = `Yedek_${new Date().toISOString().slice(0,10)}.json`;
-            a.click();
+            const blob = new Blob([JSON.stringify({urunler,kasa,sonSatislar,temaRengi,marketAdi,logoData,bgColor,cardColor},null,2)],{type:'application/json'});
+            const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=`Yedek_${new Date().toISOString().slice(0,10)}.json`; a.click();
             toast('📥 Yedek indirildi!');
         }
 
         function yedektenYukle() {
-            const input = document.createElement('input');
-            input.type = 'file';
-            input.accept = '.json';
-            input.onchange = function(e) {
-                const file = e.target.files[0];
-                if (!file) return;
-                const reader = new FileReader();
-                reader.onload = function(event) {
-                    try {
-                        const yedek = JSON.parse(event.target.result);
-                        if (!yedek.urunler) { toast('⚠️ Geçersiz yedek!', 'error'); return; }
-                        if (confirm('Yedek yüklenecek. Onaylıyor musunuz?')) {
-                            urunler = yedek.urunler;
-                            kasa = yedek.kasa || 0;
-                            sonSatislar = yedek.sonSatislar || [];
-                            temaRengi = yedek.temaRengi || '#00d084';
-                            marketAdi = yedek.marketAdi || 'ATEŞOĞLU MARKET PRO';
-                            logoData = yedek.logoData || null;
-                            bgColor = yedek.bgColor || '#0a0a0a';
-                            cardColor = yedek.cardColor || '#1a1a1a';
-                            save();
-                            temalariYukle();
-                            render();
-                            toast('✅ Yedek yüklendi!');
+            const input=document.createElement('input'); input.type='file'; input.accept='.json';
+            input.onchange=function(e){
+                const file=e.target.files[0]; if(!file) return;
+                const reader=new FileReader();
+                reader.onload=function(ev){
+                    try{
+                        const y=JSON.parse(ev.target.result);
+                        if(!y.urunler) return toast('⚠️ Geçersiz!','error');
+                        if(confirm('Yedek yüklenecek. Onaylıyor musunuz?')){
+                            urunler=y.urunler; kasa=y.kasa||0; sonSatislar=y.sonSatislar||[];
+                            temaRengi=y.temaRengi||'#00d084'; marketAdi=y.marketAdi||'ATEŞOĞLU MARKET PRO';
+                            logoData=y.logoData||null; bgColor=y.bgColor||'#0a0a0a'; cardColor=y.cardColor||'#1a1a1a';
+                            save(); temalariYukle(); render(); toast('✅ Yedek yüklendi!');
                         }
-                    } catch (err) {
-                        toast('⚠️ Dosya okunamadı!', 'error');
-                    }
+                    }catch{toast('⚠️ Hata!','error');}
                 };
                 reader.readAsText(file);
             };
@@ -1469,143 +1410,87 @@
         }
 
         function tumVerileriSifirla() {
-            if (confirm('⚠️ TÜM VERİLER SİLİNECEK!\n\nDevam etmek istiyor musunuz?')) {
-                if (confirm('Son onay: Gerçekten silmek istiyor musunuz?')) {
-                    urunler = []; kasa = 0; sepet = []; sonSatislar = []; logoData = null;
-                    localStorage.clear();
-                    save();
-                    temalariYukle();
-                    render();
-                    toast('🧨 Tüm veriler sıfırlandı!', 'error');
-                }
+            if(confirm('⚠️ TÜM VERİLER SİLİNECEK!\n\nDevam edilsin mi?')&&confirm('Son onay: Silinsin mi?')){
+                urunler=[]; kasa=0; sepet=[]; sonSatislar=[]; logoData=null;
+                localStorage.clear(); save(); temalariYukle(); render();
+                toast('🧨 Sıfırlandı!','error');
             }
         }
 
         // ============ RENDER ============
         function render() {
-            document.getElementById('kasaText').innerText = kasa.toFixed(2);
-            document.getElementById('urunSayisi').innerText = `Toplam: ${urunler.length} ürün`;
-
-            const urunList = document.getElementById('urunList');
-            if (urunler.length === 0) {
-                urunList.innerHTML = `<div class="card" style="text-align:center; padding:30px;">📦 Henüz ürün yok</div>`;
-            } else {
-                urunList.innerHTML = urunler.map((u, i) => `
-                    <div class="card" style="background:${u.stok === 0 ? '#1a0a0a' : ''}">
-                        <div class="card-header">
-                            <span class="card-title">📦 ${u.ad}</span>
-                            <span class="card-price">${u.fiyat.toFixed(2)} ₺</span>
-                        </div>
-                        <span class="card-stock ${u.stok === 0 ? 'stock-out' : u.stok < 5 ? 'stock-low' : ''}">
-                            📊 Stok: ${u.stok} ${u.stok === 0 ? '❌' : u.stok < 5 ? '⚠️' : ''}
-                        </span>
-                        ${u.kod ? `<br><span style="font-size:0.8em; color:#666;">🏷️ ${u.kod}</span>` : ''}
-                        <div class="card-actions">
-                            <button class="btn-sm btn-success" onclick="stokGuncelle(${i})">📦 Stok</button>
-                            <button class="btn-sm" style="background:var(--warning); color:#000;" onclick="fiyatGuncelle(${i})">💲 Fiyat</button>
-                            <button class="btn-sm btn-danger" onclick="urunSil(${i})">🗑️ Sil</button>
-                        </div>
-                    </div>
-                `).join('');
-            }
-
+            document.getElementById('kasaText').innerText=kasa.toFixed(2);
+            document.getElementById('urunSayisi').innerText=`Toplam: ${urunler.length} ürün`;
+            const ul=document.getElementById('urunList');
+            ul.innerHTML=urunler.length===0?'<div class="card" style="text-align:center;padding:30px;">📦 Ürün yok</div>':
+                urunler.map((u,i)=>`<div class="card" style="background:${u.stok===0?'#1a0a0a':''}">
+                    <div class="card-header"><span class="card-title">📦 ${u.ad}</span><span class="card-price">${u.fiyat.toFixed(2)} ₺</span></div>
+                    <span class="card-stock ${u.stok===0?'stock-out':u.stok<5?'stock-low':''}">📊 Stok: ${u.stok} ${u.stok===0?'❌':u.stok<5?'⚠️':''}</span>
+                    ${u.kod?`<br><span style="font-size:0.8em;color:#666;">🏷️ ${u.kod}</span>`:''}
+                    <div class="card-actions">
+                        <button class="btn-sm btn-success" onclick="stokGuncelle(${i})">📦 Stok</button>
+                        <button class="btn-sm" style="background:var(--warning);color:#000;" onclick="fiyatGuncelle(${i})">💲 Fiyat</button>
+                        <button class="btn-sm btn-danger" onclick="urunSil(${i})">🗑️ Sil</button>
+                    </div></div>`).join('');
             filtre();
-
-            const sepetEl = document.getElementById('sepet');
-            if (sepet.length === 0) {
-                sepetEl.innerHTML = `<div style="text-align:center; padding:20px;">🛒 Sepet boş</div>`;
-            } else {
-                sepetEl.innerHTML = sepet.map((s, i) => `
-                    <div class="sepet-item">
-                        <div class="sepet-info"><div class="sepet-ad">${s.ad}</div><div class="sepet-detay">${s.adet} x ${s.fiyat.toFixed(2)} ₺</div></div>
-                        <div class="sepet-fiyat">${(s.fiyat * s.adet).toFixed(2)} ₺</div>
-                        <button class="btn-icon danger" onclick="sepettenCikar(${i})">➖</button>
-                        <button class="btn-icon danger" onclick="sepettenTamamenCikar(${i})">✖️</button>
-                    </div>
-                `).join('');
-            }
-
-            document.getElementById('toplam').innerText = sepet.reduce((a, b) => a + (b.fiyat * b.adet), 0).toFixed(2);
-
-            document.getElementById('statUrun').innerText = urunler.length;
-            document.getElementById('statStok').innerText = urunler.reduce((a, b) => a + b.stok, 0);
-            document.getElementById('statKasa').innerText = kasa.toFixed(2) + ' ₺';
-            document.getElementById('statDeger').innerText = urunler.reduce((a, b) => a + (b.fiyat * b.stok), 0).toFixed(2) + ' ₺';
-            document.getElementById('statFatura').innerText = sonSatislar.length;
-            document.getElementById('statCiro').innerText = sonSatislar.reduce((a, b) => a + b.toplam, 0).toFixed(2) + ' ₺';
+            const se=document.getElementById('sepet');
+            se.innerHTML=sepet.length===0?'<div style="text-align:center;padding:20px;">🛒 Sepet boş</div>':
+                sepet.map((s,i)=>`<div class="sepet-item"><div class="sepet-info"><div class="sepet-ad">${s.ad}</div><div class="sepet-detay">${s.adet}x${s.fiyat.toFixed(2)}₺</div></div>
+                <div class="sepet-fiyat">${(s.fiyat*s.adet).toFixed(2)}₺</div>
+                <button class="btn-icon danger" onclick="sepettenCikar(${i})">➖</button>
+                <button class="btn-icon danger" onclick="sepettenTamamenCikar(${i})">✖️</button></div>`).join('');
+            document.getElementById('toplam').innerText=sepet.reduce((a,b)=>a+(b.fiyat*b.adet),0).toFixed(2);
+            document.getElementById('statUrun').innerText=urunler.length;
+            document.getElementById('statStok').innerText=urunler.reduce((a,b)=>a+b.stok,0);
+            document.getElementById('statKasa').innerText=kasa.toFixed(2)+' ₺';
+            document.getElementById('statDeger').innerText=urunler.reduce((a,b)=>a+(b.fiyat*b.stok),0).toFixed(2)+' ₺';
+            document.getElementById('statFatura').innerText=sonSatislar.length;
+            document.getElementById('statCiro').innerText=sonSatislar.reduce((a,b)=>a+b.toplam,0).toFixed(2)+' ₺';
         }
 
         // ============ GRAFİKLER ============
-        function cizGrafikler() {
-            const stokCtx = document.getElementById('stokChart');
-            if (stokCtx && urunler.length > 0) {
-                const ctx = stokCtx.getContext('2d');
-                if (stokChartInstance) stokChartInstance.destroy();
-                stokChartInstance = new Chart(ctx, {
-                    type: 'bar',
-                    data: { labels: urunler.map(u => u.ad), datasets: [{ label: 'Stok', data: urunler.map(u => u.stok), backgroundColor: urunler.map(u => u.stok === 0 ? '#ff4757' : u.stok < 5 ? '#ffa502' : temaRengi), borderRadius: 8 }] },
-                    options: { responsive: true, plugins: { title: { display: true, text: '📊 Stok Durumu', color: '#fff' } }, scales: { y: { beginAtZero: true, ticks: { color: '#aaa' } }, x: { ticks: { color: '#aaa' } } } }
-                });
+        function cizGrafikler(){
+            const sc=document.getElementById('stokChart');
+            if(sc&&urunler.length>0){
+                const ctx=sc.getContext('2d'); if(stokChartInstance)stokChartInstance.destroy();
+                stokChartInstance=new Chart(ctx,{type:'bar',data:{labels:urunler.map(u=>u.ad),datasets:[{label:'Stok',data:urunler.map(u=>u.stok),backgroundColor:urunler.map(u=>u.stok===0?'#ff4757':u.stok<5?'#ffa502':temaRengi),borderRadius:8}]},options:{responsive:true,plugins:{title:{display:true,text:'📊 Stok',color:'#fff'}},scales:{y:{beginAtZero:true,ticks:{color:'#aaa'}},x:{ticks:{color:'#aaa'}}}}});
             }
-
-            const kasaCtx = document.getElementById('kasaChart');
-            if (kasaCtx) {
-                const ctx2 = kasaCtx.getContext('2d');
-                if (kasaChartInstance) kasaChartInstance.destroy();
-                kasaChartInstance = new Chart(ctx2, {
-                    type: 'doughnut',
-                    data: { labels: ['Kasa', 'Stok Değeri'], datasets: [{ data: [kasa, urunler.reduce((a,b) => a + (b.fiyat * b.stok), 0)], backgroundColor: [temaRengi, '#ffa502'], borderWidth: 3, borderColor: bgColor }] },
-                    options: { responsive: true, plugins: { title: { display: true, text: '💰 Kasa & Stok', color: '#fff' } } }
-                });
+            const kc=document.getElementById('kasaChart');
+            if(kc){
+                const ctx=kc.getContext('2d'); if(kasaChartInstance)kasaChartInstance.destroy();
+                kasaChartInstance=new Chart(ctx,{type:'doughnut',data:{labels:['Kasa','Stok Değeri'],datasets:[{data:[kasa,urunler.reduce((a,b)=>a+(b.fiyat*b.stok),0)],backgroundColor:[temaRengi,'#ffa502'],borderWidth:3,borderColor:bgColor}]},options:{responsive:true,plugins:{title:{display:true,text:'💰 Kasa & Stok',color:'#fff'}}}});
             }
-
-            const ciroCtx = document.getElementById('ciroChart');
-            if (ciroCtx && sonSatislar.length > 0) {
-                const ctx3 = ciroCtx.getContext('2d');
-                if (ciroChartInstance) ciroChartInstance.destroy();
-                const son10 = sonSatislar.slice(0, 10).reverse();
-                ciroChartInstance = new Chart(ctx3, {
-                    type: 'line',
-                    data: { labels: son10.map(f => new Date(f.tarih).toLocaleDateString('tr-TR')), datasets: [{ label: 'Ciro (₺)', data: son10.map(f => f.toplam), borderColor: temaRengi, backgroundColor: temaRengi + '33', fill: true, tension: 0.4, pointRadius: 5 }] },
-                    options: { responsive: true, plugins: { title: { display: true, text: '📈 Ciro Grafiği', color: '#fff' } }, scales: { y: { beginAtZero: true, ticks: { color: '#aaa' } }, x: { ticks: { color: '#aaa' } } } }
-                });
+            const cc=document.getElementById('ciroChart');
+            if(cc&&sonSatislar.length>0){
+                const ctx=cc.getContext('2d'); if(ciroChartInstance)ciroChartInstance.destroy();
+                const s10=sonSatislar.slice(0,10).reverse();
+                ciroChartInstance=new Chart(ctx,{type:'line',data:{labels:s10.map(f=>new Date(f.tarih).toLocaleDateString('tr-TR')),datasets:[{label:'Ciro',data:s10.map(f=>f.toplam),borderColor:temaRengi,backgroundColor:temaRengi+'33',fill:true,tension:0.4,pointRadius:5}]},options:{responsive:true,plugins:{title:{display:true,text:'📈 Ciro',color:'#fff'}},scales:{y:{beginAtZero:true,ticks:{color:'#aaa'}},x:{ticks:{color:'#aaa'}}}}});
             }
         }
 
-        // ============ EXCEL ============
-        function excelIndir() {
-            if (urunler.length === 0) { toast('⚠️ Ürün yok!', 'warning'); return; }
-            const ws = XLSX.utils.json_to_sheet(urunler.map((u, i) => ({ 'No': i+1, 'Ürün': u.ad, 'Fiyat': u.fiyat, 'Stok': u.stok, 'Barkod': u.kod || '-', 'Değer': (u.fiyat*u.stok).toFixed(2) })));
-            const wb = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(wb, ws, "Ürünler");
-            XLSX.writeFile(wb, `Rapor_${new Date().toISOString().slice(0,10)}.xlsx`);
+        function excelIndir(){
+            if(!urunler.length)return;
+            const ws=XLSX.utils.json_to_sheet(urunler.map((u,i)=>({'No':i+1,'Ürün':u.ad,'Fiyat':u.fiyat,'Stok':u.stok,'Barkod':u.kod||'-','Değer':(u.fiyat*u.stok).toFixed(2)})));
+            const wb=XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb,ws,"Ürünler");
+            XLSX.writeFile(wb,`Rapor_${new Date().toISOString().slice(0,10)}.xlsx`);
             toast('📥 Excel indirildi!');
         }
-
-        function yazdir() { window.print(); }
-
-        document.getElementById('faturaModal').addEventListener('click', function(e) { if (e.target === this) modalKapat(); });
+        function yazdir(){window.print();}
+        document.getElementById('faturaModal').addEventListener('click',function(e){if(e.target===this)modalKapat();});
 
         // ============ BAŞLANGIÇ ============
-        if (urunler.length === 0 && !localStorage.getItem("demoYuklendi")) {
-            urunler = [
-                { ad: 'Ekmek', fiyat: 10.00, stok: 50, kod: '8691234567890', eklenmeTarihi: new Date().toISOString() },
-                { ad: 'Süt (1L)', fiyat: 25.50, stok: 30, kod: '8691234567891', eklenmeTarihi: new Date().toISOString() },
-                { ad: 'Yumurta (30lu)', fiyat: 85.00, stok: 20, kod: '8691234567892', eklenmeTarihi: new Date().toISOString() },
-                { ad: 'Peynir (500g)', fiyat: 65.00, stok: 15, kod: '8691234567893', eklenmeTarihi: new Date().toISOString() },
-                { ad: 'Su (1.5L)', fiyat: 7.50, stok: 100, kod: '8691234567894', eklenmeTarihi: new Date().toISOString() },
-            ];
-            kasa = 0;
-            save();
-            localStorage.setItem("demoYuklendi", "true");
+        if(urunler.length===0&&!localStorage.getItem("demoYuklendi")){
+            urunler=[
+                {ad:'Ekmek',fiyat:10,stok:50,kod:'8691234567890',eklenmeTarihi:new Date().toISOString()},
+                {ad:'Süt (1L)',fiyat:25.50,stok:30,kod:'8691234567891',eklenmeTarihi:new Date().toISOString()},
+                {ad:'Yumurta (30lu)',fiyat:85,stok:20,kod:'8691234567892',eklenmeTarihi:new Date().toISOString()},
+                {ad:'Peynir (500g)',fiyat:65,stok:15,kod:'8691234567893',eklenmeTarihi:new Date().toISOString()},
+                {ad:'Su (1.5L)',fiyat:7.50,stok:100,kod:'8691234567894',eklenmeTarihi:new Date().toISOString()},
+            ]; kasa=0; save(); localStorage.setItem("demoYuklendi","true");
         }
-
-        temalariYukle();
-        render();
-        
-        console.log('🚀 ATEŞOĞLU MARKET PRO - Barkod sistemi aktif!');
-        console.log('📷 Desteklenen formatlar: EAN-13, EAN-8, UPC-A, UPC-E, Code-128, Code-39, QR Code, Data Matrix, PDF-417');
-        console.log('💡 Barkod okutmak için kameraya barkodu gösterin, yeşil çizgi tarama yapıyor demektir.');
+        temalariYukle(); render();
+        console.log('🚀 ATEŞOĞLU MARKET PRO - ZXing Barkod Okuyucu Aktif!');
+        console.log('📷 ZXing kütüphanesi ile barkod okuma - Tüm formatlar desteklenir');
     </script>
 
 </body>
