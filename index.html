@@ -17,7 +17,6 @@
             --text: #e0e0e0;
             --text-secondary: #a0a0a0;
             --border: #333;
-            --sidebar-bg: #111;
         }
 
         * {
@@ -52,11 +51,19 @@
             max-width: 400px;
             box-shadow: 0 20px 60px rgba(0, 208, 132, 0.15);
             border: 1px solid var(--border);
+            text-align: center;
         }
 
-        .login-logo {
-            text-align: center;
-            font-size: 50px;
+        .login-logo-img {
+            width: 100px;
+            height: 100px;
+            object-fit: contain;
+            margin: 0 auto 10px;
+            border-radius: 20px;
+        }
+
+        .login-logo-emoji {
+            font-size: 60px;
             margin-bottom: 10px;
             animation: pulse 2s infinite;
         }
@@ -131,6 +138,14 @@
             box-shadow: 0 10px 30px rgba(0, 208, 132, 0.3);
         }
 
+        .login-error {
+            color: var(--danger);
+            text-align: center;
+            margin-top: 10px;
+            font-size: 0.9em;
+            display: none;
+        }
+
         /* MAIN APP */
         .app-header {
             background: linear-gradient(135deg, #1a1a1a, #111);
@@ -144,6 +159,20 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            gap: 15px;
+        }
+
+        .header-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .header-logo-img {
+            width: 40px;
+            height: 40px;
+            object-fit: contain;
+            border-radius: 8px;
         }
 
         .app-header h1 {
@@ -192,6 +221,7 @@
             cursor: pointer;
             transition: all 0.3s;
             font-weight: 600;
+            white-space: nowrap;
         }
 
         .btn-danger { background: rgba(255, 71, 87, 0.2); color: var(--danger); border: 1px solid rgba(255, 71, 87, 0.3); }
@@ -211,6 +241,9 @@
 
         .btn-primary { background: #3b82f6; color: #fff; border: none; }
         .btn-primary:hover { background: #2563eb; }
+
+        .btn-info { background: #06b6d4; color: #fff; border: none; }
+        .btn-info:hover { background: #0891b2; }
 
         /* TABS */
         .tabs-container { padding: 10px 15px; }
@@ -323,13 +356,6 @@
 
         .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 
-        /* COLOR PICKER */
-        .color-picker-group {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
         input[type="color"] {
             width: 50px;
             height: 40px;
@@ -337,6 +363,10 @@
             border-radius: 8px;
             cursor: pointer;
             background: transparent;
+        }
+
+        input[type="file"] {
+            display: none;
         }
 
         /* SEARCH */
@@ -436,14 +466,53 @@
             font-weight: 700;
         }
 
-        /* BARKOD */
-        #reader {
+        /* BARKOD SCANNER */
+        .barkod-scanner-container {
             width: 100%;
             max-width: 400px;
-            margin: 20px auto;
+            margin: 15px auto;
             border-radius: 15px;
             overflow: hidden;
             border: 2px solid var(--border);
+            background: #000;
+        }
+
+        .barkod-scanner-container video {
+            width: 100%;
+            height: auto;
+        }
+
+        #readerStok, #readerSatis {
+            width: 100%;
+        }
+
+        .scanner-status {
+            text-align: center;
+            padding: 10px;
+            font-weight: 600;
+            font-size: 0.9em;
+        }
+
+        .scanner-active {
+            color: var(--primary);
+            animation: pulse 1.5s infinite;
+        }
+
+        .scanner-inactive {
+            color: var(--text-secondary);
+        }
+
+        .scanner-result {
+            background: var(--card);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 10px;
+            text-align: center;
+            border: 1px solid var(--border);
+            min-height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         /* RAPOR */
@@ -472,7 +541,7 @@
         .stat-value { font-size: 1.8em; font-weight: 700; color: var(--primary); }
         .stat-label { font-size: 0.85em; color: var(--text-secondary); margin-top: 5px; }
 
-        /* FATURA GEÇMİŞİ TABLOSU */
+        /* FATURA GEÇMİŞİ */
         .fatura-tablo {
             width: 100%;
             border-collapse: collapse;
@@ -496,14 +565,6 @@
             background: rgba(0, 208, 132, 0.05);
         }
 
-        .fatura-detay-card {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 15px;
-            margin-top: 10px;
-        }
-
         /* MODAL */
         .modal-overlay {
             display: none;
@@ -519,9 +580,7 @@
             padding: 20px;
         }
 
-        .modal-overlay.active {
-            display: flex;
-        }
+        .modal-overlay.active { display: flex; }
 
         .modal-content {
             background: var(--card);
@@ -608,14 +667,30 @@
             font-size: 20px;
         }
 
-        .theme-preset:hover {
-            border-color: #fff;
-            transform: scale(1.1);
-        }
-
+        .theme-preset:hover { border-color: #fff; transform: scale(1.1); }
+        
         .theme-preset.selected {
             border-color: var(--primary);
             box-shadow: 0 0 20px rgba(0, 208, 132, 0.5);
+        }
+
+        .logo-preview {
+            width: 120px;
+            height: 120px;
+            border: 2px dashed var(--border);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 10px 0;
+            overflow: hidden;
+            background: #111;
+        }
+
+        .logo-preview img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
         }
 
         /* RESPONSIVE */
@@ -627,12 +702,25 @@
             .card-actions button { width: 100%; }
             .app-header { flex-direction: column; gap: 10px; }
             .fatura-tablo { font-size: 0.8em; }
+            .header-logo { flex-direction: column; }
+        }
+
+        .urun-secim-card {
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .urun-secim-card:active {
+            transform: scale(0.98);
         }
     </style>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <!-- HTML5 QR Code Scanner -->
     <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <!-- SheetJS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 </head>
 
 <body>
@@ -640,7 +728,9 @@
     <!-- LOGIN PAGE -->
     <div id="loginPage">
         <div class="login-container">
-            <div class="login-logo" id="loginLogo">🛒</div>
+            <div id="loginLogoContainer">
+                <span class="login-logo-emoji" id="loginLogoEmoji">🛒</span>
+            </div>
             <div class="login-title" id="loginTitle">ATEŞOĞLU MARKET</div>
             <div class="login-subtitle">Profesyonel Yönetim Sistemi</div>
             
@@ -667,7 +757,10 @@
         
         <!-- HEADER -->
         <div class="app-header" id="appHeader">
-            <h1 id="appTitle">🛒 ATEŞOĞLU MARKET PRO</h1>
+            <div class="header-logo">
+                <span id="headerLogoEmoji" style="font-size:30px;">🛒</span>
+                <h1 id="appTitle">ATEŞOĞLU MARKET PRO</h1>
+            </div>
             <div class="header-actions">
                 <button class="btn-sm btn-primary" onclick="showTab('admin')">⚙️ Admin</button>
                 <button class="btn-sm btn-danger" onclick="cikisYap()">🚪 Çıkış</button>
@@ -721,9 +814,29 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="form-label">Barkod Numarası</label>
-                        <input class="form-input" id="kod" placeholder="Barkod (opsiyonel)">
+                        <label class="form-label">
+                            Barkod Numarası
+                            <button class="btn-sm btn-info" onclick="barkodOkuStok()" id="btnBarkodStok" style="margin-left:10px;">
+                                📷 Barkod Okut
+                            </button>
+                        </label>
+                        <input class="form-input" id="kod" placeholder="Barkod (opsiyonel veya okutun)">
                     </div>
+                    
+                    <!-- Stok Barkod Okuyucu -->
+                    <div id="stokScannerArea" style="display:none; margin-bottom:15px;">
+                        <div class="barkod-scanner-container">
+                            <div id="readerStok"></div>
+                        </div>
+                        <div class="scanner-status scanner-active" id="stokScannerStatus">
+                            🔍 Barkod okumaya hazır...
+                        </div>
+                        <button class="btn-sm btn-danger" style="width:100%; margin-top:5px;" 
+                                onclick="barkodOkuDurdur('stok')">
+                            ⏹️ Okumayı Durdur
+                        </button>
+                    </div>
+                    
                     <button class="btn-success" style="width:100%; padding:14px; border:none; border-radius:10px;" 
                             onclick="urunEkle()">
                         ✅ Ürün Ekle
@@ -741,6 +854,31 @@
 
             <!-- SATIŞ SAYFASI -->
             <div id="satis" class="page">
+                <!-- Satış Barkod Okuyucu -->
+                <div class="card" style="margin-bottom:15px;">
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                        <h4>📷 Hızlı Barkod Okutma</h4>
+                        <button class="btn-sm btn-info" onclick="barkodOkuSatis()" id="btnBarkodSatis">
+                            📷 Barkod Okut
+                        </button>
+                    </div>
+                    <div id="satisScannerArea" style="display:none; margin-top:10px;">
+                        <div class="barkod-scanner-container">
+                            <div id="readerSatis"></div>
+                        </div>
+                        <div class="scanner-status scanner-active" id="satisScannerStatus">
+                            🔍 Ürün barkodu okutun...
+                        </div>
+                        <div class="scanner-result" id="satisScannerResult">
+                            <span style="color:var(--text-secondary);">Okunan barkod burada görünecek</span>
+                        </div>
+                        <button class="btn-sm btn-danger" style="width:100%; margin-top:5px;" 
+                                onclick="barkodOkuDurdur('satis')">
+                            ⏹️ Okumayı Durdur
+                        </button>
+                    </div>
+                </div>
+
                 <div class="search-bar">
                     <span class="search-icon">🔍</span>
                     <input id="ara" placeholder="Ürün ara..." onkeyup="filtre()">
@@ -751,7 +889,7 @@
                     <h3 style="margin-bottom:15px;">🛒 Sepet</h3>
                     <div id="sepet">
                         <div style="text-align:center; color:var(--text-secondary); padding:20px;">
-                            Sepet boş - Ürün eklemek için tıklayın
+                            Sepet boş - Ürün eklemek için tıklayın veya barkod okutun
                         </div>
                     </div>
                 </div>
@@ -768,17 +906,34 @@
                 <div id="fatura"></div>
             </div>
 
-            <!-- BARKOD SAYFASI -->
+            <!-- BARKOD SAYFASI (Genel) -->
             <div id="barkod" class="page">
                 <div class="card" style="text-align:center;">
                     <h3>📷 Barkod Okuyucu</h3>
-                    <p style="color:var(--text-secondary); margin:10px 0;">Ürün barkodunu kameraya gösterin</p>
-                    <button class="btn-success" style="padding:12px 30px; border:none; border-radius:10px;" 
-                            onclick="kameraAc()" id="kameraBtn">📸 Kamerayı Aç</button>
-                    <button class="btn-sm btn-danger" style="margin-top:10px;" 
-                            onclick="kameraKapat()" id="kameraKapatBtn" disabled>⏹️ Kamerayı Kapat</button>
-                    <div id="reader"></div>
-                    <div id="barkodSonuc" style="margin-top:10px; color:var(--primary);"></div>
+                    <p style="color:var(--text-secondary); margin:10px 0;">
+                        Ürün barkodunu kameraya gösterin - Okunan barkod bilgisi aşağıda görünecek
+                    </p>
+                    
+                    <div style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-bottom:15px;">
+                        <button class="btn-sm btn-info" onclick="barkodOkuGenel()" id="btnBarkodGenel">
+                            📸 Kamerayı Aç
+                        </button>
+                        <button class="btn-sm btn-danger" onclick="barkodOkuDurdur('genel')" id="btnBarkodGenelDurdur" disabled>
+                            ⏹️ Kapat
+                        </button>
+                    </div>
+                    
+                    <div class="barkod-scanner-container">
+                        <div id="readerGenel"></div>
+                    </div>
+                    
+                    <div class="scanner-status scanner-inactive" id="genelScannerStatus">
+                        ⏸️ Kamera kapalı
+                    </div>
+                    
+                    <div class="scanner-result" id="genelScannerResult">
+                        <span style="color:var(--text-secondary);">Okunan barkod burada görünecek</span>
+                    </div>
                 </div>
             </div>
 
@@ -857,10 +1012,35 @@
                 </div>
             </div>
 
-            <!-- ADMIN PANEL SAYFASI -->
+            <!-- ADMIN PANEL -->
             <div id="admin" class="page">
                 <h2 style="color:var(--primary); margin-bottom:20px;">⚙️ Admin Paneli</h2>
                 
+                <!-- Logo Yükleme -->
+                <div class="admin-section">
+                    <h3>🖼️ Market Logosu</h3>
+                    <p style="color:var(--text-secondary); margin-bottom:15px;">
+                        Marketiniz için özel logo yükleyin (PNG, JPG, GIF, SVG)
+                    </p>
+                    
+                    <div class="logo-preview" id="logoPreview">
+                        <span style="font-size:50px; color:var(--text-secondary);">🛒</span>
+                    </div>
+                    
+                    <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;">
+                        <button class="btn-sm btn-primary" onclick="document.getElementById('logoFileInput').click()">
+                            📁 Dosyadan Logo Seç
+                        </button>
+                        <input type="file" id="logoFileInput" accept="image/*" onchange="logoYukle(this)">
+                        <button class="btn-sm btn-warning" onclick="logoSifirla()">
+                            🔄 Varsayılana Dön
+                        </button>
+                    </div>
+                    <p style="font-size:0.8em; color:var(--text-secondary); margin-top:5px;">
+                        Önerilen: Kare formatta, maksimum 2MB
+                    </p>
+                </div>
+
                 <!-- Tema Ayarları -->
                 <div class="admin-section">
                     <h3>🎨 Tema Renkleri</h3>
@@ -878,7 +1058,7 @@
                     <div class="form-row" style="margin-top:15px;">
                         <div class="form-group">
                             <label class="form-label">Özel Renk</label>
-                            <div class="color-picker-group">
+                            <div style="display:flex; align-items:center; gap:10px;">
                                 <input type="color" id="customColor" value="#00d084" onchange="temaDegistir(this.value, 'Özel')">
                                 <span id="customColorText" style="color:var(--text-secondary);">#00d084</span>
                             </div>
@@ -886,16 +1066,12 @@
                     </div>
                 </div>
 
-                <!-- Başlık Ayarları -->
+                <!-- Market Bilgileri -->
                 <div class="admin-section">
                     <h3>📝 Market Bilgileri</h3>
                     <div class="form-group">
                         <label class="form-label">Market Adı</label>
                         <input class="form-input" id="marketAdi" placeholder="Market adı" value="ATEŞOĞLU MARKET PRO">
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Giriş Sayfası Logo Emoji</label>
-                        <input class="form-input" id="logoEmoji" placeholder="Emoji" value="🛒" maxlength="2">
                     </div>
                     <button class="btn-success" style="padding:12px 25px; border:none; border-radius:10px;" 
                             onclick="marketBilgiGuncelle()">
@@ -903,7 +1079,7 @@
                     </button>
                 </div>
 
-                <!-- Arkaplan Ayarları -->
+                <!-- Arkaplan -->
                 <div class="admin-section">
                     <h3>🌙 Arkaplan</h3>
                     <div class="form-row">
@@ -945,15 +1121,21 @@
         let sepet = [];
         let kasa = Number(localStorage.getItem("kasa")) || 0;
         let sonSatislar = JSON.parse(localStorage.getItem("sonSatislar") || "[]");
-        let html5QrCode = null;
+        
+        // Barkod scanner instances
+        let html5QrCodeStok = null;
+        let html5QrCodeSatis = null;
+        let html5QrCodeGenel = null;
+        
+        // Chart instances
         let stokChartInstance = null;
         let kasaChartInstance = null;
         let ciroChartInstance = null;
         
-        // Tema ayarları
+        // Tema ve logo ayarları
         let temaRengi = localStorage.getItem("temaRengi") || "#00d084";
         let marketAdi = localStorage.getItem("marketAdi") || "ATEŞOĞLU MARKET PRO";
-        let logoEmoji = localStorage.getItem("logoEmoji") || "🛒";
+        let logoData = localStorage.getItem("logoData") || null; // Base64 logo
         let bgColor = localStorage.getItem("bgColor") || "#0a0a0a";
         let cardColor = localStorage.getItem("cardColor") || "#1a1a1a";
 
@@ -963,16 +1145,84 @@
             localStorage.setItem("sonSatislar", JSON.stringify(sonSatislar));
             localStorage.setItem("temaRengi", temaRengi);
             localStorage.setItem("marketAdi", marketAdi);
-            localStorage.setItem("logoEmoji", logoEmoji);
             localStorage.setItem("bgColor", bgColor);
             localStorage.setItem("cardColor", cardColor);
+            if (logoData) {
+                localStorage.setItem("logoData", logoData);
+            } else {
+                localStorage.removeItem("logoData");
+            }
+        }
+
+        // ============ LOGO YÖNETİMİ ============
+        function logoYukle(input) {
+            const file = input.files[0];
+            if (!file) return;
+
+            // Dosya boyutu kontrolü (2MB)
+            if (file.size > 2 * 1024 * 1024) {
+                toast('⚠️ Dosya boyutu 2MB\'dan küçük olmalı!', 'warning');
+                return;
+            }
+
+            // Dosya tipi kontrolü
+            const allowedTypes = ['image/png', 'image/jpeg', 'image/gif', 'image/svg+xml', 'image/webp'];
+            if (!allowedTypes.includes(file.type)) {
+                toast('⚠️ Sadece PNG, JPG, GIF, SVG, WEBP formatları desteklenir!', 'warning');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                logoData = e.target.result;
+                save();
+                logoGuncelle();
+                toast('✅ Logo başarıyla yüklendi!');
+            };
+            reader.onerror = function() {
+                toast('⚠️ Logo yüklenirken hata oluştu!', 'error');
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function logoSifirla() {
+            if (confirm('Logo varsayılana döndürülecek. Onaylıyor musunuz?')) {
+                logoData = null;
+                save();
+                logoGuncelle();
+                toast('🔄 Logo varsayılana döndürüldü!');
+            }
+        }
+
+        function logoGuncelle() {
+            const logoPreview = document.getElementById('logoPreview');
+            const loginLogoContainer = document.getElementById('loginLogoContainer');
+            const headerLogoEmoji = document.getElementById('headerLogoEmoji');
+            const loginLogoEmoji = document.getElementById('loginLogoEmoji');
+
+            if (logoData) {
+                // Logo preview
+                logoPreview.innerHTML = `<img src="${logoData}" alt="Market Logosu" style="max-width:100%; max-height:100%; object-fit:contain;">`;
+                
+                // Login sayfası
+                loginLogoContainer.innerHTML = `<img src="${logoData}" alt="Logo" class="login-logo-img" style="animation: pulse 2s infinite;">`;
+                
+                // Header
+                headerLogoEmoji.innerHTML = `<img src="${logoData}" alt="Logo" class="header-logo-img">`;
+            } else {
+                // Varsayılan
+                logoPreview.innerHTML = '<span style="font-size:50px; color:var(--text-secondary);">🛒</span>';
+                loginLogoContainer.innerHTML = '<span class="login-logo-emoji" id="loginLogoEmoji">🛒</span>';
+                headerLogoEmoji.innerHTML = '🛒';
+            }
         }
 
         // ============ TEMA YÖNETİMİ ============
         function temaDegistir(renk, isim) {
             temaRengi = renk;
             document.documentElement.style.setProperty('--primary', renk);
-            // Koyu versiyon için rengi biraz koyulaştır
+            
+            // Koyu versiyon
             const koyu = renk.replace('#', '');
             const r = parseInt(koyu.substr(0,2), 16);
             const g = parseInt(koyu.substr(2,2), 16);
@@ -980,10 +1230,8 @@
             const koyuRenk = `#${Math.floor(r*0.7).toString(16).padStart(2,'0')}${Math.floor(g*0.7).toString(16).padStart(2,'0')}${Math.floor(b*0.7).toString(16).padStart(2,'0')}`;
             document.documentElement.style.setProperty('--primary-dark', koyuRenk);
             
-            // Preset seçimini güncelle
             document.querySelectorAll('.theme-preset').forEach(p => p.classList.remove('selected'));
-            const presets = document.querySelectorAll('.theme-preset');
-            presets.forEach(p => {
+            document.querySelectorAll('.theme-preset').forEach(p => {
                 if (p.style.background === renk) p.classList.add('selected');
             });
             
@@ -1005,11 +1253,9 @@
 
         function marketBilgiGuncelle() {
             marketAdi = document.getElementById('marketAdi').value || 'ATEŞOĞLU MARKET PRO';
-            logoEmoji = document.getElementById('logoEmoji').value || '🛒';
             
-            document.getElementById('appTitle').innerHTML = `${logoEmoji} ${marketAdi}`;
+            document.getElementById('appTitle').textContent = marketAdi;
             document.getElementById('loginTitle').textContent = marketAdi;
-            document.getElementById('loginLogo').textContent = logoEmoji;
             
             save();
             toast('✅ Market bilgileri güncellendi!');
@@ -1020,21 +1266,20 @@
             document.documentElement.style.setProperty('--bg', bgColor);
             document.documentElement.style.setProperty('--card', cardColor);
             
-            document.getElementById('appTitle').innerHTML = `${logoEmoji} ${marketAdi}`;
+            document.getElementById('appTitle').textContent = marketAdi;
             document.getElementById('loginTitle').textContent = marketAdi;
-            document.getElementById('loginLogo').textContent = logoEmoji;
             document.getElementById('marketAdi').value = marketAdi;
-            document.getElementById('logoEmoji').value = logoEmoji;
             document.getElementById('bgColor').value = bgColor;
             document.getElementById('cardColor').value = cardColor;
             document.getElementById('customColor').value = temaRengi;
             document.getElementById('customColorText').textContent = temaRengi;
             
-            // Preset seçimi
             document.querySelectorAll('.theme-preset').forEach(p => {
                 p.classList.remove('selected');
                 if (p.style.background === temaRengi) p.classList.add('selected');
             });
+            
+            logoGuncelle();
         }
 
         // ============ TOAST ============
@@ -1067,6 +1312,11 @@
 
         function cikisYap() {
             if (confirm('Çıkış yapmak istediğinize emin misiniz?')) {
+                // Tüm scanner'ları durdur
+                barkodOkuDurdur('stok');
+                barkodOkuDurdur('satis');
+                barkodOkuDurdur('genel');
+                
                 document.getElementById('app').style.display = 'none';
                 document.getElementById('loginPage').style.display = 'flex';
                 sepet = [];
@@ -1089,8 +1339,8 @@
             const page = document.getElementById(id);
             if (page) page.classList.add('active');
             
-            const tabButtons = document.querySelectorAll('.tab-btn');
             const tabMap = { 'urun': 0, 'satis': 1, 'barkod': 2, 'rapor': 3, 'faturalar': 4, 'admin': 5 };
+            const tabButtons = document.querySelectorAll('.tab-btn');
             if (tabButtons[tabMap[id]]) tabButtons[tabMap[id]].classList.add('active');
             
             render();
@@ -1098,7 +1348,260 @@
             if (id === 'rapor') setTimeout(cizGrafikler, 300);
             if (id === 'faturalar') faturaGecmisiGoster();
             if (id === 'admin') temalariYukle();
-            if (id !== 'barkod') kameraKapat();
+            
+            // Diğer sekmelerdeki scanner'ları durdur
+            if (id !== 'urun') barkodOkuDurdur('stok');
+            if (id !== 'satis') barkodOkuDurdur('satis');
+            if (id !== 'barkod') barkodOkuDurdur('genel');
+        }
+
+        // ============ BARKOD OKUYUCU YÖNETİMİ ============
+        
+        // Stok ekleme için barkod okuyucu
+        function barkodOkuStok() {
+            const scannerArea = document.getElementById('stokScannerArea');
+            const btn = document.getElementById('btnBarkodStok');
+            const statusEl = document.getElementById('stokScannerStatus');
+            
+            if (scannerArea.style.display === 'block') {
+                barkodOkuDurdur('stok');
+                return;
+            }
+            
+            scannerArea.style.display = 'block';
+            btn.textContent = '📷 Okumayı Durdur';
+            statusEl.textContent = '🔍 Barkod okumaya hazır...';
+            statusEl.className = 'scanner-status scanner-active';
+            
+            if (!html5QrCodeStok) {
+                html5QrCodeStok = new Html5Qrcode("readerStok");
+            }
+            
+            html5QrCodeStok.start(
+                { facingMode: "environment" },
+                { fps: 10, qrbox: { width: 250, height: 150 } },
+                (decodedText) => {
+                    // Barkod okundu!
+                    document.getElementById('kod').value = decodedText;
+                    statusEl.textContent = `✅ Barkod okundu: ${decodedText}`;
+                    statusEl.className = 'scanner-status';
+                    statusEl.style.color = 'var(--primary)';
+                    
+                    // Barkoda sahip ürün var mı kontrol et
+                    const mevcutUrun = urunler.find(u => u.kod === decodedText);
+                    if (mevcutUrun) {
+                        statusEl.textContent += ` (Mevcut ürün: ${mevcutUrun.ad})`;
+                    }
+                    
+                    toast(`✅ Barkod okundu: ${decodedText}`);
+                    
+                    // 2 saniye sonra durdur
+                    setTimeout(() => {
+                        barkodOkuDurdur('stok');
+                        document.getElementById('btnBarkodStok').textContent = '📷 Barkod Okut';
+                    }, 2000);
+                },
+                (errorMessage) => {
+                    // Okuma hatası - sessizce devam et
+                }
+            ).catch(err => {
+                console.error('Stok scanner hatası:', err);
+                statusEl.textContent = '❌ Kamera başlatılamadı!';
+                statusEl.className = 'scanner-status';
+                statusEl.style.color = 'var(--danger)';
+                toast('⚠️ Kamera başlatılamadı! Lütfen kamera iznini kontrol edin.', 'error');
+                barkodOkuDurdur('stok');
+            });
+        }
+        
+        // Satış için barkod okuyucu
+        function barkodOkuSatis() {
+            const scannerArea = document.getElementById('satisScannerArea');
+            const btn = document.getElementById('btnBarkodSatis');
+            const statusEl = document.getElementById('satisScannerStatus');
+            const resultEl = document.getElementById('satisScannerResult');
+            
+            if (scannerArea.style.display === 'block') {
+                barkodOkuDurdur('satis');
+                return;
+            }
+            
+            scannerArea.style.display = 'block';
+            btn.textContent = '📷 Okumayı Durdur';
+            statusEl.textContent = '🔍 Ürün barkodu okutun...';
+            statusEl.className = 'scanner-status scanner-active';
+            resultEl.innerHTML = '<span style="color:var(--text-secondary);">Okunan barkod burada görünecek</span>';
+            
+            if (!html5QrCodeSatis) {
+                html5QrCodeSatis = new Html5Qrcode("readerSatis");
+            }
+            
+            html5QrCodeSatis.start(
+                { facingMode: "environment" },
+                { fps: 10, qrbox: { width: 250, height: 150 } },
+                (decodedText) => {
+                    // Barkod okundu!
+                    const urun = urunler.find(u => u.kod === decodedText);
+                    
+                    if (urun) {
+                        resultEl.innerHTML = `
+                            <div style="color:var(--primary);">
+                                ✅ <b>${urun.ad}</b> - ${urun.fiyat.toFixed(2)} ₺
+                                <br><small>Stok: ${urun.stok} adet</small>
+                            </div>
+                        `;
+                        statusEl.textContent = `✅ Ürün bulundu: ${urun.ad}`;
+                        statusEl.className = 'scanner-status';
+                        statusEl.style.color = 'var(--primary)';
+                        
+                        if (urun.stok > 0) {
+                            const index = urunler.indexOf(urun);
+                            sepeteEkle(index);
+                        } else {
+                            toast('⚠️ Ürün stokta yok!', 'warning');
+                        }
+                    } else {
+                        resultEl.innerHTML = `
+                            <div style="color:var(--danger);">
+                                ❌ Barkod bulunamadı: <b>${decodedText}</b>
+                                <br><small>Bu barkoda sahip ürün kayıtlı değil</small>
+                            </div>
+                        `;
+                        statusEl.textContent = `❌ Tanımsız barkod: ${decodedText}`;
+                        statusEl.className = 'scanner-status';
+                        statusEl.style.color = 'var(--danger)';
+                        toast('⚠️ Bu barkoda sahip ürün bulunamadı!', 'warning');
+                    }
+                },
+                (errorMessage) => {
+                    // Sessizce devam et
+                }
+            ).catch(err => {
+                console.error('Satis scanner hatası:', err);
+                statusEl.textContent = '❌ Kamera başlatılamadı!';
+                statusEl.className = 'scanner-status';
+                statusEl.style.color = 'var(--danger)';
+                toast('⚠️ Kamera başlatılamadı! Lütfen kamera iznini kontrol edin.', 'error');
+                barkodOkuDurdur('satis');
+            });
+        }
+        
+        // Genel barkod okuyucu
+        function barkodOkuGenel() {
+            const statusEl = document.getElementById('genelScannerStatus');
+            const resultEl = document.getElementById('genelScannerResult');
+            const btn = document.getElementById('btnBarkodGenel');
+            const btnDurdur = document.getElementById('btnBarkodGenelDurdur');
+            
+            if (html5QrCodeGenel && html5QrCodeGenel.isScanning) {
+                barkodOkuDurdur('genel');
+                return;
+            }
+            
+            statusEl.textContent = '🔍 Barkod okumaya hazır...';
+            statusEl.className = 'scanner-status scanner-active';
+            resultEl.innerHTML = '<span style="color:var(--text-secondary);">Okunan barkod burada görünecek</span>';
+            btn.disabled = true;
+            btnDurdur.disabled = false;
+            
+            if (!html5QrCodeGenel) {
+                html5QrCodeGenel = new Html5Qrcode("readerGenel");
+            }
+            
+            html5QrCodeGenel.start(
+                { facingMode: "environment" },
+                { fps: 10, qrbox: { width: 250, height: 150 } },
+                (decodedText) => {
+                    const urun = urunler.find(u => u.kod === decodedText);
+                    
+                    if (urun) {
+                        resultEl.innerHTML = `
+                            <div style="color:var(--primary);">
+                                ✅ <b>${urun.ad}</b><br>
+                                Fiyat: ${urun.fiyat.toFixed(2)} ₺ | Stok: ${urun.stok} adet
+                                ${urun.stok === 0 ? '<br>⚠️ Stokta yok!' : ''}
+                            </div>
+                        `;
+                        statusEl.textContent = `✅ Bulundu: ${urun.ad}`;
+                        statusEl.className = 'scanner-status';
+                        statusEl.style.color = 'var(--primary)';
+                    } else {
+                        resultEl.innerHTML = `
+                            <div style="color:var(--warning);">
+                                ⚠️ Kayıtsız barkod: <b>${decodedText}</b><br>
+                                <small>Bu barkod sisteme kayıtlı değil</small>
+                            </div>
+                        `;
+                        statusEl.textContent = `⚠️ Tanımsız: ${decodedText}`;
+                        statusEl.className = 'scanner-status';
+                        statusEl.style.color = 'var(--warning)';
+                    }
+                },
+                (errorMessage) => {
+                    // Sessizce devam et
+                }
+            ).catch(err => {
+                console.error('Genel scanner hatası:', err);
+                statusEl.textContent = '❌ Kamera başlatılamadı!';
+                statusEl.className = 'scanner-status';
+                statusEl.style.color = 'var(--danger)';
+                toast('⚠️ Kamera başlatılamadı!', 'error');
+                barkodOkuDurdur('genel');
+            });
+        }
+        
+        // Barkod okuyucuyu durdur
+        function barkodOkuDurdur(tip) {
+            if (tip === 'stok') {
+                const scannerArea = document.getElementById('stokScannerArea');
+                const btn = document.getElementById('btnBarkodStok');
+                const statusEl = document.getElementById('stokScannerStatus');
+                
+                if (html5QrCodeStok && html5QrCodeStok.isScanning) {
+                    html5QrCodeStok.stop().then(() => {
+                        console.log('Stok scanner durduruldu');
+                    }).catch(err => console.log('Durdurma hatası:', err));
+                }
+                
+                scannerArea.style.display = 'none';
+                btn.textContent = '📷 Barkod Okut';
+                statusEl.textContent = '';
+                statusEl.className = 'scanner-status scanner-inactive';
+            }
+            
+            if (tip === 'satis') {
+                const scannerArea = document.getElementById('satisScannerArea');
+                const btn = document.getElementById('btnBarkodSatis');
+                const statusEl = document.getElementById('satisScannerStatus');
+                
+                if (html5QrCodeSatis && html5QrCodeSatis.isScanning) {
+                    html5QrCodeSatis.stop().then(() => {
+                        console.log('Satis scanner durduruldu');
+                    }).catch(err => console.log('Durdurma hatası:', err));
+                }
+                
+                scannerArea.style.display = 'none';
+                btn.textContent = '📷 Barkod Okut';
+                statusEl.textContent = '';
+                statusEl.className = 'scanner-status scanner-inactive';
+            }
+            
+            if (tip === 'genel') {
+                const statusEl = document.getElementById('genelScannerStatus');
+                const btn = document.getElementById('btnBarkodGenel');
+                const btnDurdur = document.getElementById('btnBarkodGenelDurdur');
+                
+                if (html5QrCodeGenel && html5QrCodeGenel.isScanning) {
+                    html5QrCodeGenel.stop().then(() => {
+                        console.log('Genel scanner durduruldu');
+                    }).catch(err => console.log('Durdurma hatası:', err));
+                }
+                
+                statusEl.textContent = '⏸️ Kamera kapalı';
+                statusEl.className = 'scanner-status scanner-inactive';
+                btn.disabled = false;
+                btnDurdur.disabled = true;
+            }
         }
 
         // ============ ÜRÜN İŞLEMLERİ ============
@@ -1111,7 +1614,10 @@
             if (!ad) { toast('⚠️ Ürün adı gerekli!', 'warning'); return; }
             if (isNaN(fiyat) || fiyat < 0) { toast('⚠️ Geçerli bir fiyat girin!', 'warning'); return; }
             if (isNaN(stok) || stok < 0) { toast('⚠️ Geçerli bir stok girin!', 'warning'); return; }
-            if (kod && urunler.some(u => u.kod === kod)) { toast('⚠️ Bu barkod zaten kayıtlı!', 'warning'); return; }
+            if (kod && urunler.some(u => u.kod === kod)) { 
+                toast('⚠️ Bu barkod zaten kayıtlı! Mevcut ürün: ' + urunler.find(u => u.kod === kod).ad, 'warning'); 
+                return; 
+            }
 
             urunler.push({ ad, fiyat, stok, kod, eklenmeTarihi: new Date().toISOString() });
             save(); render();
@@ -1243,7 +1749,6 @@
             const tarih = new Date();
             const faturaNo = 'FTR-' + tarih.getTime().toString().slice(-8);
 
-            // Stok düş
             sepet.forEach(s => {
                 const urun = urunler.find(u => u.ad === s.ad);
                 if (urun) urun.stok = Math.max(0, urun.stok - s.adet);
@@ -1251,7 +1756,6 @@
 
             kasa += toplamTutar;
 
-            // Faturayı kaydet
             const faturaKaydi = {
                 faturaNo,
                 tarih: tarih.toISOString(),
@@ -1262,7 +1766,6 @@
             sonSatislar.unshift(faturaKaydi);
             if (sonSatislar.length > 100) sonSatislar.pop();
 
-            // Fatura gösterimi
             const faturaHTML = `
                 <div class="fatura-card">
                     <div class="fatura-header">
@@ -1327,49 +1830,6 @@
             }).join('');
         }
 
-        // ============ BARKOD ============
-        function kameraAc() {
-            const readerEl = document.getElementById('reader');
-            readerEl.style.display = 'block';
-            document.getElementById('kameraBtn').disabled = true;
-            document.getElementById('kameraKapatBtn').disabled = false;
-
-            if (!html5QrCode) html5QrCode = new Html5Qrcode("reader");
-
-            html5QrCode.start(
-                { facingMode: "environment" },
-                { fps: 10, qrbox: { width: 250, height: 250 } },
-                (decodedText) => {
-                    const urun = urunler.find(u => u.kod === decodedText);
-                    const sonucEl = document.getElementById('barkodSonuc');
-                    if (urun) {
-                        sonucEl.innerHTML = `✅ Bulundu: <b>${urun.ad}</b> - ${urun.fiyat.toFixed(2)} ₺`;
-                        sonucEl.style.color = 'var(--primary)';
-                        if (urun.stok > 0) sepeteEkle(urunler.indexOf(urun));
-                        else toast('⚠️ Ürün stokta yok!', 'warning');
-                    } else {
-                        sonucEl.innerHTML = `❌ Barkod bulunamadı: ${decodedText}`;
-                        sonucEl.style.color = 'var(--danger)';
-                    }
-                    setTimeout(() => sonucEl.innerHTML = '', 3000);
-                },
-                () => {}
-            ).catch(err => {
-                toast('⚠️ Kamera başlatılamadı!', 'error');
-                kameraKapat();
-            });
-        }
-
-        function kameraKapat() {
-            if (html5QrCode && html5QrCode.isScanning) {
-                html5QrCode.stop().then(() => {
-                    document.getElementById('reader').style.display = 'none';
-                    document.getElementById('kameraBtn').disabled = false;
-                    document.getElementById('kameraKapatBtn').disabled = true;
-                }).catch(() => {});
-            }
-        }
-
         // ============ FATURA GEÇMİŞİ ============
         function faturaGecmisiGoster(filtre = '') {
             const container = document.getElementById('faturaGecmisiList');
@@ -1398,7 +1858,7 @@
                             <tr>
                                 <th>📋 Fatura No</th>
                                 <th>📅 Tarih</th>
-                                <th>📦 Ürün Sayısı</th>
+                                <th>📦 Ürün</th>
                                 <th>💰 Toplam</th>
                                 <th>🔍 Detay</th>
                             </tr>
@@ -1464,9 +1924,6 @@
                         <span><b>TOPLAM</b></span>
                         <span style="color:var(--primary); font-size:1.3em;"><b>${fatura.toplam.toFixed(2)} ₺</b></span>
                     </div>
-                    <p style="text-align:center; margin-top:15px; color:var(--text-secondary);">
-                        🎉 Bizi tercih ettiğiniz için teşekkürler!
-                    </p>
                 </div>
                 <button class="btn-sm btn-danger" style="margin-top:15px; width:100%;" 
                         onclick="faturaSil(${index})">
@@ -1519,7 +1976,6 @@
             const wb = XLSX.utils.book_new();
             XLSX.utils.book_append_sheet(wb, ws, "Faturalar");
             
-            // Özet
             const toplamCiro = sonSatislar.reduce((a,b) => a + b.toplam, 0);
             const ozet = [{
                 'Toplam Fatura': sonSatislar.length,
@@ -1537,14 +1993,8 @@
         // ============ VERİ YÖNETİMİ ============
         function verileriYedekle() {
             const yedek = {
-                urunler,
-                kasa,
-                sonSatislar,
-                temaRengi,
-                marketAdi,
-                logoEmoji,
-                bgColor,
-                cardColor,
+                urunler, kasa, sonSatislar,
+                temaRengi, marketAdi, logoData, bgColor, cardColor,
                 yedekTarihi: new Date().toISOString()
             };
             
@@ -1582,7 +2032,7 @@
                             sonSatislar = yedek.sonSatislar || [];
                             temaRengi = yedek.temaRengi || '#00d084';
                             marketAdi = yedek.marketAdi || 'ATEŞOĞLU MARKET PRO';
-                            logoEmoji = yedek.logoEmoji || '🛒';
+                            logoData = yedek.logoData || null;
                             bgColor = yedek.bgColor || '#0a0a0a';
                             cardColor = yedek.cardColor || '#1a1a1a';
                             
@@ -1607,8 +2057,10 @@
                     kasa = 0;
                     sepet = [];
                     sonSatislar = [];
+                    logoData = null;
                     localStorage.clear();
                     save();
+                    temalariYukle();
                     render();
                     toast('🧨 Tüm veriler sıfırlandı!', 'error');
                 }
@@ -1620,7 +2072,6 @@
             document.getElementById('kasaText').innerText = kasa.toFixed(2);
             document.getElementById('urunSayisi').innerText = `Toplam: ${urunler.length} ürün`;
 
-            // Ürün listesi
             const urunList = document.getElementById('urunList');
             if (urunler.length === 0) {
                 urunList.innerHTML = `<div class="card" style="text-align:center; color:var(--text-secondary); padding:30px;">📦 Henüz ürün eklenmemiş<br><small>Yukarıdaki formu kullanarak ürün ekleyebilirsiniz</small></div>`;
@@ -1647,10 +2098,9 @@
 
             filtre();
 
-            // Sepet
             const sepetEl = document.getElementById('sepet');
             if (sepet.length === 0) {
-                sepetEl.innerHTML = `<div style="text-align:center; color:var(--text-secondary); padding:20px;">🛒 Sepet boş - Ürün eklemek için tıklayın</div>`;
+                sepetEl.innerHTML = `<div style="text-align:center; color:var(--text-secondary); padding:20px;">🛒 Sepet boş - Ürün eklemek için tıklayın veya barkod okutun</div>`;
             } else {
                 sepetEl.innerHTML = sepet.map((s, i) => `
                     <div class="sepet-item">
@@ -1667,7 +2117,6 @@
 
             document.getElementById('toplam').innerText = sepet.reduce((a, b) => a + (b.fiyat * b.adet), 0).toFixed(2);
 
-            // İstatistikler
             document.getElementById('statUrun').innerText = urunler.length;
             document.getElementById('statStok').innerText = urunler.reduce((a, b) => a + b.stok, 0);
             document.getElementById('statKasa').innerText = kasa.toFixed(2) + ' ₺';
@@ -1678,38 +2127,29 @@
 
         // ============ GRAFİKLER ============
         function cizGrafikler() {
-            // Stok grafiği
             const stokCtx = document.getElementById('stokChart');
-            if (stokCtx) {
+            if (stokCtx && urunler.length > 0) {
                 const ctx = stokCtx.getContext('2d');
                 if (stokChartInstance) stokChartInstance.destroy();
-                if (urunler.length > 0) {
-                    stokChartInstance = new Chart(ctx, {
-                        type: 'bar',
-                        data: {
-                            labels: urunler.map(u => u.ad),
-                            datasets: [{
-                                label: 'Stok',
-                                data: urunler.map(u => u.stok),
-                                backgroundColor: urunler.map(u => u.stok === 0 ? '#ff4757' : u.stok < 5 ? '#ffa502' : temaRengi),
-                                borderRadius: 8
-                            }]
-                        },
-                        options: {
-                            responsive: true,
-                            plugins: {
-                                title: { display: true, text: '📊 Ürün Stok Durumu', color: '#fff', font: { size: 16 } }
-                            },
-                            scales: {
-                                y: { beginAtZero: true, ticks: { color: '#aaa' }, grid: { color: '#333' } },
-                                x: { ticks: { color: '#aaa' } }
-                            }
-                        }
-                    });
-                }
+                stokChartInstance = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: urunler.map(u => u.ad),
+                        datasets: [{
+                            label: 'Stok',
+                            data: urunler.map(u => u.stok),
+                            backgroundColor: urunler.map(u => u.stok === 0 ? '#ff4757' : u.stok < 5 ? '#ffa502' : temaRengi),
+                            borderRadius: 8
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: { title: { display: true, text: '📊 Ürün Stok Durumu', color: '#fff' } },
+                        scales: { y: { beginAtZero: true, ticks: { color: '#aaa' } }, x: { ticks: { color: '#aaa' } } }
+                    }
+                });
             }
 
-            // Kasa grafiği
             const kasaCtx = document.getElementById('kasaChart');
             if (kasaCtx) {
                 const ctx2 = kasaCtx.getContext('2d');
@@ -1723,15 +2163,11 @@
                     },
                     options: {
                         responsive: true,
-                        plugins: {
-                            title: { display: true, text: '💰 Kasa & Stok Değeri', color: '#fff', font: { size: 16 } },
-                            legend: { position: 'bottom', labels: { color: '#aaa' } }
-                        }
+                        plugins: { title: { display: true, text: '💰 Kasa & Stok Değeri', color: '#fff' } }
                     }
                 });
             }
 
-            // Ciro grafiği (son 10 fatura)
             const ciroCtx = document.getElementById('ciroChart');
             if (ciroCtx && sonSatislar.length > 0) {
                 const ctx3 = ciroCtx.getContext('2d');
@@ -1746,21 +2182,13 @@
                             data: son10.map(f => f.toplam),
                             borderColor: temaRengi,
                             backgroundColor: temaRengi + '33',
-                            fill: true,
-                            tension: 0.4,
-                            pointRadius: 5
+                            fill: true, tension: 0.4, pointRadius: 5
                         }]
                     },
                     options: {
                         responsive: true,
-                        plugins: {
-                            title: { display: true, text: '📈 Son Faturalar - Ciro Grafiği', color: '#fff', font: { size: 16 } },
-                            legend: { labels: { color: '#aaa' } }
-                        },
-                        scales: {
-                            y: { beginAtZero: true, ticks: { color: '#aaa' }, grid: { color: '#333' } },
-                            x: { ticks: { color: '#aaa' } }
-                        }
+                        plugins: { title: { display: true, text: '📈 Son Faturalar - Ciro Grafiği', color: '#fff' } },
+                        scales: { y: { beginAtZero: true, ticks: { color: '#aaa' } }, x: { ticks: { color: '#aaa' } } }
                     }
                 });
             }
@@ -1769,41 +2197,28 @@
         // ============ EXCEL ============
         function excelIndir() {
             if (urunler.length === 0) { toast('⚠️ Dışa aktarılacak ürün yok!', 'warning'); return; }
-
             const data = urunler.map((u, i) => ({
-                'No': i + 1,
-                'Ürün Adı': u.ad,
-                'Fiyat (₺)': u.fiyat,
-                'Stok': u.stok,
-                'Barkod': u.kod || '-',
-                'Toplam Değer (₺)': (u.fiyat * u.stok).toFixed(2)
+                'No': i + 1, 'Ürün Adı': u.ad, 'Fiyat (₺)': u.fiyat, 'Stok': u.stok,
+                'Barkod': u.kod || '-', 'Toplam Değer (₺)': (u.fiyat * u.stok).toFixed(2)
             }));
-
             const ws = XLSX.utils.json_to_sheet(data);
             const wb = XLSX.utils.book_new();
             XLSX.utils.book_append_sheet(wb, ws, "Ürünler");
-            
             const ozet = [{
-                'Toplam Ürün': urunler.length,
-                'Toplam Stok': urunler.reduce((a, b) => a + b.stok, 0),
-                'Stok Değeri (₺)': urunler.reduce((a, b) => a + (b.fiyat * b.stok), 0).toFixed(2),
-                'Kasa (₺)': kasa.toFixed(2),
-                'Toplam Fatura': sonSatislar.length,
-                'Toplam Ciro (₺)': sonSatislar.reduce((a,b) => a + b.toplam, 0).toFixed(2),
-                'Tarih': new Date().toLocaleString('tr-TR')
+                'Toplam Ürün': urunler.length, 'Toplam Stok': urunler.reduce((a,b) => a + b.stok, 0),
+                'Stok Değeri (₺)': urunler.reduce((a,b) => a + (b.fiyat * b.stok), 0).toFixed(2),
+                'Kasa (₺)': kasa.toFixed(2), 'Toplam Fatura': sonSatislar.length,
+                'Toplam Ciro (₺)': sonSatislar.reduce((a,b) => a + b.toplam, 0).toFixed(2)
             }];
             const ws2 = XLSX.utils.json_to_sheet(ozet);
             XLSX.utils.book_append_sheet(wb, ws2, "Özet");
-
             XLSX.writeFile(wb, `${marketAdi.replace(/\s/g,'_')}_Rapor_${new Date().toISOString().slice(0,10)}.xlsx`);
             toast('📥 Excel dosyası indirildi!');
         }
 
-        function yazdir() {
-            window.print();
-        }
+        function yazdir() { window.print(); }
 
-        // ============ MODAL DIŞI TIKLAMA ============
+        // ============ MODAL ============
         document.getElementById('faturaModal').addEventListener('click', function(e) {
             if (e.target === this) modalKapat();
         });
@@ -1829,6 +2244,7 @@
         console.log('📦 Ürünler:', urunler.length);
         console.log('💰 Kasa:', kasa);
         console.log('🧾 Faturalar:', sonSatislar.length);
+        console.log('📷 Barkod sistemleri: Stok, Satış, Genel - 3 ayrı scanner');
     </script>
 
 </body>
