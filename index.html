@@ -19,11 +19,7 @@
             --border: #333;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -32,7 +28,6 @@
             min-height: 100vh;
         }
 
-        /* LOGIN PAGE */
         #loginPage {
             min-height: 100vh;
             display: flex;
@@ -73,227 +68,84 @@
             50% { transform: scale(1.1); }
         }
 
-        .login-title {
-            text-align: center;
-            color: var(--primary);
-            font-size: 1.8em;
-            font-weight: 700;
-            margin-bottom: 5px;
-        }
+        .login-title { color: var(--primary); font-size: 1.8em; font-weight: 700; margin-bottom: 5px; }
+        .login-subtitle { color: var(--text-secondary); margin-bottom: 30px; font-size: 0.9em; }
 
-        .login-subtitle {
-            text-align: center;
-            color: var(--text-secondary);
-            margin-bottom: 30px;
-            font-size: 0.9em;
-        }
-
-        .input-group {
-            position: relative;
-            margin-bottom: 20px;
-        }
-
-        .input-group .icon {
-            position: absolute;
-            left: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 18px;
-            color: var(--text-secondary);
-        }
-
+        .input-group { position: relative; margin-bottom: 20px; }
+        .input-group .icon { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); font-size: 18px; color: var(--text-secondary); }
+        
         .input-group input {
-            width: 100%;
-            padding: 14px 15px 14px 45px;
-            border: 2px solid var(--border);
-            border-radius: 12px;
-            background: #111;
-            color: #fff;
-            font-size: 16px;
-            transition: all 0.3s;
+            width: 100%; padding: 14px 15px 14px 45px;
+            border: 2px solid var(--border); border-radius: 12px;
+            background: #111; color: #fff; font-size: 16px; transition: all 0.3s;
         }
-
-        .input-group input:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 4px rgba(0, 208, 132, 0.1);
-        }
+        .input-group input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 4px rgba(0, 208, 132, 0.1); }
 
         .login-btn {
-            width: 100%;
-            padding: 14px;
+            width: 100%; padding: 14px;
             background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            color: #fff;
-            border: none;
-            border-radius: 12px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            letter-spacing: 1px;
+            color: #fff; border: none; border-radius: 12px;
+            font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.3s; letter-spacing: 1px;
         }
+        .login-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(0, 208, 132, 0.3); }
+        .login-error { color: var(--danger); text-align: center; margin-top: 10px; font-size: 0.9em; display: none; }
 
-        .login-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(0, 208, 132, 0.3);
-        }
-
-        .login-error {
-            color: var(--danger);
-            text-align: center;
-            margin-top: 10px;
-            font-size: 0.9em;
-            display: none;
-        }
-
-        /* MAIN APP */
         .app-header {
             background: linear-gradient(135deg, #1a1a1a, #111);
-            padding: 15px 20px;
-            text-align: center;
+            padding: 15px 20px; text-align: center;
             border-bottom: 2px solid var(--primary);
-            position: sticky;
-            top: 0;
-            z-index: 100;
+            position: sticky; top: 0; z-index: 100;
             backdrop-filter: blur(10px);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 15px;
+            display: flex; justify-content: space-between; align-items: center; gap: 15px;
         }
 
-        .header-logo {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .header-logo-img {
-            width: 40px;
-            height: 40px;
-            object-fit: contain;
-            border-radius: 8px;
-        }
+        .header-logo { display: flex; align-items: center; gap: 10px; }
+        .header-logo-img { width: 40px; height: 40px; object-fit: contain; border-radius: 8px; }
 
         .app-header h1 {
             font-size: 1.4em;
             background: linear-gradient(135deg, var(--primary), #00e6a0);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            font-weight: 800;
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            background-clip: text; font-weight: 800;
         }
 
-        .header-actions {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-        }
+        .header-actions { display: flex; gap: 10px; align-items: center; }
 
         .kasa-bar {
             background: linear-gradient(135deg, #1a3a2a, #0d2818);
-            padding: 12px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin: 10px 15px;
-            border-radius: 15px;
-            border: 1px solid rgba(0, 208, 132, 0.3);
+            padding: 12px 20px; display: flex; justify-content: space-between; align-items: center;
+            margin: 10px 15px; border-radius: 15px; border: 1px solid rgba(0, 208, 132, 0.3);
         }
-
-        .kasa-info {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .kasa-text {
-            font-size: 1.4em;
-            font-weight: 700;
-            color: var(--primary);
-        }
+        .kasa-info { display: flex; align-items: center; gap: 10px; }
+        .kasa-text { font-size: 1.4em; font-weight: 700; color: var(--primary); }
 
         .btn-sm {
-            padding: 8px 15px;
-            border: none;
-            border-radius: 8px;
-            font-size: 0.85em;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-weight: 600;
-            white-space: nowrap;
+            padding: 8px 15px; border: none; border-radius: 8px;
+            font-size: 0.85em; cursor: pointer; transition: all 0.3s; font-weight: 600; white-space: nowrap;
         }
-
         .btn-danger { background: rgba(255, 71, 87, 0.2); color: var(--danger); border: 1px solid rgba(255, 71, 87, 0.3); }
         .btn-danger:hover { background: rgba(255, 71, 87, 0.3); }
-        
         .btn-warning { background: rgba(255, 165, 2, 0.2); color: var(--warning); border: 1px solid rgba(255, 165, 2, 0.3); }
         .btn-warning:hover { background: rgba(255, 165, 2, 0.3); }
-        
-        .btn-success {
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            color: #fff;
-            font-weight: 600;
-            border: none;
-            cursor: pointer;
-        }
+        .btn-success { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: #fff; font-weight: 600; border: none; cursor: pointer; }
         .btn-success:hover { transform: translateY(-2px); box-shadow: 0 5px 20px rgba(0, 208, 132, 0.3); }
-
         .btn-primary { background: #3b82f6; color: #fff; border: none; }
         .btn-primary:hover { background: #2563eb; }
-
         .btn-info { background: #06b6d4; color: #fff; border: none; }
         .btn-info:hover { background: #0891b2; }
 
-        /* TABS */
         .tabs-container { padding: 10px 15px; }
-        
-        .tabs {
-            display: flex;
-            gap: 5px;
-            background: var(--card);
-            padding: 5px;
-            border-radius: 15px;
-            flex-wrap: wrap;
-        }
-
+        .tabs { display: flex; gap: 5px; background: var(--card); padding: 5px; border-radius: 15px; flex-wrap: wrap; }
         .tab-btn {
-            flex: 1;
-            min-width: 80px;
-            padding: 12px 10px;
-            border: none;
-            border-radius: 12px;
-            cursor: pointer;
-            font-size: 0.85em;
-            font-weight: 600;
-            transition: all 0.3s;
-            background: transparent;
-            color: var(--text-secondary);
+            flex: 1; min-width: 80px; padding: 12px 10px; border: none; border-radius: 12px;
+            cursor: pointer; font-size: 0.85em; font-weight: 600; transition: all 0.3s;
+            background: transparent; color: var(--text-secondary);
         }
+        .tab-btn.active { background: var(--primary); color: #000; box-shadow: 0 5px 15px rgba(0, 208, 132, 0.3); }
+        .tab-btn:hover:not(.active) { color: var(--primary); background: rgba(0, 208, 132, 0.1); }
 
-        .tab-btn.active {
-            background: var(--primary);
-            color: #000;
-            box-shadow: 0 5px 15px rgba(0, 208, 132, 0.3);
-        }
-
-        .tab-btn:hover:not(.active) {
-            color: var(--primary);
-            background: rgba(0, 208, 132, 0.1);
-        }
-
-        /* PAGES */
-        .content-area {
-            padding: 10px 15px;
-            max-width: 900px;
-            margin: 0 auto;
-        }
-
-        .page {
-            display: none;
-            animation: fadeIn 0.3s ease;
-        }
-
+        .content-area { padding: 10px 15px; max-width: 900px; margin: 0 auto; }
+        .page { display: none; animation: fadeIn 0.3s ease; }
         .page.active { display: block; }
 
         @keyframes fadeIn {
@@ -301,324 +153,130 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* CARDS */
-        .card {
-            background: var(--card);
-            padding: 15px;
-            border-radius: 12px;
-            margin-bottom: 10px;
-            border: 1px solid var(--border);
-            transition: all 0.3s;
-        }
-
+        .card { background: var(--card); padding: 15px; border-radius: 12px; margin-bottom: 10px; border: 1px solid var(--border); transition: all 0.3s; }
         .card:hover { background: var(--card-hover); border-color: var(--primary); }
-
-        .card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-
+        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
         .card-title { font-weight: 600; font-size: 1.1em; }
         .card-price { color: var(--primary); font-weight: 700; font-size: 1.2em; }
         .card-stock { font-size: 0.9em; color: var(--text-secondary); }
         .stock-low { color: var(--warning) !important; }
         .stock-out { color: var(--danger) !important; }
+        .card-actions { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
 
-        .card-actions {
-            display: flex;
-            gap: 8px;
-            margin-top: 10px;
-            flex-wrap: wrap;
-        }
-
-        /* FORM */
         .form-group { margin-bottom: 15px; }
         .form-label { display: block; margin-bottom: 5px; color: var(--text-secondary); font-size: 0.9em; font-weight: 500; }
-        
         .form-input {
-            width: 100%;
-            padding: 12px 15px;
-            border: 2px solid var(--border);
-            border-radius: 10px;
-            background: #111;
-            color: #fff;
-            font-size: 15px;
-            transition: all 0.3s;
+            width: 100%; padding: 12px 15px; border: 2px solid var(--border);
+            border-radius: 10px; background: #111; color: #fff; font-size: 15px; transition: all 0.3s;
         }
-
-        .form-input:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(0, 208, 132, 0.1);
-        }
-
+        .form-input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(0, 208, 132, 0.1); }
         .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        input[type="color"] { width: 50px; height: 40px; border: 2px solid var(--border); border-radius: 8px; cursor: pointer; background: transparent; }
+        input[type="file"] { display: none; }
 
-        input[type="color"] {
-            width: 50px;
-            height: 40px;
-            border: 2px solid var(--border);
-            border-radius: 8px;
-            cursor: pointer;
-            background: transparent;
-        }
-
-        input[type="file"] {
-            display: none;
-        }
-
-        /* SEARCH */
         .search-bar { position: relative; margin-bottom: 15px; }
-        
-        .search-bar .search-icon {
-            position: absolute;
-            left: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 18px;
-        }
-
-        .search-bar input {
-            width: 100%;
-            padding: 12px 15px 12px 45px;
-            border: 2px solid var(--border);
-            border-radius: 12px;
-            background: #111;
-            color: #fff;
-            font-size: 15px;
-        }
-
+        .search-bar .search-icon { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); font-size: 18px; }
+        .search-bar input { width: 100%; padding: 12px 15px 12px 45px; border: 2px solid var(--border); border-radius: 12px; background: #111; color: #fff; font-size: 15px; }
         .search-bar input:focus { outline: none; border-color: var(--primary); }
 
-        /* SEPET */
-        .sepet-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px;
-            background: var(--card);
-            border-radius: 10px;
-            margin-bottom: 8px;
-            border: 1px solid var(--border);
-        }
-
+        .sepet-item { display: flex; justify-content: space-between; align-items: center; padding: 12px; background: var(--card); border-radius: 10px; margin-bottom: 8px; border: 1px solid var(--border); }
         .sepet-info { flex: 1; }
         .sepet-ad { font-weight: 600; }
         .sepet-detay { color: var(--text-secondary); font-size: 0.85em; }
         .sepet-fiyat { color: var(--primary); font-weight: 700; margin-right: 10px; }
 
-        .btn-icon {
-            width: 35px;
-            height: 35px;
-            border: none;
-            border-radius: 50%;
-            cursor: pointer;
-            font-size: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s;
-            margin: 0 3px;
-        }
-
+        .btn-icon { width: 35px; height: 35px; border: none; border-radius: 50%; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; transition: all 0.3s; margin: 0 3px; }
         .btn-icon.danger { background: rgba(255, 71, 87, 0.2); color: var(--danger); }
         .btn-icon.danger:hover { background: rgba(255, 71, 87, 0.4); }
 
-        .sepet-summary {
-            background: linear-gradient(135deg, #1a3a2a, #0d2818);
-            padding: 20px;
-            border-radius: 15px;
-            margin-top: 15px;
-            border: 1px solid rgba(0, 208, 132, 0.3);
-        }
-
+        .sepet-summary { background: linear-gradient(135deg, #1a3a2a, #0d2818); padding: 20px; border-radius: 15px; margin-top: 15px; border: 1px solid rgba(0, 208, 132, 0.3); }
         .sepet-toplam { font-size: 1.8em; font-weight: 800; color: var(--primary); text-align: center; }
 
-        /* FATURA */
-        .fatura-card {
-            background: linear-gradient(135deg, #1a1a1a, #111);
-            border: 2px solid var(--primary);
-            border-radius: 15px;
-            padding: 20px;
-            margin-top: 20px;
-        }
-
-        .fatura-header {
-            text-align: center;
-            border-bottom: 2px dashed var(--border);
-            padding-bottom: 15px;
-            margin-bottom: 15px;
-        }
-
-        .fatura-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 8px 0;
-        }
-
-        .fatura-total {
-            border-top: 2px solid var(--primary);
-            padding-top: 10px;
-            margin-top: 10px;
-            font-size: 1.2em;
-            font-weight: 700;
-        }
+        .fatura-card { background: linear-gradient(135deg, #1a1a1a, #111); border: 2px solid var(--primary); border-radius: 15px; padding: 20px; margin-top: 20px; }
+        .fatura-header { text-align: center; border-bottom: 2px dashed var(--border); padding-bottom: 15px; margin-bottom: 15px; }
+        .fatura-item { display: flex; justify-content: space-between; padding: 8px 0; }
+        .fatura-total { border-top: 2px solid var(--primary); padding-top: 10px; margin-top: 10px; font-size: 1.2em; font-weight: 700; }
 
         /* BARKOD SCANNER */
         .barkod-scanner-container {
-            width: 100%;
-            max-width: 400px;
-            margin: 15px auto;
-            border-radius: 15px;
-            overflow: hidden;
-            border: 2px solid var(--border);
-            background: #000;
+            width: 100%; max-width: 400px; margin: 15px auto;
+            border-radius: 15px; overflow: hidden;
+            border: 3px solid var(--primary); background: #000;
+            position: relative;
         }
-
+        
         .barkod-scanner-container video {
-            width: 100%;
-            height: auto;
+            width: 100% !important;
+            height: auto !important;
+            display: block !important;
         }
 
-        #readerStok, #readerSatis {
-            width: 100%;
+        #readerStok, #readerSatis, #readerGenel {
+            width: 100% !important;
+            min-height: 250px;
+        }
+
+        /* HTML5-QRCode still override */
+        #readerStok video, #readerSatis video, #readerGenel video {
+            width: 100% !important;
+            height: auto !important;
+            object-fit: cover !important;
+        }
+
+        #readerStok img, #readerSatis img, #readerGenel img {
+            display: none !important;
         }
 
         .scanner-status {
-            text-align: center;
-            padding: 10px;
-            font-weight: 600;
-            font-size: 0.9em;
+            text-align: center; padding: 10px; font-weight: 600; font-size: 0.9em;
         }
-
-        .scanner-active {
-            color: var(--primary);
-            animation: pulse 1.5s infinite;
-        }
-
-        .scanner-inactive {
-            color: var(--text-secondary);
-        }
+        .scanner-active { color: var(--primary); animation: pulse 1.5s infinite; }
+        .scanner-inactive { color: var(--text-secondary); }
 
         .scanner-result {
-            background: var(--card);
-            padding: 15px;
-            border-radius: 10px;
-            margin-top: 10px;
-            text-align: center;
-            border: 1px solid var(--border);
-            min-height: 50px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            background: var(--card); padding: 15px; border-radius: 10px;
+            margin-top: 10px; text-align: center; border: 1px solid var(--border);
+            min-height: 50px; display: flex; align-items: center; justify-content: center;
         }
 
-        /* RAPOR */
-        .chart-container {
-            background: var(--card);
-            padding: 20px;
-            border-radius: 15px;
-            margin: 15px 0;
+        /* SCANNER OVERLAY */
+        .scanner-overlay {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 250px; height: 3px;
+            background: rgba(0, 208, 132, 0.8);
+            box-shadow: 0 0 20px rgba(0, 208, 132, 0.6);
+            animation: scanLine 2s ease-in-out infinite;
+            z-index: 10; pointer-events: none;
         }
 
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 10px;
-            margin: 15px 0;
+        @keyframes scanLine {
+            0%, 100% { top: 30%; }
+            50% { top: 70%; }
         }
 
-        .stat-card {
-            background: var(--card);
-            padding: 15px;
-            border-radius: 12px;
-            text-align: center;
-            border: 1px solid var(--border);
-        }
-
+        .chart-container { background: var(--card); padding: 20px; border-radius: 15px; margin: 15px 0; }
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin: 15px 0; }
+        .stat-card { background: var(--card); padding: 15px; border-radius: 12px; text-align: center; border: 1px solid var(--border); }
         .stat-value { font-size: 1.8em; font-weight: 700; color: var(--primary); }
         .stat-label { font-size: 0.85em; color: var(--text-secondary); margin-top: 5px; }
 
-        /* FATURA GEÇMİŞİ */
-        .fatura-tablo {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 15px;
-        }
+        .fatura-tablo { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        .fatura-tablo th { background: var(--primary); color: #000; padding: 12px; text-align: left; font-weight: 600; }
+        .fatura-tablo td { padding: 12px; border-bottom: 1px solid var(--border); }
+        .fatura-tablo tr:hover td { background: rgba(0, 208, 132, 0.05); }
 
-        .fatura-tablo th {
-            background: var(--primary);
-            color: #000;
-            padding: 12px;
-            text-align: left;
-            font-weight: 600;
-        }
-
-        .fatura-tablo td {
-            padding: 12px;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .fatura-tablo tr:hover td {
-            background: rgba(0, 208, 132, 0.05);
-        }
-
-        /* MODAL */
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.8);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; justify-content: center; align-items: center; padding: 20px; }
         .modal-overlay.active { display: flex; }
+        .modal-content { background: var(--card); border-radius: 15px; padding: 25px; max-width: 600px; width: 100%; max-height: 80vh; overflow-y: auto; border: 2px solid var(--primary); }
+        .modal-close { float: right; background: none; border: none; color: #fff; font-size: 24px; cursor: pointer; }
 
-        .modal-content {
-            background: var(--card);
-            border-radius: 15px;
-            padding: 25px;
-            max-width: 600px;
-            width: 100%;
-            max-height: 80vh;
-            overflow-y: auto;
-            border: 2px solid var(--primary);
-        }
-
-        .modal-close {
-            float: right;
-            background: none;
-            border: none;
-            color: #fff;
-            font-size: 24px;
-            cursor: pointer;
-        }
-
-        /* TOAST */
         .toast {
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #333;
-            color: #fff;
-            padding: 12px 25px;
-            border-radius: 25px;
-            font-weight: 600;
-            z-index: 1000;
+            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+            background: #333; color: #fff; padding: 12px 25px; border-radius: 25px;
+            font-weight: 600; z-index: 9999;
             animation: slideUp 0.3s ease, fadeOut 0.3s ease 2.5s forwards;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            white-space: nowrap;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5); white-space: nowrap;
         }
-
         .toast.success { background: var(--primary); color: #000; }
         .toast.error { background: var(--danger); }
         .toast.warning { background: var(--warning); color: #000; }
@@ -627,73 +285,22 @@
             from { transform: translateX(-50%) translateY(100px); opacity: 0; }
             to { transform: translateX(-50%) translateY(0); opacity: 1; }
         }
-
         @keyframes fadeOut {
             from { opacity: 1; }
             to { opacity: 0; }
         }
 
-        /* ADMIN PANEL */
-        .admin-section {
-            background: var(--card);
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 15px;
-            border: 1px solid var(--border);
-        }
-
-        .admin-section h3 {
-            margin-bottom: 15px;
-            color: var(--primary);
-        }
-
-        .theme-preview {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            margin: 10px 0;
-        }
-
-        .theme-preset {
-            width: 60px;
-            height: 60px;
-            border-radius: 12px;
-            cursor: pointer;
-            border: 2px solid transparent;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-        }
-
+        .admin-section { background: var(--card); border-radius: 12px; padding: 20px; margin-bottom: 15px; border: 1px solid var(--border); }
+        .admin-section h3 { margin-bottom: 15px; color: var(--primary); }
+        .theme-preview { display: flex; gap: 10px; flex-wrap: wrap; margin: 10px 0; }
+        .theme-preset { width: 60px; height: 60px; border-radius: 12px; cursor: pointer; border: 2px solid transparent; transition: all 0.3s; display: flex; align-items: center; justify-content: center; font-size: 20px; }
         .theme-preset:hover { border-color: #fff; transform: scale(1.1); }
-        
-        .theme-preset.selected {
-            border-color: var(--primary);
-            box-shadow: 0 0 20px rgba(0, 208, 132, 0.5);
-        }
+        .theme-preset.selected { border-color: var(--primary); box-shadow: 0 0 20px rgba(0, 208, 132, 0.5); }
+        .logo-preview { width: 120px; height: 120px; border: 2px dashed var(--border); border-radius: 15px; display: flex; align-items: center; justify-content: center; margin: 10px 0; overflow: hidden; background: #111; }
+        .logo-preview img { max-width: 100%; max-height: 100%; object-fit: contain; }
+        .urun-secim-card { cursor: pointer; transition: all 0.2s; }
+        .urun-secim-card:active { transform: scale(0.98); }
 
-        .logo-preview {
-            width: 120px;
-            height: 120px;
-            border: 2px dashed var(--border);
-            border-radius: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 10px 0;
-            overflow: hidden;
-            background: #111;
-        }
-
-        .logo-preview img {
-            max-width: 100%;
-            max-height: 100%;
-            object-fit: contain;
-        }
-
-        /* RESPONSIVE */
         @media (max-width: 480px) {
             .form-row { grid-template-columns: 1fr; }
             .tabs { flex-wrap: wrap; }
@@ -702,25 +309,18 @@
             .card-actions button { width: 100%; }
             .app-header { flex-direction: column; gap: 10px; }
             .fatura-tablo { font-size: 0.8em; }
-            .header-logo { flex-direction: column; }
-        }
-
-        .urun-secim-card {
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .urun-secim-card:active {
-            transform: scale(0.98);
         }
     </style>
 
-    <!-- HTML5 QR Code Scanner -->
-    <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+    <!-- HTML5 QR Code Scanner - CDN -->
+    <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js">
+    </script>
     <!-- Chart.js -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js">
+    </script>
     <!-- SheetJS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js">
+    </script>
 </head>
 
 <body>
@@ -744,10 +344,7 @@
                 <input id="pass" type="password" placeholder="Şifre" autocomplete="current-password" value="1234">
             </div>
             
-            <button class="login-btn" onclick="login()">
-                🔐 GİRİŞ YAP
-            </button>
-            
+            <button class="login-btn" onclick="login()">🔐 GİRİŞ YAP</button>
             <div class="login-error" id="loginError">⚠️ Kullanıcı adı veya şifre hatalı!</div>
         </div>
     </div>
@@ -755,7 +352,6 @@
     <!-- MAIN APP -->
     <div id="app" style="display:none;">
         
-        <!-- HEADER -->
         <div class="app-header" id="appHeader">
             <div class="header-logo">
                 <span id="headerLogoEmoji" style="font-size:30px;">🛒</span>
@@ -767,7 +363,6 @@
             </div>
         </div>
 
-        <!-- KASA BAR -->
         <div class="kasa-bar" id="kasaBar">
             <div class="kasa-info">
                 <span style="font-size:30px;">💰</span>
@@ -776,12 +371,9 @@
                     <span class="kasa-text" id="kasaText">0.00</span> ₺
                 </div>
             </div>
-            <button class="btn-sm btn-danger" onclick="kasaSifirla()" title="Kasayı Sıfırla">
-                🧨 Sıfırla
-            </button>
+            <button class="btn-sm btn-danger" onclick="kasaSifirla()">🧨 Sıfırla</button>
         </div>
 
-        <!-- TABS -->
         <div class="tabs-container">
             <div class="tabs" id="mainTabs">
                 <button class="tab-btn active" onclick="showTab('urun')">📦 Ürünler</button>
@@ -792,7 +384,6 @@
             </div>
         </div>
 
-        <!-- CONTENT -->
         <div class="content-area">
             
             <!-- ÜRÜN SAYFASI -->
@@ -826,10 +417,11 @@
                     <!-- Stok Barkod Okuyucu -->
                     <div id="stokScannerArea" style="display:none; margin-bottom:15px;">
                         <div class="barkod-scanner-container">
+                            <div class="scanner-overlay"></div>
                             <div id="readerStok"></div>
                         </div>
                         <div class="scanner-status scanner-active" id="stokScannerStatus">
-                            🔍 Barkod okumaya hazır...
+                            🔍 Kamera aktif - Barkod okutun...
                         </div>
                         <button class="btn-sm btn-danger" style="width:100%; margin-top:5px;" 
                                 onclick="barkodOkuDurdur('stok')">
@@ -838,9 +430,7 @@
                     </div>
                     
                     <button class="btn-success" style="width:100%; padding:14px; border:none; border-radius:10px;" 
-                            onclick="urunEkle()">
-                        ✅ Ürün Ekle
-                    </button>
+                            onclick="urunEkle()">✅ Ürün Ekle</button>
                 </div>
 
                 <div style="display:flex; gap:10px; margin-bottom:15px; flex-wrap:wrap;">
@@ -854,7 +444,6 @@
 
             <!-- SATIŞ SAYFASI -->
             <div id="satis" class="page">
-                <!-- Satış Barkod Okuyucu -->
                 <div class="card" style="margin-bottom:15px;">
                     <div style="display:flex; justify-content:space-between; align-items:center;">
                         <h4>📷 Hızlı Barkod Okutma</h4>
@@ -864,18 +453,17 @@
                     </div>
                     <div id="satisScannerArea" style="display:none; margin-top:10px;">
                         <div class="barkod-scanner-container">
+                            <div class="scanner-overlay"></div>
                             <div id="readerSatis"></div>
                         </div>
                         <div class="scanner-status scanner-active" id="satisScannerStatus">
-                            🔍 Ürün barkodu okutun...
+                            🔍 Kamera aktif - Ürün barkodu okutun...
                         </div>
                         <div class="scanner-result" id="satisScannerResult">
                             <span style="color:var(--text-secondary);">Okunan barkod burada görünecek</span>
                         </div>
                         <button class="btn-sm btn-danger" style="width:100%; margin-top:5px;" 
-                                onclick="barkodOkuDurdur('satis')">
-                            ⏹️ Okumayı Durdur
-                        </button>
+                                onclick="barkodOkuDurdur('satis')">⏹️ Okumayı Durdur</button>
                     </div>
                 </div>
 
@@ -906,12 +494,12 @@
                 <div id="fatura"></div>
             </div>
 
-            <!-- BARKOD SAYFASI (Genel) -->
+            <!-- BARKOD SAYFASI -->
             <div id="barkod" class="page">
                 <div class="card" style="text-align:center;">
                     <h3>📷 Barkod Okuyucu</h3>
                     <p style="color:var(--text-secondary); margin:10px 0;">
-                        Ürün barkodunu kameraya gösterin - Okunan barkod bilgisi aşağıda görünecek
+                        Ürün barkodunu kameraya gösterin
                     </p>
                     
                     <div style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-bottom:15px;">
@@ -924,6 +512,7 @@
                     </div>
                     
                     <div class="barkod-scanner-container">
+                        <div class="scanner-overlay"></div>
                         <div id="readerGenel"></div>
                     </div>
                     
@@ -934,49 +523,30 @@
                     <div class="scanner-result" id="genelScannerResult">
                         <span style="color:var(--text-secondary);">Okunan barkod burada görünecek</span>
                     </div>
+                    
+                    <div style="margin-top:10px; padding:10px; background:var(--card); border-radius:10px;">
+                        <small style="color:var(--warning);">
+                            💡 <b>İpucu:</b> Telefonunuzdaki veya bilgisayarınızdaki kamera ile barkodları okutabilirsiniz. 
+                            EAN-13, UPC, Code-128, QR Code gibi tüm barkod formatları desteklenir.
+                        </small>
+                    </div>
                 </div>
             </div>
 
             <!-- RAPOR SAYFASI -->
             <div id="rapor" class="page">
                 <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-value" id="statUrun">0</div>
-                        <div class="stat-label">Toplam Ürün</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-value" id="statStok">0</div>
-                        <div class="stat-label">Toplam Stok</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-value" id="statKasa">0.00 ₺</div>
-                        <div class="stat-label">Kasa</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-value" id="statDeger">0.00 ₺</div>
-                        <div class="stat-label">Stok Değeri</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-value" id="statFatura">0</div>
-                        <div class="stat-label">Toplam Fatura</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-value" id="statCiro">0.00 ₺</div>
-                        <div class="stat-label">Toplam Ciro</div>
-                    </div>
+                    <div class="stat-card"><div class="stat-value" id="statUrun">0</div><div class="stat-label">Toplam Ürün</div></div>
+                    <div class="stat-card"><div class="stat-value" id="statStok">0</div><div class="stat-label">Toplam Stok</div></div>
+                    <div class="stat-card"><div class="stat-value" id="statKasa">0.00 ₺</div><div class="stat-label">Kasa</div></div>
+                    <div class="stat-card"><div class="stat-value" id="statDeger">0.00 ₺</div><div class="stat-label">Stok Değeri</div></div>
+                    <div class="stat-card"><div class="stat-value" id="statFatura">0</div><div class="stat-label">Toplam Fatura</div></div>
+                    <div class="stat-card"><div class="stat-value" id="statCiro">0.00 ₺</div><div class="stat-label">Toplam Ciro</div></div>
                 </div>
 
-                <div class="chart-container">
-                    <canvas id="stokChart"></canvas>
-                </div>
-
-                <div class="chart-container">
-                    <canvas id="kasaChart"></canvas>
-                </div>
-
-                <div class="chart-container">
-                    <canvas id="ciroChart"></canvas>
-                </div>
+                <div class="chart-container"><canvas id="stokChart"></canvas></div>
+                <div class="chart-container"><canvas id="kasaChart"></canvas></div>
+                <div class="chart-container"><canvas id="ciroChart"></canvas></div>
 
                 <div class="export-buttons">
                     <button class="btn-success" style="flex:1; padding:12px; border:none; border-radius:10px;" 
@@ -991,20 +561,14 @@
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
                     <h3>🧾 Geçmiş Faturalar</h3>
                     <div>
-                        <button class="btn-sm btn-danger" onclick="faturaGecmisiTemizle()" style="margin-right:5px;">
-                            🗑️ Tümünü Temizle
-                        </button>
-                        <button class="btn-sm btn-success" onclick="faturaGecmisiExcel()">
-                            📥 Excel
-                        </button>
+                        <button class="btn-sm btn-danger" onclick="faturaGecmisiTemizle()" style="margin-right:5px;">🗑️ Tümünü Temizle</button>
+                        <button class="btn-sm btn-success" onclick="faturaGecmisiExcel()">📥 Excel</button>
                     </div>
                 </div>
-
                 <div class="search-bar">
                     <span class="search-icon">🔍</span>
                     <input id="faturaAra" placeholder="Fatura no veya tarih ara..." onkeyup="faturaFiltrele()">
                 </div>
-
                 <div id="faturaGecmisiList">
                     <div class="card" style="text-align:center; color:var(--text-secondary); padding:30px;">
                         📋 Henüz fatura kaydı bulunmuyor
@@ -1016,85 +580,58 @@
             <div id="admin" class="page">
                 <h2 style="color:var(--primary); margin-bottom:20px;">⚙️ Admin Paneli</h2>
                 
-                <!-- Logo Yükleme -->
                 <div class="admin-section">
                     <h3>🖼️ Market Logosu</h3>
-                    <p style="color:var(--text-secondary); margin-bottom:15px;">
-                        Marketiniz için özel logo yükleyin (PNG, JPG, GIF, SVG)
-                    </p>
-                    
+                    <p style="color:var(--text-secondary); margin-bottom:15px;">Marketiniz için özel logo yükleyin (PNG, JPG, GIF, SVG)</p>
                     <div class="logo-preview" id="logoPreview">
                         <span style="font-size:50px; color:var(--text-secondary);">🛒</span>
                     </div>
-                    
                     <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;">
-                        <button class="btn-sm btn-primary" onclick="document.getElementById('logoFileInput').click()">
-                            📁 Dosyadan Logo Seç
-                        </button>
+                        <button class="btn-sm btn-primary" onclick="document.getElementById('logoFileInput').click()">📁 Dosyadan Logo Seç</button>
                         <input type="file" id="logoFileInput" accept="image/*" onchange="logoYukle(this)">
-                        <button class="btn-sm btn-warning" onclick="logoSifirla()">
-                            🔄 Varsayılana Dön
-                        </button>
+                        <button class="btn-sm btn-warning" onclick="logoSifirla()">🔄 Varsayılana Dön</button>
                     </div>
-                    <p style="font-size:0.8em; color:var(--text-secondary); margin-top:5px;">
-                        Önerilen: Kare formatta, maksimum 2MB
-                    </p>
                 </div>
 
-                <!-- Tema Ayarları -->
                 <div class="admin-section">
                     <h3>🎨 Tema Renkleri</h3>
-                    <p style="color:var(--text-secondary); margin-bottom:15px;">Ana rengi değiştirerek site görünümünü özelleştirin</p>
-                    
                     <div class="theme-preview" id="themePresets">
-                        <div class="theme-preset selected" style="background:#00d084;" onclick="temaDegistir('#00d084', 'Yeşil')" title="Yeşil">🟢</div>
-                        <div class="theme-preset" style="background:#3b82f6;" onclick="temaDegistir('#3b82f6', 'Mavi')" title="Mavi">🔵</div>
-                        <div class="theme-preset" style="background:#8b5cf6;" onclick="temaDegistir('#8b5cf6', 'Mor')" title="Mor">🟣</div>
-                        <div class="theme-preset" style="background:#ef4444;" onclick="temaDegistir('#ef4444', 'Kırmızı')" title="Kırmızı">🔴</div>
-                        <div class="theme-preset" style="background:#f59e0b;" onclick="temaDegistir('#f59e0b', 'Turuncu')" title="Turuncu">🟠</div>
-                        <div class="theme-preset" style="background:#ec4899;" onclick="temaDegistir('#ec4899', 'Pembe')" title="Pembe">🌸</div>
+                        <div class="theme-preset selected" style="background:#00d084;" onclick="temaDegistir('#00d084', 'Yeşil')">🟢</div>
+                        <div class="theme-preset" style="background:#3b82f6;" onclick="temaDegistir('#3b82f6', 'Mavi')">🔵</div>
+                        <div class="theme-preset" style="background:#8b5cf6;" onclick="temaDegistir('#8b5cf6', 'Mor')">🟣</div>
+                        <div class="theme-preset" style="background:#ef4444;" onclick="temaDegistir('#ef4444', 'Kırmızı')">🔴</div>
+                        <div class="theme-preset" style="background:#f59e0b;" onclick="temaDegistir('#f59e0b', 'Turuncu')">🟠</div>
+                        <div class="theme-preset" style="background:#ec4899;" onclick="temaDegistir('#ec4899', 'Pembe')">🌸</div>
                     </div>
-
                     <div class="form-row" style="margin-top:15px;">
                         <div class="form-group">
                             <label class="form-label">Özel Renk</label>
                             <div style="display:flex; align-items:center; gap:10px;">
                                 <input type="color" id="customColor" value="#00d084" onchange="temaDegistir(this.value, 'Özel')">
-                                <span id="customColorText" style="color:var(--text-secondary);">#00d084</span>
+                                <span id="customColorText">#00d084</span>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Market Bilgileri -->
                 <div class="admin-section">
                     <h3>📝 Market Bilgileri</h3>
                     <div class="form-group">
                         <label class="form-label">Market Adı</label>
-                        <input class="form-input" id="marketAdi" placeholder="Market adı" value="ATEŞOĞLU MARKET PRO">
+                        <input class="form-input" id="marketAdi" value="ATEŞOĞLU MARKET PRO">
                     </div>
                     <button class="btn-success" style="padding:12px 25px; border:none; border-radius:10px;" 
-                            onclick="marketBilgiGuncelle()">
-                        💾 Bilgileri Kaydet
-                    </button>
+                            onclick="marketBilgiGuncelle()">💾 Bilgileri Kaydet</button>
                 </div>
 
-                <!-- Arkaplan -->
                 <div class="admin-section">
                     <h3>🌙 Arkaplan</h3>
                     <div class="form-row">
-                        <div class="form-group">
-                            <label class="form-label">Arkaplan Rengi</label>
-                            <input type="color" id="bgColor" value="#0a0a0a" onchange="arkaplanDegistir()">
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Kart Rengi</label>
-                            <input type="color" id="cardColor" value="#1a1a1a" onchange="arkaplanDegistir()">
-                        </div>
+                        <div class="form-group"><label class="form-label">Arkaplan Rengi</label><input type="color" id="bgColor" value="#0a0a0a" onchange="arkaplanDegistir()"></div>
+                        <div class="form-group"><label class="form-label">Kart Rengi</label><input type="color" id="cardColor" value="#1a1a1a" onchange="arkaplanDegistir()"></div>
                     </div>
                 </div>
 
-                <!-- Veri Yönetimi -->
                 <div class="admin-section">
                     <h3>💾 Veri Yönetimi</h3>
                     <div style="display:flex; gap:10px; flex-wrap:wrap;">
@@ -1122,20 +659,23 @@
         let kasa = Number(localStorage.getItem("kasa")) || 0;
         let sonSatislar = JSON.parse(localStorage.getItem("sonSatislar") || "[]");
         
-        // Barkod scanner instances
-        let html5QrCodeStok = null;
-        let html5QrCodeSatis = null;
-        let html5QrCodeGenel = null;
+        // Barkod scanner instances - HER BİRİ AYRI
+        let scannerStok = null;
+        let scannerSatis = null;
+        let scannerGenel = null;
+        
+        // Aktif scanner takibi
+        let aktifScanner = null; // 'stok', 'satis', 'genel' veya null
         
         // Chart instances
         let stokChartInstance = null;
         let kasaChartInstance = null;
         let ciroChartInstance = null;
         
-        // Tema ve logo ayarları
+        // Tema
         let temaRengi = localStorage.getItem("temaRengi") || "#00d084";
         let marketAdi = localStorage.getItem("marketAdi") || "ATEŞOĞLU MARKET PRO";
-        let logoData = localStorage.getItem("logoData") || null; // Base64 logo
+        let logoData = localStorage.getItem("logoData") || null;
         let bgColor = localStorage.getItem("bgColor") || "#0a0a0a";
         let cardColor = localStorage.getItem("cardColor") || "#1a1a1a";
 
@@ -1147,50 +687,23 @@
             localStorage.setItem("marketAdi", marketAdi);
             localStorage.setItem("bgColor", bgColor);
             localStorage.setItem("cardColor", cardColor);
-            if (logoData) {
-                localStorage.setItem("logoData", logoData);
-            } else {
-                localStorage.removeItem("logoData");
-            }
+            if (logoData) localStorage.setItem("logoData", logoData);
+            else localStorage.removeItem("logoData");
         }
 
-        // ============ LOGO YÖNETİMİ ============
+        // ============ LOGO ============
         function logoYukle(input) {
             const file = input.files[0];
             if (!file) return;
-
-            // Dosya boyutu kontrolü (2MB)
-            if (file.size > 2 * 1024 * 1024) {
-                toast('⚠️ Dosya boyutu 2MB\'dan küçük olmalı!', 'warning');
-                return;
-            }
-
-            // Dosya tipi kontrolü
-            const allowedTypes = ['image/png', 'image/jpeg', 'image/gif', 'image/svg+xml', 'image/webp'];
-            if (!allowedTypes.includes(file.type)) {
-                toast('⚠️ Sadece PNG, JPG, GIF, SVG, WEBP formatları desteklenir!', 'warning');
-                return;
-            }
-
+            if (file.size > 2 * 1024 * 1024) { toast('⚠️ Dosya 2MB\'dan küçük olmalı!', 'warning'); return; }
             const reader = new FileReader();
-            reader.onload = function(e) {
-                logoData = e.target.result;
-                save();
-                logoGuncelle();
-                toast('✅ Logo başarıyla yüklendi!');
-            };
-            reader.onerror = function() {
-                toast('⚠️ Logo yüklenirken hata oluştu!', 'error');
-            };
+            reader.onload = function(e) { logoData = e.target.result; save(); logoGuncelle(); toast('✅ Logo yüklendi!'); };
             reader.readAsDataURL(file);
         }
 
         function logoSifirla() {
-            if (confirm('Logo varsayılana döndürülecek. Onaylıyor musunuz?')) {
-                logoData = null;
-                save();
-                logoGuncelle();
-                toast('🔄 Logo varsayılana döndürüldü!');
+            if (confirm('Logo varsayılana döndürülsün mü?')) {
+                logoData = null; save(); logoGuncelle(); toast('🔄 Logo sıfırlandı!');
             }
         }
 
@@ -1198,48 +711,30 @@
             const logoPreview = document.getElementById('logoPreview');
             const loginLogoContainer = document.getElementById('loginLogoContainer');
             const headerLogoEmoji = document.getElementById('headerLogoEmoji');
-            const loginLogoEmoji = document.getElementById('loginLogoEmoji');
-
             if (logoData) {
-                // Logo preview
-                logoPreview.innerHTML = `<img src="${logoData}" alt="Market Logosu" style="max-width:100%; max-height:100%; object-fit:contain;">`;
-                
-                // Login sayfası
-                loginLogoContainer.innerHTML = `<img src="${logoData}" alt="Logo" class="login-logo-img" style="animation: pulse 2s infinite;">`;
-                
-                // Header
-                headerLogoEmoji.innerHTML = `<img src="${logoData}" alt="Logo" class="header-logo-img">`;
+                logoPreview.innerHTML = `<img src="${logoData}" style="max-width:100%; max-height:100%; object-fit:contain;">`;
+                loginLogoContainer.innerHTML = `<img src="${logoData}" class="login-logo-img" style="animation: pulse 2s infinite;">`;
+                headerLogoEmoji.innerHTML = `<img src="${logoData}" class="header-logo-img">`;
             } else {
-                // Varsayılan
-                logoPreview.innerHTML = '<span style="font-size:50px; color:var(--text-secondary);">🛒</span>';
+                logoPreview.innerHTML = '<span style="font-size:50px;">🛒</span>';
                 loginLogoContainer.innerHTML = '<span class="login-logo-emoji" id="loginLogoEmoji">🛒</span>';
                 headerLogoEmoji.innerHTML = '🛒';
             }
         }
 
-        // ============ TEMA YÖNETİMİ ============
+        // ============ TEMA ============
         function temaDegistir(renk, isim) {
             temaRengi = renk;
             document.documentElement.style.setProperty('--primary', renk);
-            
-            // Koyu versiyon
             const koyu = renk.replace('#', '');
-            const r = parseInt(koyu.substr(0,2), 16);
-            const g = parseInt(koyu.substr(2,2), 16);
-            const b = parseInt(koyu.substr(4,2), 16);
-            const koyuRenk = `#${Math.floor(r*0.7).toString(16).padStart(2,'0')}${Math.floor(g*0.7).toString(16).padStart(2,'0')}${Math.floor(b*0.7).toString(16).padStart(2,'0')}`;
-            document.documentElement.style.setProperty('--primary-dark', koyuRenk);
-            
+            const r = parseInt(koyu.substr(0,2), 16), g = parseInt(koyu.substr(2,2), 16), b = parseInt(koyu.substr(4,2), 16);
+            document.documentElement.style.setProperty('--primary-dark', `#${Math.floor(r*0.7).toString(16).padStart(2,'0')}${Math.floor(g*0.7).toString(16).padStart(2,'0')}${Math.floor(b*0.7).toString(16).padStart(2,'0')}`);
             document.querySelectorAll('.theme-preset').forEach(p => p.classList.remove('selected'));
-            document.querySelectorAll('.theme-preset').forEach(p => {
-                if (p.style.background === renk) p.classList.add('selected');
-            });
-            
+            document.querySelectorAll('.theme-preset').forEach(p => { if (p.style.background === renk) p.classList.add('selected'); });
             document.getElementById('customColor').value = renk;
             document.getElementById('customColorText').textContent = renk;
-            
             save();
-            toast(`🎨 Tema "${isim}" olarak değiştirildi!`);
+            toast(`🎨 Tema: ${isim}`);
         }
 
         function arkaplanDegistir() {
@@ -1248,24 +743,20 @@
             document.documentElement.style.setProperty('--bg', bgColor);
             document.documentElement.style.setProperty('--card', cardColor);
             save();
-            toast('🎨 Arkaplan güncellendi!');
         }
 
         function marketBilgiGuncelle() {
             marketAdi = document.getElementById('marketAdi').value || 'ATEŞOĞLU MARKET PRO';
-            
             document.getElementById('appTitle').textContent = marketAdi;
             document.getElementById('loginTitle').textContent = marketAdi;
-            
             save();
-            toast('✅ Market bilgileri güncellendi!');
+            toast('✅ Kaydedildi!');
         }
 
         function temalariYukle() {
             document.documentElement.style.setProperty('--primary', temaRengi);
             document.documentElement.style.setProperty('--bg', bgColor);
             document.documentElement.style.setProperty('--card', cardColor);
-            
             document.getElementById('appTitle').textContent = marketAdi;
             document.getElementById('loginTitle').textContent = marketAdi;
             document.getElementById('marketAdi').value = marketAdi;
@@ -1273,12 +764,10 @@
             document.getElementById('cardColor').value = cardColor;
             document.getElementById('customColor').value = temaRengi;
             document.getElementById('customColorText').textContent = temaRengi;
-            
             document.querySelectorAll('.theme-preset').forEach(p => {
                 p.classList.remove('selected');
                 if (p.style.background === temaRengi) p.classList.add('selected');
             });
-            
             logoGuncelle();
         }
 
@@ -1294,154 +783,204 @@
 
         // ============ LOGIN ============
         function login() {
-            const user = document.getElementById('user').value;
-            const pass = document.getElementById('pass').value;
-            const errorEl = document.getElementById('loginError');
-
-            if (user === "admin" && pass === "1234") {
+            if (document.getElementById('user').value === "admin" && document.getElementById('pass').value === "1234") {
                 document.getElementById('loginPage').style.display = 'none';
                 document.getElementById('app').style.display = 'block';
                 temalariYukle();
                 showTab('urun');
-                toast('✅ Hoş geldiniz! Başarıyla giriş yapıldı.');
+                toast('✅ Hoş geldiniz!');
             } else {
-                errorEl.style.display = 'block';
-                setTimeout(() => errorEl.style.display = 'none', 2000);
+                document.getElementById('loginError').style.display = 'block';
+                setTimeout(() => document.getElementById('loginError').style.display = 'none', 2000);
             }
         }
 
         function cikisYap() {
             if (confirm('Çıkış yapmak istediğinize emin misiniz?')) {
-                // Tüm scanner'ları durdur
-                barkodOkuDurdur('stok');
-                barkodOkuDurdur('satis');
-                barkodOkuDurdur('genel');
-                
+                tumScannerlariDurdur();
                 document.getElementById('app').style.display = 'none';
                 document.getElementById('loginPage').style.display = 'flex';
                 sepet = [];
                 render();
-                toast('👋 Güle güle!');
             }
         }
 
         document.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter' && document.getElementById('loginPage').style.display !== 'none') {
-                login();
-            }
+            if (e.key === 'Enter' && document.getElementById('loginPage').style.display !== 'none') login();
         });
 
-        // ============ TAB YÖNETİMİ ============
+        // ============ TAB ============
         function showTab(id) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            
             const page = document.getElementById(id);
             if (page) page.classList.add('active');
-            
             const tabMap = { 'urun': 0, 'satis': 1, 'barkod': 2, 'rapor': 3, 'faturalar': 4, 'admin': 5 };
             const tabButtons = document.querySelectorAll('.tab-btn');
             if (tabButtons[tabMap[id]]) tabButtons[tabMap[id]].classList.add('active');
             
             render();
-            
             if (id === 'rapor') setTimeout(cizGrafikler, 300);
             if (id === 'faturalar') faturaGecmisiGoster();
             if (id === 'admin') temalariYukle();
             
-            // Diğer sekmelerdeki scanner'ları durdur
+            // Sadece ilgili sayfadaki scanner'ı açık bırak, diğerlerini kapat
             if (id !== 'urun') barkodOkuDurdur('stok');
             if (id !== 'satis') barkodOkuDurdur('satis');
             if (id !== 'barkod') barkodOkuDurdur('genel');
         }
 
-        // ============ BARKOD OKUYUCU YÖNETİMİ ============
+        // ============ TÜM SCANNER'LARI DURDUR ============
+        function tumScannerlariDurdur() {
+            barkodOkuDurdur('stok');
+            barkodOkuDurdur('satis');
+            barkodOkuDurdur('genel');
+        }
+
+        // ============ BARKOD OKUYUCU - YENİDEN YAZILDI ============
         
-        // Stok ekleme için barkod okuyucu
+        function barkodOkutmaBaslat(elementId, onSuccess, onError) {
+            // Önceki instance'ı temizle
+            const element = document.getElementById(elementId);
+            if (!element) {
+                console.error(`${elementId} elementi bulunamadı!`);
+                return null;
+            }
+            
+            // Elementi temizle
+            element.innerHTML = '';
+            
+            // Yeni scanner oluştur
+            const scanner = new Html5Qrcode(elementId);
+            
+            const config = {
+                fps: 10,
+                qrbox: { width: 250, height: 150 },
+                aspectRatio: 1.333,
+                formatsToSupport: [
+                    Html5QrcodeSupportedFormats.EAN_13,
+                    Html5QrcodeSupportedFormats.EAN_8,
+                    Html5QrcodeSupportedFormats.UPC_A,
+                    Html5QrcodeSupportedFormats.UPC_E,
+                    Html5QrcodeSupportedFormats.CODE_128,
+                    Html5QrcodeSupportedFormats.CODE_39,
+                    Html5QrcodeSupportedFormats.CODE_93,
+                    Html5QrcodeSupportedFormats.CODABAR,
+                    Html5QrcodeSupportedFormats.ITF,
+                    Html5QrcodeSupportedFormats.QR_CODE,
+                    Html5QrcodeSupportedFormats.DATA_MATRIX,
+                    Html5QrcodeSupportedFormats.AZTEC,
+                    Html5QrcodeSupportedFormats.PDF_417,
+                ]
+            };
+            
+            scanner.start(
+                { facingMode: "environment" },
+                config,
+                (decodedText, decodedResult) => {
+                    console.log(`✅ Barkod okundu [${elementId}]:`, decodedText);
+                    if (onSuccess) onSuccess(decodedText, decodedResult);
+                },
+                (errorMessage) => {
+                    // Sessizce devam et - sürekli tarama için hataları yok say
+                }
+            ).then(() => {
+                console.log(`✅ Scanner başlatıldı: ${elementId}`);
+            }).catch(err => {
+                console.error(`❌ Scanner başlatılamadı [${elementId}]:`, err);
+                if (onError) onError(err);
+            });
+            
+            return scanner;
+        }
+
         function barkodOkuStok() {
             const scannerArea = document.getElementById('stokScannerArea');
-            const btn = document.getElementById('btnBarkodStok');
-            const statusEl = document.getElementById('stokScannerStatus');
             
+            // Eğer zaten açıksa kapat
             if (scannerArea.style.display === 'block') {
                 barkodOkuDurdur('stok');
                 return;
             }
             
-            scannerArea.style.display = 'block';
-            btn.textContent = '📷 Okumayı Durdur';
-            statusEl.textContent = '🔍 Barkod okumaya hazır...';
-            statusEl.className = 'scanner-status scanner-active';
-            
-            if (!html5QrCodeStok) {
-                html5QrCodeStok = new Html5Qrcode("readerStok");
+            // Diğer scanner'ları durdur
+            if (aktifScanner && aktifScanner !== 'stok') {
+                barkodOkuDurdur(aktifScanner);
             }
             
-            html5QrCodeStok.start(
-                { facingMode: "environment" },
-                { fps: 10, qrbox: { width: 250, height: 150 } },
+            scannerArea.style.display = 'block';
+            document.getElementById('btnBarkodStok').textContent = '📷 Okumayı Durdur';
+            document.getElementById('stokScannerStatus').textContent = '🔍 Kamera aktif - Barkod okutun...';
+            document.getElementById('stokScannerStatus').className = 'scanner-status scanner-active';
+            
+            // Önceki scanner'ı temizle
+            if (scannerStok) {
+                if (scannerStok.isScanning) {
+                    scannerStok.stop().catch(() => {});
+                }
+                scannerStok = null;
+            }
+            
+            scannerStok = barkodOkutmaBaslat('readerStok',
                 (decodedText) => {
                     // Barkod okundu!
                     document.getElementById('kod').value = decodedText;
-                    statusEl.textContent = `✅ Barkod okundu: ${decodedText}`;
-                    statusEl.className = 'scanner-status';
-                    statusEl.style.color = 'var(--primary)';
+                    document.getElementById('stokScannerStatus').textContent = `✅ Okundu: ${decodedText}`;
+                    document.getElementById('stokScannerStatus').className = 'scanner-status';
+                    document.getElementById('stokScannerStatus').style.color = 'var(--primary)';
                     
-                    // Barkoda sahip ürün var mı kontrol et
                     const mevcutUrun = urunler.find(u => u.kod === decodedText);
                     if (mevcutUrun) {
-                        statusEl.textContent += ` (Mevcut ürün: ${mevcutUrun.ad})`;
+                        document.getElementById('stokScannerStatus').textContent += ` (Ürün: ${mevcutUrun.ad})`;
                     }
                     
-                    toast(`✅ Barkod okundu: ${decodedText}`);
+                    toast(`✅ Barkod: ${decodedText}`);
                     
-                    // 2 saniye sonra durdur
-                    setTimeout(() => {
-                        barkodOkuDurdur('stok');
-                        document.getElementById('btnBarkodStok').textContent = '📷 Barkod Okut';
-                    }, 2000);
+                    // 1.5 saniye sonra kapat
+                    setTimeout(() => barkodOkuDurdur('stok'), 1500);
                 },
-                (errorMessage) => {
-                    // Okuma hatası - sessizce devam et
+                (err) => {
+                    document.getElementById('stokScannerStatus').textContent = '❌ Kamera hatası!';
+                    document.getElementById('stokScannerStatus').className = 'scanner-status';
+                    document.getElementById('stokScannerStatus').style.color = 'var(--danger)';
+                    toast('⚠️ Kamera başlatılamadı!', 'error');
+                    barkodOkuDurdur('stok');
                 }
-            ).catch(err => {
-                console.error('Stok scanner hatası:', err);
-                statusEl.textContent = '❌ Kamera başlatılamadı!';
-                statusEl.className = 'scanner-status';
-                statusEl.style.color = 'var(--danger)';
-                toast('⚠️ Kamera başlatılamadı! Lütfen kamera iznini kontrol edin.', 'error');
-                barkodOkuDurdur('stok');
-            });
+            );
+            
+            aktifScanner = 'stok';
         }
-        
-        // Satış için barkod okuyucu
+
         function barkodOkuSatis() {
             const scannerArea = document.getElementById('satisScannerArea');
-            const btn = document.getElementById('btnBarkodSatis');
-            const statusEl = document.getElementById('satisScannerStatus');
-            const resultEl = document.getElementById('satisScannerResult');
             
             if (scannerArea.style.display === 'block') {
                 barkodOkuDurdur('satis');
                 return;
             }
             
-            scannerArea.style.display = 'block';
-            btn.textContent = '📷 Okumayı Durdur';
-            statusEl.textContent = '🔍 Ürün barkodu okutun...';
-            statusEl.className = 'scanner-status scanner-active';
-            resultEl.innerHTML = '<span style="color:var(--text-secondary);">Okunan barkod burada görünecek</span>';
-            
-            if (!html5QrCodeSatis) {
-                html5QrCodeSatis = new Html5Qrcode("readerSatis");
+            if (aktifScanner && aktifScanner !== 'satis') {
+                barkodOkuDurdur(aktifScanner);
             }
             
-            html5QrCodeSatis.start(
-                { facingMode: "environment" },
-                { fps: 10, qrbox: { width: 250, height: 150 } },
+            scannerArea.style.display = 'block';
+            document.getElementById('btnBarkodSatis').textContent = '📷 Okumayı Durdur';
+            document.getElementById('satisScannerStatus').textContent = '🔍 Kamera aktif - Ürün barkodu okutun...';
+            document.getElementById('satisScannerStatus').className = 'scanner-status scanner-active';
+            document.getElementById('satisScannerResult').innerHTML = '<span style="color:var(--text-secondary);">Barkod bekleniyor...</span>';
+            
+            if (scannerSatis) {
+                if (scannerSatis.isScanning) {
+                    scannerSatis.stop().catch(() => {});
+                }
+                scannerSatis = null;
+            }
+            
+            scannerSatis = barkodOkutmaBaslat('readerSatis',
                 (decodedText) => {
-                    // Barkod okundu!
                     const urun = urunler.find(u => u.kod === decodedText);
+                    const resultEl = document.getElementById('satisScannerResult');
+                    const statusEl = document.getElementById('satisScannerStatus');
                     
                     if (urun) {
                         resultEl.innerHTML = `
@@ -1450,69 +989,68 @@
                                 <br><small>Stok: ${urun.stok} adet</small>
                             </div>
                         `;
-                        statusEl.textContent = `✅ Ürün bulundu: ${urun.ad}`;
+                        statusEl.textContent = `✅ Bulundu: ${urun.ad}`;
                         statusEl.className = 'scanner-status';
                         statusEl.style.color = 'var(--primary)';
                         
                         if (urun.stok > 0) {
-                            const index = urunler.indexOf(urun);
-                            sepeteEkle(index);
+                            sepeteEkle(urunler.indexOf(urun));
                         } else {
-                            toast('⚠️ Ürün stokta yok!', 'warning');
+                            toast('⚠️ Stokta yok!', 'warning');
                         }
                     } else {
                         resultEl.innerHTML = `
                             <div style="color:var(--danger);">
-                                ❌ Barkod bulunamadı: <b>${decodedText}</b>
-                                <br><small>Bu barkoda sahip ürün kayıtlı değil</small>
+                                ❌ Kayıtsız barkod: <b>${decodedText}</b>
                             </div>
                         `;
-                        statusEl.textContent = `❌ Tanımsız barkod: ${decodedText}`;
+                        statusEl.textContent = `❌ Tanımsız: ${decodedText}`;
                         statusEl.className = 'scanner-status';
                         statusEl.style.color = 'var(--danger)';
-                        toast('⚠️ Bu barkoda sahip ürün bulunamadı!', 'warning');
+                        toast('⚠️ Ürün bulunamadı!', 'warning');
                     }
                 },
-                (errorMessage) => {
-                    // Sessizce devam et
+                (err) => {
+                    document.getElementById('satisScannerStatus').textContent = '❌ Kamera hatası!';
+                    document.getElementById('satisScannerStatus').className = 'scanner-status';
+                    document.getElementById('satisScannerStatus').style.color = 'var(--danger)';
+                    toast('⚠️ Kamera başlatılamadı!', 'error');
+                    barkodOkuDurdur('satis');
                 }
-            ).catch(err => {
-                console.error('Satis scanner hatası:', err);
-                statusEl.textContent = '❌ Kamera başlatılamadı!';
-                statusEl.className = 'scanner-status';
-                statusEl.style.color = 'var(--danger)';
-                toast('⚠️ Kamera başlatılamadı! Lütfen kamera iznini kontrol edin.', 'error');
-                barkodOkuDurdur('satis');
-            });
-        }
-        
-        // Genel barkod okuyucu
-        function barkodOkuGenel() {
-            const statusEl = document.getElementById('genelScannerStatus');
-            const resultEl = document.getElementById('genelScannerResult');
-            const btn = document.getElementById('btnBarkodGenel');
-            const btnDurdur = document.getElementById('btnBarkodGenelDurdur');
+            );
             
-            if (html5QrCodeGenel && html5QrCodeGenel.isScanning) {
+            aktifScanner = 'satis';
+        }
+
+        function barkodOkuGenel() {
+            // Eğer zaten açıksa kapat
+            if (scannerGenel && scannerGenel.isScanning) {
                 barkodOkuDurdur('genel');
                 return;
             }
             
-            statusEl.textContent = '🔍 Barkod okumaya hazır...';
-            statusEl.className = 'scanner-status scanner-active';
-            resultEl.innerHTML = '<span style="color:var(--text-secondary);">Okunan barkod burada görünecek</span>';
-            btn.disabled = true;
-            btnDurdur.disabled = false;
-            
-            if (!html5QrCodeGenel) {
-                html5QrCodeGenel = new Html5Qrcode("readerGenel");
+            if (aktifScanner && aktifScanner !== 'genel') {
+                barkodOkuDurdur(aktifScanner);
             }
             
-            html5QrCodeGenel.start(
-                { facingMode: "environment" },
-                { fps: 10, qrbox: { width: 250, height: 150 } },
+            document.getElementById('genelScannerStatus').textContent = '🔍 Kamera aktif - Barkod okutun...';
+            document.getElementById('genelScannerStatus').className = 'scanner-status scanner-active';
+            document.getElementById('genelScannerResult').innerHTML = '<span style="color:var(--text-secondary);">Barkod bekleniyor...</span>';
+            document.getElementById('btnBarkodGenel').disabled = true;
+            document.getElementById('btnBarkodGenelDurdur').disabled = false;
+            
+            if (scannerGenel) {
+                if (scannerGenel.isScanning) {
+                    scannerGenel.stop().catch(() => {});
+                }
+                scannerGenel = null;
+            }
+            
+            scannerGenel = barkodOkutmaBaslat('readerGenel',
                 (decodedText) => {
                     const urun = urunler.find(u => u.kod === decodedText);
+                    const resultEl = document.getElementById('genelScannerResult');
+                    const statusEl = document.getElementById('genelScannerStatus');
                     
                     if (urun) {
                         resultEl.innerHTML = `
@@ -1528,8 +1066,8 @@
                     } else {
                         resultEl.innerHTML = `
                             <div style="color:var(--warning);">
-                                ⚠️ Kayıtsız barkod: <b>${decodedText}</b><br>
-                                <small>Bu barkod sisteme kayıtlı değil</small>
+                                ⚠️ Kayıtsız barkod: <b>${decodedText}</b>
+                                <br><small>Bu barkod sisteme kayıtlı değil</small>
                             </div>
                         `;
                         statusEl.textContent = `⚠️ Tanımsız: ${decodedText}`;
@@ -1537,71 +1075,62 @@
                         statusEl.style.color = 'var(--warning)';
                     }
                 },
-                (errorMessage) => {
-                    // Sessizce devam et
+                (err) => {
+                    document.getElementById('genelScannerStatus').textContent = '❌ Kamera hatası!';
+                    document.getElementById('genelScannerStatus').className = 'scanner-status';
+                    document.getElementById('genelScannerStatus').style.color = 'var(--danger)';
+                    toast('⚠️ Kamera başlatılamadı!', 'error');
+                    barkodOkuDurdur('genel');
                 }
-            ).catch(err => {
-                console.error('Genel scanner hatası:', err);
-                statusEl.textContent = '❌ Kamera başlatılamadı!';
-                statusEl.className = 'scanner-status';
-                statusEl.style.color = 'var(--danger)';
-                toast('⚠️ Kamera başlatılamadı!', 'error');
-                barkodOkuDurdur('genel');
-            });
+            );
+            
+            aktifScanner = 'genel';
         }
-        
-        // Barkod okuyucuyu durdur
+
         function barkodOkuDurdur(tip) {
             if (tip === 'stok') {
-                const scannerArea = document.getElementById('stokScannerArea');
-                const btn = document.getElementById('btnBarkodStok');
-                const statusEl = document.getElementById('stokScannerStatus');
-                
-                if (html5QrCodeStok && html5QrCodeStok.isScanning) {
-                    html5QrCodeStok.stop().then(() => {
+                if (scannerStok && scannerStok.isScanning) {
+                    scannerStok.stop().then(() => {
                         console.log('Stok scanner durduruldu');
                     }).catch(err => console.log('Durdurma hatası:', err));
                 }
-                
-                scannerArea.style.display = 'none';
-                btn.textContent = '📷 Barkod Okut';
-                statusEl.textContent = '';
-                statusEl.className = 'scanner-status scanner-inactive';
+                scannerStok = null;
+                document.getElementById('stokScannerArea').style.display = 'none';
+                document.getElementById('btnBarkodStok').textContent = '📷 Barkod Okut';
+                document.getElementById('stokScannerStatus').textContent = '';
+                document.getElementById('stokScannerStatus').className = 'scanner-status scanner-inactive';
+                document.getElementById('stokScannerStatus').style.color = '';
             }
             
             if (tip === 'satis') {
-                const scannerArea = document.getElementById('satisScannerArea');
-                const btn = document.getElementById('btnBarkodSatis');
-                const statusEl = document.getElementById('satisScannerStatus');
-                
-                if (html5QrCodeSatis && html5QrCodeSatis.isScanning) {
-                    html5QrCodeSatis.stop().then(() => {
+                if (scannerSatis && scannerSatis.isScanning) {
+                    scannerSatis.stop().then(() => {
                         console.log('Satis scanner durduruldu');
                     }).catch(err => console.log('Durdurma hatası:', err));
                 }
-                
-                scannerArea.style.display = 'none';
-                btn.textContent = '📷 Barkod Okut';
-                statusEl.textContent = '';
-                statusEl.className = 'scanner-status scanner-inactive';
+                scannerSatis = null;
+                document.getElementById('satisScannerArea').style.display = 'none';
+                document.getElementById('btnBarkodSatis').textContent = '📷 Barkod Okut';
+                document.getElementById('satisScannerStatus').textContent = '';
+                document.getElementById('satisScannerStatus').className = 'scanner-status scanner-inactive';
+                document.getElementById('satisScannerStatus').style.color = '';
             }
             
             if (tip === 'genel') {
-                const statusEl = document.getElementById('genelScannerStatus');
-                const btn = document.getElementById('btnBarkodGenel');
-                const btnDurdur = document.getElementById('btnBarkodGenelDurdur');
-                
-                if (html5QrCodeGenel && html5QrCodeGenel.isScanning) {
-                    html5QrCodeGenel.stop().then(() => {
+                if (scannerGenel && scannerGenel.isScanning) {
+                    scannerGenel.stop().then(() => {
                         console.log('Genel scanner durduruldu');
                     }).catch(err => console.log('Durdurma hatası:', err));
                 }
-                
-                statusEl.textContent = '⏸️ Kamera kapalı';
-                statusEl.className = 'scanner-status scanner-inactive';
-                btn.disabled = false;
-                btnDurdur.disabled = true;
+                scannerGenel = null;
+                document.getElementById('genelScannerStatus').textContent = '⏸️ Kamera kapalı';
+                document.getElementById('genelScannerStatus').className = 'scanner-status scanner-inactive';
+                document.getElementById('genelScannerStatus').style.color = '';
+                document.getElementById('btnBarkodGenel').disabled = false;
+                document.getElementById('btnBarkodGenelDurdur').disabled = true;
             }
+            
+            if (aktifScanner === tip) aktifScanner = null;
         }
 
         // ============ ÜRÜN İŞLEMLERİ ============
@@ -1612,10 +1141,10 @@
             const kod = document.getElementById('kod').value.trim();
 
             if (!ad) { toast('⚠️ Ürün adı gerekli!', 'warning'); return; }
-            if (isNaN(fiyat) || fiyat < 0) { toast('⚠️ Geçerli bir fiyat girin!', 'warning'); return; }
-            if (isNaN(stok) || stok < 0) { toast('⚠️ Geçerli bir stok girin!', 'warning'); return; }
+            if (isNaN(fiyat) || fiyat < 0) { toast('⚠️ Geçerli fiyat girin!', 'warning'); return; }
+            if (isNaN(stok) || stok < 0) { toast('⚠️ Geçerli stok girin!', 'warning'); return; }
             if (kod && urunler.some(u => u.kod === kod)) { 
-                toast('⚠️ Bu barkod zaten kayıtlı! Mevcut ürün: ' + urunler.find(u => u.kod === kod).ad, 'warning'); 
+                toast('⚠️ Bu barkod zaten kayıtlı: ' + urunler.find(u => u.kod === kod).ad, 'warning'); 
                 return; 
             }
 
@@ -1630,20 +1159,20 @@
         }
 
         function urunSil(index) {
-            const urunAdi = urunler[index].ad;
-            if (confirm(`"${urunAdi}" silinecek. Onaylıyor musunuz?`)) {
+            if (confirm(`"${urunler[index].ad}" silinecek. Onaylıyor musunuz?`)) {
+                const ad = urunler[index].ad;
                 urunler.splice(index, 1);
                 save(); render();
-                toast(`🗑️ "${urunAdi}" silindi.`, 'warning');
+                toast(`🗑️ "${ad}" silindi.`, 'warning');
             }
         }
 
         function stokGuncelle(index) {
             const urun = urunler[index];
-            const yeniStok = prompt(`"${urun.ad}" için yeni stok miktarı:`, urun.stok);
+            const yeniStok = prompt(`"${urun.ad}" stok:`, urun.stok);
             if (yeniStok === null) return;
             const stok = parseInt(yeniStok);
-            if (isNaN(stok) || stok < 0) { toast('⚠️ Geçersiz stok miktarı!', 'warning'); return; }
+            if (isNaN(stok) || stok < 0) { toast('⚠️ Geçersiz!', 'warning'); return; }
             urun.stok = stok;
             save(); render();
             toast(`✅ "${urun.ad}" stok: ${stok}`);
@@ -1651,18 +1180,18 @@
 
         function fiyatGuncelle(index) {
             const urun = urunler[index];
-            const yeniFiyat = prompt(`"${urun.ad}" için yeni fiyat:`, urun.fiyat);
+            const yeniFiyat = prompt(`"${urun.ad}" fiyat:`, urun.fiyat);
             if (yeniFiyat === null) return;
             const fiyat = parseFloat(yeniFiyat);
-            if (isNaN(fiyat) || fiyat < 0) { toast('⚠️ Geçersiz fiyat!', 'warning'); return; }
+            if (isNaN(fiyat) || fiyat < 0) { toast('⚠️ Geçersiz!', 'warning'); return; }
             urun.fiyat = fiyat;
             save(); render();
             toast(`✅ "${urun.ad}" fiyat: ${fiyat.toFixed(2)} ₺`);
         }
 
         function tumStokSifirla() {
-            if (urunler.length === 0) { toast('⚠️ Silinecek ürün yok!', 'warning'); return; }
-            if (confirm(`Tüm ürünler (${urunler.length} adet) silinecek! Onaylıyor musunuz?`)) {
+            if (urunler.length === 0) { toast('⚠️ Ürün yok!', 'warning'); return; }
+            if (confirm(`${urunler.length} ürün silinecek! Onaylıyor musunuz?`)) {
                 urunler = [];
                 save(); render();
                 toast('🧨 Tüm ürünler silindi!', 'error');
@@ -1670,72 +1199,62 @@
         }
 
         function topluStokEkle() {
-            const miktar = prompt('Tüm ürünlere eklenecek stok miktarı:');
+            const miktar = prompt('Eklenecek stok:');
             if (miktar === null) return;
             const ekStok = parseInt(miktar);
-            if (isNaN(ekStok) || ekStok <= 0) { toast('⚠️ Geçerli bir miktar girin!', 'warning'); return; }
+            if (isNaN(ekStok) || ekStok <= 0) { toast('⚠️ Geçersiz!', 'warning'); return; }
             urunler.forEach(u => u.stok += ekStok);
             save(); render();
-            toast(`✅ Tüm ürünlere +${ekStok} stok eklendi!`);
+            toast(`✅ +${ekStok} stok eklendi!`);
         }
 
         function kasaSifirla() {
             if (kasa === 0) { toast('⚠️ Kasa zaten sıfır!', 'warning'); return; }
-            if (confirm(`Kasa (${kasa.toFixed(2)} ₺) sıfırlanacak. Onaylıyor musunuz?`)) {
+            if (confirm(`Kasa (${kasa.toFixed(2)} ₺) sıfırlansın mı?`)) {
                 kasa = 0;
                 save(); render();
                 toast('🧨 Kasa sıfırlandı!', 'warning');
             }
         }
 
-        // ============ SEPET İŞLEMLERİ ============
+        // ============ SEPET ============
         function sepeteEkle(index) {
             if (index < 0 || index >= urunler.length) { toast('⚠️ Geçersiz ürün!', 'error'); return; }
             const urun = urunler[index];
-            
-            if (urun.stok <= 0) { toast('⚠️ Stokta ürün kalmadı!', 'error'); return; }
+            if (urun.stok <= 0) { toast('⚠️ Stokta yok!', 'error'); return; }
 
             const sepetteVar = sepet.find(s => s.ad === urun.ad);
             if (sepetteVar) {
                 if (sepetteVar.adet >= urun.stok) { toast('⚠️ Yetersiz stok!', 'error'); return; }
                 sepetteVar.adet++;
                 render();
-                toast(`🛒 "${urun.ad}" adet artırıldı (${sepetteVar.adet})`);
                 return;
             }
 
             const adet = prompt(`"${urun.ad}" - Kaç adet? (Stok: ${urun.stok})`, '1');
             if (!adet) return;
             const adetSayi = parseInt(adet);
-            if (isNaN(adetSayi) || adetSayi <= 0) { toast('⚠️ Geçersiz adet!', 'warning'); return; }
-            if (adetSayi > urun.stok) { toast(`⚠️ Yetersiz stok! Mevcut: ${urun.stok}`, 'error'); return; }
+            if (isNaN(adetSayi) || adetSayi <= 0) { toast('⚠️ Geçersiz!', 'warning'); return; }
+            if (adetSayi > urun.stok) { toast('⚠️ Yetersiz stok!', 'error'); return; }
 
-            sepet.push({ ad: urun.ad, fiyat: urun.fiyat, adet: adetSayi, urunIndex: index });
-            render();
-            toast(`🛒 "${urun.ad}" sepete eklendi (${adetSayi} adet)`);
-        }
-
-        function sepettenCikar(sepetIndex) {
-            const item = sepet[sepetIndex];
-            if (item.adet > 1) {
-                item.adet--;
-                toast(`➖ "${item.ad}" adet azaltıldı (${item.adet})`);
-            } else {
-                toast(`🗑️ "${item.ad}" sepetten çıkarıldı`);
-                sepet.splice(sepetIndex, 1);
-            }
+            sepet.push({ ad: urun.ad, fiyat: urun.fiyat, adet: adetSayi });
             render();
         }
 
-        function sepettenTamamenCikar(sepetIndex) {
-            toast(`🗑️ "${sepet[sepetIndex].ad}" sepetten tamamen çıkarıldı`);
-            sepet.splice(sepetIndex, 1);
+        function sepettenCikar(i) {
+            if (sepet[i].adet > 1) sepet[i].adet--;
+            else sepet.splice(i, 1);
+            render();
+        }
+
+        function sepettenTamamenCikar(i) {
+            sepet.splice(i, 1);
             render();
         }
 
         function sepetiBosalt() {
-            if (sepet.length === 0) { toast('⚠️ Sepet zaten boş!', 'warning'); return; }
-            if (confirm('Sepet boşaltılacak. Onaylıyor musunuz?')) {
+            if (sepet.length === 0) { toast('⚠️ Sepet boş!', 'warning'); return; }
+            if (confirm('Sepet boşaltılsın mı?')) {
                 sepet = [];
                 render();
                 toast('🗑️ Sepet boşaltıldı.');
@@ -1756,58 +1275,44 @@
 
             kasa += toplamTutar;
 
-            const faturaKaydi = {
+            sonSatislar.unshift({
                 faturaNo,
                 tarih: tarih.toISOString(),
                 urunler: sepet.map(s => ({ ad: s.ad, fiyat: s.fiyat, adet: s.adet })),
-                toplam: toplamTutar,
-                odemeTuru: 'Nakit'
-            };
-            sonSatislar.unshift(faturaKaydi);
+                toplam: toplamTutar
+            });
             if (sonSatislar.length > 100) sonSatislar.pop();
 
-            const faturaHTML = `
+            document.getElementById('fatura').innerHTML = `
                 <div class="fatura-card">
                     <div class="fatura-header">
                         <h2>🧾 ${marketAdi}</h2>
                         <p style="color:var(--text-secondary);">Fatura No: ${faturaNo}</p>
                         <p style="color:var(--text-secondary);">Tarih: ${tarih.toLocaleString('tr-TR')}</p>
                     </div>
-                    ${sepet.map(s => `
-                        <div class="fatura-item">
-                            <span>${s.ad} x${s.adet}</span>
-                            <span>${(s.fiyat * s.adet).toFixed(2)} ₺</span>
-                        </div>
-                    `).join('')}
+                    ${sepet.map(s => `<div class="fatura-item"><span>${s.ad} x${s.adet}</span><span>${(s.fiyat * s.adet).toFixed(2)} ₺</span></div>`).join('')}
                     <div class="fatura-total" style="display:flex; justify-content:space-between;">
                         <span>TOPLAM</span>
                         <span style="color:var(--primary);">${toplamTutar.toFixed(2)} ₺</span>
                     </div>
-                    <p style="text-align:center; margin-top:15px; color:var(--text-secondary);">
-                        🎉 Bizi tercih ettiğiniz için teşekkürler!
-                    </p>
                 </div>
             `;
-
-            document.getElementById('fatura').innerHTML = faturaHTML;
             
             sepet = [];
             save(); render();
-            toast(`✅ Satış tamamlandı! Toplam: ${toplamTutar.toFixed(2)} ₺`);
+            toast(`✅ Satış: ${toplamTutar.toFixed(2)} ₺`);
         }
 
-        // ============ ARAMA / FİLTRE ============
+        // ============ FİLTRE ============
         function filtre() {
             const q = document.getElementById('ara').value.toLowerCase();
             const urunSec = document.getElementById('urunSec');
             if (!urunSec) return;
             
-            const filtrelenmis = urunler.filter(u => 
-                u.ad.toLowerCase().includes(q) || u.kod.includes(q) || u.fiyat.toString().includes(q)
-            );
+            const filtrelenmis = urunler.filter(u => u.ad.toLowerCase().includes(q) || u.kod.includes(q));
             
             if (filtrelenmis.length === 0) {
-                urunSec.innerHTML = `<div class="card" style="text-align:center; color:var(--text-secondary);">🔍 "${q}" için sonuç bulunamadı</div>`;
+                urunSec.innerHTML = `<div class="card" style="text-align:center; color:var(--text-secondary);">🔍 Sonuç bulunamadı</div>`;
                 return;
             }
             
@@ -1820,9 +1325,7 @@
                             <span class="card-title">📦 ${u.ad}</span>
                             <span class="card-price">${u.fiyat.toFixed(2)} ₺</span>
                         </div>
-                        <span class="card-stock ${stokClass}">
-                            📊 Stok: ${u.stok} adet ${u.stok === 0 ? '❌' : u.stok < 5 ? '⚠️' : '✅'}
-                        </span>
+                        <span class="card-stock ${stokClass}">📊 Stok: ${u.stok} ${u.stok === 0 ? '❌' : u.stok < 5 ? '⚠️' : '✅'}</span>
                         ${u.kod ? `<br><span style="font-size:0.8em; color:#666;">🏷️ ${u.kod}</span>` : ''}
                         <div style="margin-top:8px;"><span style="color:var(--primary); font-weight:600;">🛒 Sepete Ekle</span></div>
                     </div>
@@ -1833,179 +1336,101 @@
         // ============ FATURA GEÇMİŞİ ============
         function faturaGecmisiGoster(filtre = '') {
             const container = document.getElementById('faturaGecmisiList');
-            
-            let filtrelenmisFaturalar = sonSatislar;
-            if (filtre) {
-                filtrelenmisFaturalar = sonSatislar.filter(f => 
-                    f.faturaNo.toLowerCase().includes(filtre) ||
-                    new Date(f.tarih).toLocaleString('tr-TR').toLowerCase().includes(filtre)
-                );
-            }
+            let list = sonSatislar;
+            if (filtre) list = sonSatislar.filter(f => f.faturaNo.toLowerCase().includes(filtre) || new Date(f.tarih).toLocaleString('tr-TR').includes(filtre));
 
-            if (filtrelenmisFaturalar.length === 0) {
-                container.innerHTML = `
-                    <div class="card" style="text-align:center; color:var(--text-secondary); padding:30px;">
-                        📋 ${filtre ? 'Aramanızla eşleşen fatura bulunamadı' : 'Henüz fatura kaydı bulunmuyor'}
-                    </div>
-                `;
+            if (list.length === 0) {
+                container.innerHTML = `<div class="card" style="text-align:center; color:var(--text-secondary); padding:30px;">📋 Fatura bulunamadı</div>`;
                 return;
             }
 
             container.innerHTML = `
                 <div style="overflow-x:auto;">
                     <table class="fatura-tablo">
-                        <thead>
-                            <tr>
-                                <th>📋 Fatura No</th>
-                                <th>📅 Tarih</th>
-                                <th>📦 Ürün</th>
-                                <th>💰 Toplam</th>
-                                <th>🔍 Detay</th>
-                            </tr>
-                        </thead>
+                        <thead><tr><th>Fatura No</th><th>Tarih</th><th>Ürün</th><th>Toplam</th><th>Detay</th></tr></thead>
                         <tbody>
-                            ${filtrelenmisFaturalar.map((f, i) => `
+                            ${list.map(f => `
                                 <tr>
                                     <td><b>${f.faturaNo}</b></td>
                                     <td>${new Date(f.tarih).toLocaleString('tr-TR')}</td>
                                     <td>${f.urunler.reduce((a,b) => a + b.adet, 0)} adet</td>
                                     <td style="color:var(--primary); font-weight:700;">${f.toplam.toFixed(2)} ₺</td>
-                                    <td>
-                                        <button class="btn-sm btn-primary" onclick="faturaDetayGoster(${sonSatislar.indexOf(f)})">
-                                            👁️ Görüntüle
-                                        </button>
-                                    </td>
+                                    <td><button class="btn-sm btn-primary" onclick="faturaDetayGoster(${sonSatislar.indexOf(f)})">👁️ Görüntüle</button></td>
                                 </tr>
                             `).join('')}
                         </tbody>
                     </table>
-                </div>
-            `;
+                </div>`;
         }
 
-        function faturaFiltrele() {
-            const filtre = document.getElementById('faturaAra').value.toLowerCase();
-            faturaGecmisiGoster(filtre);
-        }
+        function faturaFiltrele() { faturaGecmisiGoster(document.getElementById('faturaAra').value.toLowerCase()); }
 
         function faturaDetayGoster(index) {
-            const fatura = sonSatislar[index];
-            if (!fatura) return;
-
-            const modalIcerik = document.getElementById('faturaModalIcerik');
-            modalIcerik.innerHTML = `
+            const f = sonSatislar[index];
+            if (!f) return;
+            document.getElementById('faturaModalIcerik').innerHTML = `
                 <div class="fatura-card" style="border:none; margin:0;">
                     <div class="fatura-header">
                         <h2>🧾 ${marketAdi}</h2>
-                        <p style="color:var(--text-secondary);">Fatura No: ${fatura.faturaNo}</p>
-                        <p style="color:var(--text-secondary);">Tarih: ${new Date(fatura.tarih).toLocaleString('tr-TR')}</p>
+                        <p>Fatura No: ${f.faturaNo}</p>
+                        <p>Tarih: ${new Date(f.tarih).toLocaleString('tr-TR')}</p>
                     </div>
-                    <table style="width:100%; border-collapse:collapse;">
-                        <thead>
-                            <tr style="border-bottom:1px solid var(--border);">
-                                <th style="text-align:left; padding:8px;">Ürün</th>
-                                <th style="text-align:center; padding:8px;">Adet</th>
-                                <th style="text-align:right; padding:8px;">Birim Fiyat</th>
-                                <th style="text-align:right; padding:8px;">Tutar</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            ${fatura.urunler.map(u => `
-                                <tr style="border-bottom:1px solid var(--border);">
-                                    <td style="padding:8px;">${u.ad}</td>
-                                    <td style="text-align:center; padding:8px;">${u.adet}</td>
-                                    <td style="text-align:right; padding:8px;">${u.fiyat.toFixed(2)} ₺</td>
-                                    <td style="text-align:right; padding:8px; color:var(--primary);">${(u.fiyat * u.adet).toFixed(2)} ₺</td>
-                                </tr>
-                            `).join('')}
-                        </tbody>
-                    </table>
-                    <div class="fatura-total" style="display:flex; justify-content:space-between; margin-top:15px;">
-                        <span><b>TOPLAM</b></span>
-                        <span style="color:var(--primary); font-size:1.3em;"><b>${fatura.toplam.toFixed(2)} ₺</b></span>
-                    </div>
+                    ${f.urunler.map(u => `<div class="fatura-item"><span>${u.ad} x${u.adet}</span><span>${(u.fiyat*u.adet).toFixed(2)} ₺</span></div>`).join('')}
+                    <div class="fatura-total" style="display:flex; justify-content:space-between;"><span>TOPLAM</span><span style="color:var(--primary); font-size:1.3em;">${f.toplam.toFixed(2)} ₺</span></div>
                 </div>
-                <button class="btn-sm btn-danger" style="margin-top:15px; width:100%;" 
-                        onclick="faturaSil(${index})">
-                    🗑️ Bu Faturayı Sil
-                </button>
+                <button class="btn-sm btn-danger" style="margin-top:15px; width:100%;" onclick="faturaSil(${index})">🗑️ Bu Faturayı Sil</button>
             `;
-
             document.getElementById('faturaModal').classList.add('active');
         }
 
-        function modalKapat() {
-            document.getElementById('faturaModal').classList.remove('active');
-        }
-
+        function modalKapat() { document.getElementById('faturaModal').classList.remove('active'); }
+        
         function faturaSil(index) {
-            if (confirm('Bu fatura kaydı silinecek. Onaylıyor musunuz?')) {
-                const fatura = sonSatislar[index];
+            if (confirm('Fatura silinsin mi?')) {
                 sonSatislar.splice(index, 1);
                 save();
                 modalKapat();
                 faturaGecmisiGoster();
-                toast(`🗑️ ${fatura.faturaNo} nolu fatura silindi.`, 'warning');
+                toast('🗑️ Fatura silindi.', 'warning');
             }
         }
 
         function faturaGecmisiTemizle() {
-            if (sonSatislar.length === 0) { toast('⚠️ Temizlenecek fatura yok!', 'warning'); return; }
-            if (confirm(`${sonSatislar.length} fatura kaydı silinecek! Onaylıyor musunuz?`)) {
+            if (sonSatislar.length === 0) return;
+            if (confirm(`${sonSatislar.length} fatura silinecek!`)) {
                 sonSatislar = [];
                 save();
                 faturaGecmisiGoster();
                 render();
-                toast('🧨 Tüm fatura kayıtları silindi!', 'error');
+                toast('🧨 Faturalar silindi!', 'error');
             }
         }
 
         function faturaGecmisiExcel() {
-            if (sonSatislar.length === 0) { toast('⚠️ Dışa aktarılacak fatura yok!', 'warning'); return; }
-
+            if (sonSatislar.length === 0) { toast('⚠️ Fatura yok!', 'warning'); return; }
             const data = sonSatislar.map((f, i) => ({
-                'No': i + 1,
-                'Fatura No': f.faturaNo,
+                'No': i+1, 'Fatura No': f.faturaNo,
                 'Tarih': new Date(f.tarih).toLocaleString('tr-TR'),
                 'Ürünler': f.urunler.map(u => `${u.ad} x${u.adet}`).join(', '),
-                'Ürün Adedi': f.urunler.reduce((a,b) => a + b.adet, 0),
-                'Toplam (₺)': f.toplam.toFixed(2)
+                'Adet': f.urunler.reduce((a,b) => a+b.adet, 0),
+                'Toplam': f.toplam.toFixed(2)
             }));
-
             const ws = XLSX.utils.json_to_sheet(data);
             const wb = XLSX.utils.book_new();
             XLSX.utils.book_append_sheet(wb, ws, "Faturalar");
-            
-            const toplamCiro = sonSatislar.reduce((a,b) => a + b.toplam, 0);
-            const ozet = [{
-                'Toplam Fatura': sonSatislar.length,
-                'Toplam Ciro (₺)': toplamCiro.toFixed(2),
-                'Ortalama Fatura (₺)': (toplamCiro / sonSatislar.length).toFixed(2),
-                'Tarih': new Date().toLocaleString('tr-TR')
-            }];
-            const ws2 = XLSX.utils.json_to_sheet(ozet);
-            XLSX.utils.book_append_sheet(wb, ws2, "Özet");
-
-            XLSX.writeFile(wb, `Fatura_Gecmisi_${new Date().toISOString().slice(0,10)}.xlsx`);
-            toast('📥 Fatura geçmişi Excel olarak indirildi!');
+            XLSX.writeFile(wb, `Faturalar_${new Date().toISOString().slice(0,10)}.xlsx`);
+            toast('📥 Excel indirildi!');
         }
 
         // ============ VERİ YÖNETİMİ ============
         function verileriYedekle() {
-            const yedek = {
-                urunler, kasa, sonSatislar,
-                temaRengi, marketAdi, logoData, bgColor, cardColor,
-                yedekTarihi: new Date().toISOString()
-            };
-            
+            const yedek = { urunler, kasa, sonSatislar, temaRengi, marketAdi, logoData, bgColor, cardColor, yedekTarihi: new Date().toISOString() };
             const blob = new Blob([JSON.stringify(yedek, null, 2)], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
-            a.href = url;
-            a.download = `AtesogluMarket_Yedek_${new Date().toISOString().slice(0,10)}.json`;
+            a.href = URL.createObjectURL(blob);
+            a.download = `Yedek_${new Date().toISOString().slice(0,10)}.json`;
             a.click();
-            URL.revokeObjectURL(url);
-            toast('📥 Yedek dosyası indirildi!');
+            toast('📥 Yedek indirildi!');
         }
 
         function yedektenYukle() {
@@ -2015,34 +1440,27 @@
             input.onchange = function(e) {
                 const file = e.target.files[0];
                 if (!file) return;
-                
                 const reader = new FileReader();
                 reader.onload = function(event) {
                     try {
                         const yedek = JSON.parse(event.target.result);
-                        
-                        if (!yedek.urunler || yedek.kasa === undefined) {
-                            toast('⚠️ Geçersiz yedek dosyası!', 'error');
-                            return;
-                        }
-
-                        if (confirm('Yedek yüklenecek. Mevcut veriler silinecek. Onaylıyor musunuz?')) {
+                        if (!yedek.urunler) { toast('⚠️ Geçersiz yedek!', 'error'); return; }
+                        if (confirm('Yedek yüklenecek. Onaylıyor musunuz?')) {
                             urunler = yedek.urunler;
-                            kasa = yedek.kasa;
+                            kasa = yedek.kasa || 0;
                             sonSatislar = yedek.sonSatislar || [];
                             temaRengi = yedek.temaRengi || '#00d084';
                             marketAdi = yedek.marketAdi || 'ATEŞOĞLU MARKET PRO';
                             logoData = yedek.logoData || null;
                             bgColor = yedek.bgColor || '#0a0a0a';
                             cardColor = yedek.cardColor || '#1a1a1a';
-                            
                             save();
                             temalariYukle();
                             render();
-                            toast('✅ Yedek başarıyla yüklendi!');
+                            toast('✅ Yedek yüklendi!');
                         }
                     } catch (err) {
-                        toast('⚠️ Dosya okunamadı! Geçersiz format.', 'error');
+                        toast('⚠️ Dosya okunamadı!', 'error');
                     }
                 };
                 reader.readAsText(file);
@@ -2051,13 +1469,9 @@
         }
 
         function tumVerileriSifirla() {
-            if (confirm('⚠️ TÜM VERİLER SİLİNECEK!\n\nÜrünler, kasa, faturalar ve ayarlar sıfırlanacak.\nBu işlem geri alınamaz!\n\nDevam etmek istiyor musunuz?')) {
-                if (confirm('Son bir kez daha soruyorum: GERÇEKTEN tüm verileri silmek istiyor musunuz?')) {
-                    urunler = [];
-                    kasa = 0;
-                    sepet = [];
-                    sonSatislar = [];
-                    logoData = null;
+            if (confirm('⚠️ TÜM VERİLER SİLİNECEK!\n\nDevam etmek istiyor musunuz?')) {
+                if (confirm('Son onay: Gerçekten silmek istiyor musunuz?')) {
+                    urunler = []; kasa = 0; sepet = []; sonSatislar = []; logoData = null;
                     localStorage.clear();
                     save();
                     temalariYukle();
@@ -2074,43 +1488,39 @@
 
             const urunList = document.getElementById('urunList');
             if (urunler.length === 0) {
-                urunList.innerHTML = `<div class="card" style="text-align:center; color:var(--text-secondary); padding:30px;">📦 Henüz ürün eklenmemiş<br><small>Yukarıdaki formu kullanarak ürün ekleyebilirsiniz</small></div>`;
+                urunList.innerHTML = `<div class="card" style="text-align:center; padding:30px;">📦 Henüz ürün yok</div>`;
             } else {
-                urunList.innerHTML = urunler.map((u, i) => {
-                    const stokClass = u.stok === 0 ? 'stock-out' : u.stok < 5 ? 'stock-low' : '';
-                    return `
-                        <div class="card" style="background:${u.stok === 0 ? '#1a0a0a' : ''}">
-                            <div class="card-header">
-                                <span class="card-title">📦 ${u.ad}</span>
-                                <span class="card-price">${u.fiyat.toFixed(2)} ₺</span>
-                            </div>
-                            <span class="card-stock ${stokClass}">📊 Stok: ${u.stok} adet ${u.stok === 0 ? '❌ TÜKENDİ' : u.stok < 5 ? '⚠️ AZALDI' : ''}</span>
-                            ${u.kod ? `<br><span style="font-size:0.8em; color:#666;">🏷️ Barkod: ${u.kod}</span>` : ''}
-                            <div class="card-actions">
-                                <button class="btn-sm btn-success" onclick="stokGuncelle(${i})">📦 Stok</button>
-                                <button class="btn-sm" style="background:var(--warning); color:#000;" onclick="fiyatGuncelle(${i})">💲 Fiyat</button>
-                                <button class="btn-sm btn-danger" onclick="urunSil(${i})">🗑️ Sil</button>
-                            </div>
+                urunList.innerHTML = urunler.map((u, i) => `
+                    <div class="card" style="background:${u.stok === 0 ? '#1a0a0a' : ''}">
+                        <div class="card-header">
+                            <span class="card-title">📦 ${u.ad}</span>
+                            <span class="card-price">${u.fiyat.toFixed(2)} ₺</span>
                         </div>
-                    `;
-                }).join('');
+                        <span class="card-stock ${u.stok === 0 ? 'stock-out' : u.stok < 5 ? 'stock-low' : ''}">
+                            📊 Stok: ${u.stok} ${u.stok === 0 ? '❌' : u.stok < 5 ? '⚠️' : ''}
+                        </span>
+                        ${u.kod ? `<br><span style="font-size:0.8em; color:#666;">🏷️ ${u.kod}</span>` : ''}
+                        <div class="card-actions">
+                            <button class="btn-sm btn-success" onclick="stokGuncelle(${i})">📦 Stok</button>
+                            <button class="btn-sm" style="background:var(--warning); color:#000;" onclick="fiyatGuncelle(${i})">💲 Fiyat</button>
+                            <button class="btn-sm btn-danger" onclick="urunSil(${i})">🗑️ Sil</button>
+                        </div>
+                    </div>
+                `).join('');
             }
 
             filtre();
 
             const sepetEl = document.getElementById('sepet');
             if (sepet.length === 0) {
-                sepetEl.innerHTML = `<div style="text-align:center; color:var(--text-secondary); padding:20px;">🛒 Sepet boş - Ürün eklemek için tıklayın veya barkod okutun</div>`;
+                sepetEl.innerHTML = `<div style="text-align:center; padding:20px;">🛒 Sepet boş</div>`;
             } else {
                 sepetEl.innerHTML = sepet.map((s, i) => `
                     <div class="sepet-item">
-                        <div class="sepet-info">
-                            <div class="sepet-ad">${s.ad}</div>
-                            <div class="sepet-detay">${s.adet} adet x ${s.fiyat.toFixed(2)} ₺</div>
-                        </div>
+                        <div class="sepet-info"><div class="sepet-ad">${s.ad}</div><div class="sepet-detay">${s.adet} x ${s.fiyat.toFixed(2)} ₺</div></div>
                         <div class="sepet-fiyat">${(s.fiyat * s.adet).toFixed(2)} ₺</div>
-                        <button class="btn-icon danger" onclick="sepettenCikar(${i})" title="Azalt">➖</button>
-                        <button class="btn-icon danger" onclick="sepettenTamamenCikar(${i})" title="Kaldır">✖️</button>
+                        <button class="btn-icon danger" onclick="sepettenCikar(${i})">➖</button>
+                        <button class="btn-icon danger" onclick="sepettenTamamenCikar(${i})">✖️</button>
                     </div>
                 `).join('');
             }
@@ -2133,20 +1543,8 @@
                 if (stokChartInstance) stokChartInstance.destroy();
                 stokChartInstance = new Chart(ctx, {
                     type: 'bar',
-                    data: {
-                        labels: urunler.map(u => u.ad),
-                        datasets: [{
-                            label: 'Stok',
-                            data: urunler.map(u => u.stok),
-                            backgroundColor: urunler.map(u => u.stok === 0 ? '#ff4757' : u.stok < 5 ? '#ffa502' : temaRengi),
-                            borderRadius: 8
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        plugins: { title: { display: true, text: '📊 Ürün Stok Durumu', color: '#fff' } },
-                        scales: { y: { beginAtZero: true, ticks: { color: '#aaa' } }, x: { ticks: { color: '#aaa' } } }
-                    }
+                    data: { labels: urunler.map(u => u.ad), datasets: [{ label: 'Stok', data: urunler.map(u => u.stok), backgroundColor: urunler.map(u => u.stok === 0 ? '#ff4757' : u.stok < 5 ? '#ffa502' : temaRengi), borderRadius: 8 }] },
+                    options: { responsive: true, plugins: { title: { display: true, text: '📊 Stok Durumu', color: '#fff' } }, scales: { y: { beginAtZero: true, ticks: { color: '#aaa' } }, x: { ticks: { color: '#aaa' } } } }
                 });
             }
 
@@ -2154,17 +1552,10 @@
             if (kasaCtx) {
                 const ctx2 = kasaCtx.getContext('2d');
                 if (kasaChartInstance) kasaChartInstance.destroy();
-                const stokDegeri = urunler.reduce((a, b) => a + (b.fiyat * b.stok), 0);
                 kasaChartInstance = new Chart(ctx2, {
                     type: 'doughnut',
-                    data: {
-                        labels: ['Kasa', 'Stok Değeri'],
-                        datasets: [{ data: [kasa, stokDegeri], backgroundColor: [temaRengi, '#ffa502'], borderWidth: 3, borderColor: bgColor }]
-                    },
-                    options: {
-                        responsive: true,
-                        plugins: { title: { display: true, text: '💰 Kasa & Stok Değeri', color: '#fff' } }
-                    }
+                    data: { labels: ['Kasa', 'Stok Değeri'], datasets: [{ data: [kasa, urunler.reduce((a,b) => a + (b.fiyat * b.stok), 0)], backgroundColor: [temaRengi, '#ffa502'], borderWidth: 3, borderColor: bgColor }] },
+                    options: { responsive: true, plugins: { title: { display: true, text: '💰 Kasa & Stok', color: '#fff' } } }
                 });
             }
 
@@ -2175,53 +1566,25 @@
                 const son10 = sonSatislar.slice(0, 10).reverse();
                 ciroChartInstance = new Chart(ctx3, {
                     type: 'line',
-                    data: {
-                        labels: son10.map(f => new Date(f.tarih).toLocaleDateString('tr-TR')),
-                        datasets: [{
-                            label: 'Ciro (₺)',
-                            data: son10.map(f => f.toplam),
-                            borderColor: temaRengi,
-                            backgroundColor: temaRengi + '33',
-                            fill: true, tension: 0.4, pointRadius: 5
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        plugins: { title: { display: true, text: '📈 Son Faturalar - Ciro Grafiği', color: '#fff' } },
-                        scales: { y: { beginAtZero: true, ticks: { color: '#aaa' } }, x: { ticks: { color: '#aaa' } } }
-                    }
+                    data: { labels: son10.map(f => new Date(f.tarih).toLocaleDateString('tr-TR')), datasets: [{ label: 'Ciro (₺)', data: son10.map(f => f.toplam), borderColor: temaRengi, backgroundColor: temaRengi + '33', fill: true, tension: 0.4, pointRadius: 5 }] },
+                    options: { responsive: true, plugins: { title: { display: true, text: '📈 Ciro Grafiği', color: '#fff' } }, scales: { y: { beginAtZero: true, ticks: { color: '#aaa' } }, x: { ticks: { color: '#aaa' } } } }
                 });
             }
         }
 
         // ============ EXCEL ============
         function excelIndir() {
-            if (urunler.length === 0) { toast('⚠️ Dışa aktarılacak ürün yok!', 'warning'); return; }
-            const data = urunler.map((u, i) => ({
-                'No': i + 1, 'Ürün Adı': u.ad, 'Fiyat (₺)': u.fiyat, 'Stok': u.stok,
-                'Barkod': u.kod || '-', 'Toplam Değer (₺)': (u.fiyat * u.stok).toFixed(2)
-            }));
-            const ws = XLSX.utils.json_to_sheet(data);
+            if (urunler.length === 0) { toast('⚠️ Ürün yok!', 'warning'); return; }
+            const ws = XLSX.utils.json_to_sheet(urunler.map((u, i) => ({ 'No': i+1, 'Ürün': u.ad, 'Fiyat': u.fiyat, 'Stok': u.stok, 'Barkod': u.kod || '-', 'Değer': (u.fiyat*u.stok).toFixed(2) })));
             const wb = XLSX.utils.book_new();
             XLSX.utils.book_append_sheet(wb, ws, "Ürünler");
-            const ozet = [{
-                'Toplam Ürün': urunler.length, 'Toplam Stok': urunler.reduce((a,b) => a + b.stok, 0),
-                'Stok Değeri (₺)': urunler.reduce((a,b) => a + (b.fiyat * b.stok), 0).toFixed(2),
-                'Kasa (₺)': kasa.toFixed(2), 'Toplam Fatura': sonSatislar.length,
-                'Toplam Ciro (₺)': sonSatislar.reduce((a,b) => a + b.toplam, 0).toFixed(2)
-            }];
-            const ws2 = XLSX.utils.json_to_sheet(ozet);
-            XLSX.utils.book_append_sheet(wb, ws2, "Özet");
-            XLSX.writeFile(wb, `${marketAdi.replace(/\s/g,'_')}_Rapor_${new Date().toISOString().slice(0,10)}.xlsx`);
-            toast('📥 Excel dosyası indirildi!');
+            XLSX.writeFile(wb, `Rapor_${new Date().toISOString().slice(0,10)}.xlsx`);
+            toast('📥 Excel indirildi!');
         }
 
         function yazdir() { window.print(); }
 
-        // ============ MODAL ============
-        document.getElementById('faturaModal').addEventListener('click', function(e) {
-            if (e.target === this) modalKapat();
-        });
+        document.getElementById('faturaModal').addEventListener('click', function(e) { if (e.target === this) modalKapat(); });
 
         // ============ BAŞLANGIÇ ============
         if (urunler.length === 0 && !localStorage.getItem("demoYuklendi")) {
@@ -2240,11 +1603,9 @@
         temalariYukle();
         render();
         
-        console.log('🚀 ATEŞOĞLU MARKET PRO hazır!');
-        console.log('📦 Ürünler:', urunler.length);
-        console.log('💰 Kasa:', kasa);
-        console.log('🧾 Faturalar:', sonSatislar.length);
-        console.log('📷 Barkod sistemleri: Stok, Satış, Genel - 3 ayrı scanner');
+        console.log('🚀 ATEŞOĞLU MARKET PRO - Barkod sistemi aktif!');
+        console.log('📷 Desteklenen formatlar: EAN-13, EAN-8, UPC-A, UPC-E, Code-128, Code-39, QR Code, Data Matrix, PDF-417');
+        console.log('💡 Barkod okutmak için kameraya barkodu gösterin, yeşil çizgi tarama yapıyor demektir.');
     </script>
 
 </body>
