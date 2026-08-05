@@ -226,6 +226,8 @@ html
             background: linear-gradient(135deg, var(--primary), var(--primary-dark));
             color: #fff;
             font-weight: 600;
+            border: none;
+            cursor: pointer;
         }
 
         .btn-success:hover {
@@ -419,6 +421,7 @@ html
             background: var(--card);
             border-radius: 10px;
             margin-bottom: 8px;
+            border: 1px solid var(--border);
         }
 
         .sepet-info {
@@ -437,6 +440,7 @@ html
         .sepet-fiyat {
             color: var(--primary);
             font-weight: 700;
+            margin-right: 10px;
         }
 
         .btn-icon {
@@ -573,6 +577,7 @@ html
             z-index: 1000;
             animation: slideUp 0.3s ease, fadeOut 0.3s ease 2.5s forwards;
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            white-space: nowrap;
         }
 
         .toast.success { background: var(--primary); color: #000; }
@@ -589,6 +594,16 @@ html
             to { opacity: 0; }
         }
 
+        /* Ürün seçim kartı tıklanabilir */
+        .urun-secim-card {
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .urun-secim-card:active {
+            transform: scale(0.98);
+        }
+
         /* RESPONSIVE */
         @media (max-width: 480px) {
             .form-row {
@@ -603,6 +618,14 @@ html
                 flex: 1 1 45%;
                 font-size: 0.8em;
                 padding: 10px 8px;
+            }
+            
+            .card-actions {
+                flex-direction: column;
+            }
+            
+            .card-actions button {
+                width: 100%;
             }
         }
     </style>
@@ -626,12 +649,12 @@ html
             
             <div class="input-group">
                 <span class="icon">👤</span>
-                <input id="user" type="text" placeholder="Kullanıcı Adı" autocomplete="username">
+                <input id="user" type="text" placeholder="Kullanıcı Adı" autocomplete="username" value="admin">
             </div>
             
             <div class="input-group">
                 <span class="icon">🔒</span>
-                <input id="pass" type="password" placeholder="Şifre" autocomplete="current-password">
+                <input id="pass" type="password" placeholder="Şifre" autocomplete="current-password" value="1234">
             </div>
             
             <button class="login-btn" onclick="login()">
@@ -833,6 +856,9 @@ html
 
         // ============ TOAST BİLDİRİM ============
         function toast(mesaj, tip = 'success') {
+            // Önceki toast'ları temizle
+            document.querySelectorAll('.toast').forEach(t => t.remove());
+            
             const t = document.createElement('div');
             t.className = `toast ${tip}`;
             t.textContent = mesaj;
@@ -866,13 +892,20 @@ html
 
         // ============ TAB YÖNETİMİ ============
         function showTab(id) {
+            // Tüm sayfaları gizle
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            // Tüm tab butonlarını pasif yap
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             
+            // Seçili sayfayı göster
             document.getElementById(id).classList.add('active');
             
+            // Seçili tab butonunu aktif yap
             const tabMap = { 'urun': 0, 'satis': 1, 'barkod': 2, 'rapor': 3 };
-            document.querySelectorAll('.tab-btn')[tabMap[id]].classList.add('active');
+            const tabButtons = document.querySelectorAll('.tab-btn');
+            if (tabButtons[tabMap[id]]) {
+                tabButtons[tabMap[id]].classList.add('active');
+            }
             
             render();
             
@@ -1010,7 +1043,15 @@ html
 
         // ============ SEPET İŞLEMLERİ ============
         function sepeteEkle(index) {
+            console.log('sepeteEkle çağrıldı, index:', index);
+            
+            if (index < 0 || index >= urunler.length) {
+                toast('⚠️ Geçersiz ürün!', 'error');
+                return;
+            }
+            
             const urun = urunler[index];
+            console.log('Ürün:', urun);
             
             if (urun.stok <= 0) {
                 toast('⚠️ Stokta ürün kalmadı!', 'error');
@@ -1026,6 +1067,7 @@ html
                 }
                 sepetteVar.adet++;
                 render();
+                toast(`🛒 "${urun.ad}" adet artırıldı (${sepetteVar.adet})`);
                 return;
             }
 
@@ -1051,22 +1093,27 @@ html
             });
 
             render();
-            toast(`🛒 "${urun.ad}" sepete eklendi.`);
+            toast(`🛒 "${urun.ad}" sepete eklendi (${adetSayi} adet)`);
         }
 
         function sepettenCikar(sepetIndex) {
             const item = sepet[sepetIndex];
             if (item.adet > 1) {
                 item.adet--;
+                toast(`➖ "${item.ad}" adet azaltıldı (${item.adet})`);
             } else {
+                const urunAdi = item.ad;
                 sepet.splice(sepetIndex, 1);
+                toast(`🗑️ "${urunAdi}" sepetten çıkarıldı`);
             }
             render();
         }
 
         function sepettenTamamenCikar(sepetIndex) {
+            const urunAdi = sepet[sepetIndex].ad;
             sepet.splice(sepetIndex, 1);
             render();
+            toast(`🗑️ "${urunAdi}" sepetten tamamen çıkarıldı`);
         }
 
         function sepetiBosalt() {
@@ -1136,7 +1183,7 @@ html
                 urunler: [...sepet],
                 toplam: toplamTutar
             });
-            if (sonSatislar.length > 50) sonSatislar.pop(); // Max 50 kayıt
+            if (sonSatislar.length > 50) sonSatislar.pop();
             localStorage.setItem("sonSatislar", JSON.stringify(sonSatislar));
 
             sepet = [];
@@ -1150,6 +1197,11 @@ html
         function filtre() {
             const q = document.getElementById('ara').value.toLowerCase();
             const urunSec = document.getElementById('urunSec');
+            
+            if (!urunSec) {
+                console.error('urunSec elementi bulunamadı!');
+                return;
+            }
             
             const filtrelenmis = urunler.filter(u => 
                 u.ad.toLowerCase().includes(q) || 
@@ -1166,20 +1218,24 @@ html
                 return;
             }
             
-            urunSec.innerHTML = filtrenenmis.map((u) => {
+            // DÜZELTME: "filtrenenmis" -> "filtrelenmis"
+            urunSec.innerHTML = filtrelenmis.map((u) => {
                 const gercekIndex = urunler.indexOf(u);
                 const stokClass = u.stok === 0 ? 'stock-out' : u.stok < 5 ? 'stock-low' : '';
                 return `
-                    <div class="card" onclick="sepeteEkle(${gercekIndex})" style="cursor:pointer;">
+                    <div class="card urun-secim-card" onclick="sepeteEkle(${gercekIndex})" style="cursor:pointer;">
                         <div class="card-header">
                             <span class="card-title">📦 ${u.ad}</span>
                             <span class="card-price">${u.fiyat.toFixed(2)} ₺</span>
                         </div>
                         <span class="card-stock ${stokClass}">
                             📊 Stok: ${u.stok} adet
-                            ${u.stok === 0 ? '❌' : u.stok < 5 ? '⚠️' : '✅'}
+                            ${u.stok === 0 ? '❌ TÜKENDİ' : u.stok < 5 ? '⚠️ AZ' : '✅'}
                         </span>
                         ${u.kod ? `<br><span style="font-size:0.8em; color:#666;">🏷️ ${u.kod}</span>` : ''}
+                        <div style="margin-top:8px;">
+                            <span style="color:var(--primary); font-weight:600;">🛒 Sepete Ekle</span>
+                        </div>
                     </div>
                 `;
             }).join('');
@@ -1201,6 +1257,7 @@ html
                 { facingMode: "environment" },
                 { fps: 10, qrbox: { width: 250, height: 250 } },
                 (decodedText) => {
+                    console.log('Barkod okundu:', decodedText);
                     const urun = urunler.find(u => u.kod === decodedText);
                     const sonucEl = document.getElementById('barkodSonuc');
                     
@@ -1222,9 +1279,10 @@ html
                     setTimeout(() => sonucEl.innerHTML = '', 3000);
                 },
                 (errorMessage) => {
-                    // Barkod okuma hatası - sessizce devam et
+                    // Sessizce devam et
                 }
             ).catch(err => {
+                console.error('Kamera hatası:', err);
                 toast('⚠️ Kamera başlatılamadı!', 'error');
                 kameraKapat();
             });
@@ -1254,7 +1312,8 @@ html
             if (urunler.length === 0) {
                 urunList.innerHTML = `
                     <div class="card" style="text-align:center; color:var(--text-secondary); padding:30px;">
-                        📦 Henüz ürün eklenmemiş
+                        📦 Henüz ürün eklenmemiş<br>
+                        <small>Yukarıdaki formu kullanarak ürün ekleyebilirsiniz</small>
                     </div>
                 `;
             } else {
@@ -1273,11 +1332,11 @@ html
                             ${u.kod ? `<br><span style="font-size:0.8em; color:#666;">🏷️ Barkod: ${u.kod}</span>` : ''}
                             <div class="card-actions">
                                 <button class="btn-sm btn-success" onclick="stokGuncelle(${i})">
-                                    📦 Stok Güncelle
+                                    📦 Stok
                                 </button>
                                 <button class="btn-sm" style="background:var(--warning); color:#000;" 
                                         onclick="fiyatGuncelle(${i})">
-                                    💲 Fiyat Güncelle
+                                    💲 Fiyat
                                 </button>
                                 <button class="btn-sm btn-danger" onclick="urunSil(${i})">
                                     🗑️ Sil
@@ -1296,7 +1355,7 @@ html
             if (sepet.length === 0) {
                 sepetEl.innerHTML = `
                     <div style="text-align:center; color:var(--text-secondary); padding:20px;">
-                        🛒 Sepet boş - Ürün eklemek için tıklayın
+                        🛒 Sepet boş - Ürün eklemek için aşağıdaki ürünlere tıklayın
                     </div>
                 `;
             } else {
@@ -1329,10 +1388,15 @@ html
         // ============ GRAFİKLER ============
         function cizGrafikler() {
             // Stok grafiği
-            const stokCtx = document.getElementById('stokChart').getContext('2d');
+            const stokCtx = document.getElementById('stokChart');
+            if (!stokCtx) return;
+            
+            const ctx = stokCtx.getContext('2d');
             if (stokChartInstance) stokChartInstance.destroy();
             
-            stokChartInstance = new Chart(stokCtx, {
+            if (urunler.length === 0) return;
+            
+            stokChartInstance = new Chart(ctx, {
                 type: 'bar',
                 data: {
                     labels: urunler.map(u => u.ad),
@@ -1374,12 +1438,15 @@ html
             });
 
             // Kasa grafiği
-            const kasaCtx = document.getElementById('kasaChart').getContext('2d');
+            const kasaCtx = document.getElementById('kasaChart');
+            if (!kasaCtx) return;
+            
+            const ctx2 = kasaCtx.getContext('2d');
             if (kasaChartInstance) kasaChartInstance.destroy();
             
             const toplamStokDegeri = urunler.reduce((a, b) => a + (b.fiyat * b.stok), 0);
             
-            kasaChartInstance = new Chart(kasaCtx, {
+            kasaChartInstance = new Chart(ctx2, {
                 type: 'doughnut',
                 data: {
                     labels: ['Kasa', 'Stok Değeri'],
@@ -1426,7 +1493,6 @@ html
 
             const ws = XLSX.utils.json_to_sheet(data);
             
-            // Sütun genişlikleri
             ws['!cols'] = [
                 { wch: 5 },
                 { wch: 25 },
@@ -1439,7 +1505,6 @@ html
             const wb = XLSX.utils.book_new();
             XLSX.utils.book_append_sheet(wb, ws, "Ürünler");
             
-            // Özet sayfası
             const ozet = [{
                 'Toplam Ürün': urunler.length,
                 'Toplam Stok': urunler.reduce((a, b) => a + b.stok, 0),
@@ -1471,9 +1536,15 @@ html
             kasa = 0;
             save();
             localStorage.setItem("demoYuklendi", "true");
+            console.log('Demo ürünler yüklendi:', urunler);
         }
 
+        // Sayfa yüklendiğinde render et
         render();
+        
+        console.log('ATEŞOĞLU MARKET PRO hazır!');
+        console.log('Ürünler:', urunler);
+        console.log('Kasa:', kasa);
     </script>
 
 </body>
