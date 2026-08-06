@@ -63,9 +63,6 @@
         .btn-success:hover { transform: translateY(-2px); box-shadow: 0 5px 20px rgba(0, 208, 132, 0.3); }
         .btn-primary { background: #3b82f6; color: #fff; border: none; }
         .btn-info { background: #06b6d4; color: #fff; border: none; }
-        .btn-outline { background: transparent; color: var(--primary); border: 2px solid var(--primary); }
-        .btn-outline:hover { background: rgba(0,208,132,0.1); }
-        .btn-outline.active { background: var(--primary); color: #000; }
 
         .tabs-container { padding: 10px 15px; }
         .tabs { display: flex; gap: 5px; background: var(--card); padding: 5px; border-radius: 15px; flex-wrap: wrap; }
@@ -93,16 +90,11 @@
         .form-input, select { width: 100%; padding: 12px 15px; border: 2px solid var(--border); border-radius: 10px; background: #111; color: #fff; font-size: 15px; }
         .form-input:focus, select:focus { outline: none; border-color: var(--primary); }
         .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .form-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
-
         select option { background: #111; color: #fff; }
 
         /* KATEGORİ */
         .kategori-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; margin-bottom: 15px; }
-        .kategori-card {
-            background: var(--card); border: 2px solid var(--border); border-radius: 12px;
-            padding: 20px 15px; text-align: center; cursor: pointer; transition: all 0.3s;
-        }
+        .kategori-card { background: var(--card); border: 2px solid var(--border); border-radius: 12px; padding: 20px 15px; text-align: center; cursor: pointer; transition: all 0.3s; }
         .kategori-card:hover { border-color: var(--primary); transform: translateY(-3px); }
         .kategori-card.active { border-color: var(--primary); background: rgba(0,208,132,0.1); }
         .kategori-emoji { font-size: 40px; display: block; margin-bottom: 8px; }
@@ -110,12 +102,8 @@
         .kategori-sayi { font-size: 0.75em; color: var(--text-secondary); }
 
         .urun-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; }
-        .urun-kart {
-            background: var(--card); border: 1px solid var(--border); border-radius: 12px;
-            padding: 12px; cursor: pointer; transition: all 0.3s; position: relative;
-        }
+        .urun-kart { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 12px; cursor: pointer; transition: all 0.3s; position: relative; }
         .urun-kart:hover { border-color: var(--primary); transform: translateY(-2px); }
-        .urun-kart-img { width: 100%; height: 100px; object-fit: contain; margin-bottom: 8px; border-radius: 8px; background: #111; }
         .urun-kart-emoji { font-size: 50px; text-align: center; display: block; margin-bottom: 8px; }
         .urun-kart-ad { font-weight: 600; font-size: 0.95em; }
         .urun-kart-fiyat { color: var(--primary); font-weight: 700; font-size: 1.1em; }
@@ -134,7 +122,6 @@
         .sepet-summary { background: linear-gradient(135deg, #1a3a2a, #0d2818); padding: 20px; border-radius: 15px; margin-top: 15px; border: 1px solid rgba(0, 208, 132, 0.3); }
         .sepet-toplam { font-size: 1.8em; font-weight: 800; color: var(--primary); text-align: center; }
 
-        /* ÖDEME SEÇENEĞİ */
         .odeme-secenekleri { display: flex; gap: 10px; margin: 15px 0; }
         .odeme-btn { flex: 1; padding: 15px; border: 2px solid var(--border); border-radius: 12px; background: var(--card); color: #fff; text-align: center; cursor: pointer; transition: all 0.3s; font-weight: 600; font-size: 1em; }
         .odeme-btn:hover { border-color: var(--primary); }
@@ -155,7 +142,9 @@
         .fatura-item { display: flex; justify-content: space-between; padding: 8px 0; }
         .fatura-total { border-top: 2px solid var(--primary); padding-top: 10px; margin-top: 10px; font-size: 1.2em; font-weight: 700; }
 
+        /* RAPOR */
         .chart-container { background: var(--card); padding: 20px; border-radius: 15px; margin: 15px 0; }
+        .chart-container canvas { max-height: 300px; }
         .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin: 15px 0; }
         .stat-card { background: var(--card); padding: 15px; border-radius: 12px; text-align: center; border: 1px solid var(--border); }
         .stat-value { font-size: 1.8em; font-weight: 700; color: var(--primary); }
@@ -184,7 +173,7 @@
         .logo-preview { width: 120px; height: 120px; border: 2px dashed var(--border); border-radius: 15px; display: flex; align-items: center; justify-content: center; margin: 10px 0; overflow: hidden; background: #111; }
 
         @media (max-width: 480px) {
-            .form-row, .form-row-3 { grid-template-columns: 1fr; }
+            .form-row { grid-template-columns: 1fr; }
             .tabs { flex-wrap: wrap; }
             .tab-btn { flex: 1 1 30%; font-size: 0.75em; padding: 10px 5px; }
             .urun-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
@@ -192,8 +181,10 @@
         }
     </style>
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js">
+    </script>
 </head>
 
 <body>
@@ -266,7 +257,6 @@
 
             <!-- SATIŞ SAYFASI -->
             <div id="satis" class="page">
-                <!-- KATEGORİLER -->
                 <div class="kategori-grid" id="kategoriList"></div>
 
                 <div class="search-bar" style="position:relative;margin-bottom:15px;">
@@ -282,17 +272,10 @@
                     <div style="text-align:center;font-size:0.9em;color:#aaa;">TOPLAM TUTAR</div>
                     <div class="sepet-toplam"><span id="toplam">0.00</span> ₺</div>
                     
-                    <!-- ÖDEME SEÇENEĞİ -->
                     <div class="odeme-secenekleri">
-                        <div class="odeme-btn active" onclick="odemeSec('Nakit')" id="odemeNakit">
-                            <span class="odeme-icon">💵</span> Nakit
-                        </div>
-                        <div class="odeme-btn" onclick="odemeSec('Kredi Kartı')" id="odemeKart">
-                            <span class="odeme-icon">💳</span> Kredi Kartı
-                        </div>
-                        <div class="odeme-btn" onclick="odemeSec('Banka Kartı')" id="odemeBanka">
-                            <span class="odeme-icon">🏦</span> Banka Kartı
-                        </div>
+                        <div class="odeme-btn active" onclick="odemeSec('Nakit')" id="odemeNakit"><span class="odeme-icon">💵</span> Nakit</div>
+                        <div class="odeme-btn" onclick="odemeSec('Kredi Kartı')" id="odemeKart"><span class="odeme-icon">💳</span> Kredi Kartı</div>
+                        <div class="odeme-btn" onclick="odemeSec('Banka Kartı')" id="odemeBanka"><span class="odeme-icon">🏦</span> Banka Kartı</div>
                     </div>
                     
                     <button class="btn-success" style="width:100%;padding:14px;border:none;border-radius:10px;font-size:1.1em;" onclick="satis()">💳 Satışı Tamamla</button>
@@ -321,27 +304,46 @@
                         <input class="form-input" id="manuelBarkod" placeholder="Veya barkod numarası yazın" style="flex:1;">
                         <button class="btn-sm btn-success" onclick="manuelBarkodSorgula()">🔍 Sorgula</button>
                     </div>
-                    <div style="margin-top:10px;padding:10px;background:rgba(0,0,0,0.3);border-radius:10px;text-align:left;">
-                        <small style="color:var(--warning);">💡 <b>Barkod Okutma İpuçları:</b><br>
-                        • Barkodu düz ve net tutun<br>
-                        • Işıklandırmanın iyi olduğundan emin olun<br>
-                        • Kamerayı barkoda 10-15 cm yaklaştırın<br>
-                        • Okumazsa barkodu manuel girin</small>
-                    </div>
                 </div>
             </div>
 
-            <!-- RAPOR -->
+            <!-- RAPOR SAYFASI -->
             <div id="rapor" class="page">
-                <div class="stats-grid">
-                    <div class="stat-card"><div class="stat-value" id="statUrun">0</div><div class="stat-label">Ürün</div></div>
-                    <div class="stat-card"><div class="stat-value" id="statStok">0</div><div class="stat-label">Stok</div></div>
-                    <div class="stat-card"><div class="stat-value" id="statKasa">0₺</div><div class="stat-label">Kasa</div></div>
-                    <div class="stat-card"><div class="stat-value" id="statFatura">0</div><div class="stat-label">Fatura</div></div>
+                <h3 style="color:var(--primary);margin-bottom:15px;">📊 İstatistikler ve Raporlar</h3>
+                
+                <div class="stats-grid" id="raporStats">
+                    <div class="stat-card"><div class="stat-value" id="statUrun">0</div><div class="stat-label">📦 Toplam Ürün</div></div>
+                    <div class="stat-card"><div class="stat-value" id="statStok">0</div><div class="stat-label">📊 Toplam Stok</div></div>
+                    <div class="stat-card"><div class="stat-value" id="statKasa">0.00 ₺</div><div class="stat-label">💰 Kasa Bakiyesi</div></div>
+                    <div class="stat-card"><div class="stat-value" id="statDeger">0.00 ₺</div><div class="stat-label">💎 Stok Değeri</div></div>
+                    <div class="stat-card"><div class="stat-value" id="statFatura">0</div><div class="stat-label">🧾 Toplam Fatura</div></div>
+                    <div class="stat-card"><div class="stat-value" id="statCiro">0.00 ₺</div><div class="stat-label">📈 Toplam Ciro</div></div>
+                    <div class="stat-card"><div class="stat-value" id="statNakit">0.00 ₺</div><div class="stat-label">💵 Nakit Ciro</div></div>
+                    <div class="stat-card"><div class="stat-value" id="statKart">0.00 ₺</div><div class="stat-label">💳 Kart Ciro</div></div>
+                    <div class="stat-card"><div class="stat-value" id="statOrtalama">0.00 ₺</div><div class="stat-label">📊 Ort. Fatura</div></div>
                 </div>
-                <div class="chart-container"><canvas id="stokChart"></canvas></div>
-                <div class="chart-container"><canvas id="kasaChart"></canvas></div>
-                <button class="btn-success" style="width:100%;padding:12px;border:none;border-radius:10px;" onclick="excelIndir()">📥 Excel</button>
+
+                <div class="chart-container">
+                    <h4 style="color:var(--text);margin-bottom:10px;">📊 Ürün Stok Durumu</h4>
+                    <canvas id="stokChart"></canvas>
+                </div>
+
+                <div class="chart-container">
+                    <h4 style="color:var(--text);margin-bottom:10px;">💰 Ödeme Yöntemi Dağılımı</h4>
+                    <canvas id="odemeChart"></canvas>
+                </div>
+
+                <div class="chart-container">
+                    <h4 style="color:var(--text);margin-bottom:10px;">📈 Günlük Ciro Grafiği (Son 10 İşlem)</h4>
+                    <canvas id="ciroChart"></canvas>
+                </div>
+
+                <div class="chart-container">
+                    <h4 style="color:var(--text);margin-bottom:10px;">🏷️ Kategori Bazlı Ürün Dağılımı</h4>
+                    <canvas id="kategoriChart"></canvas>
+                </div>
+
+                <button class="btn-success" style="width:100%;padding:12px;border:none;border-radius:10px;" onclick="excelIndir()">📥 Excel'e Aktar</button>
             </div>
 
             <!-- FATURALAR -->
@@ -378,12 +380,17 @@
         let barkodStream = null;
         let barkodOkuyucu = null;
         
+        // Chart instances
+        let stokChartInstance = null;
+        let odemeChartInstance = null;
+        let ciroChartInstance = null;
+        let kategoriChartInstance = null;
+        
         // TEMA
         let temaRengi = localStorage.getItem("temaRengi") || "#00d084";
         let marketAdi = localStorage.getItem("marketAdi") || "ATEŞOĞLU MARKET PRO";
         let logoData = localStorage.getItem("logoData") || null;
 
-        // KATEGORİLER
         const kategoriler = [
             { ad: 'Tümü', emoji: '📦' },
             { ad: 'Gıda', emoji: '🍞' },
@@ -447,24 +454,48 @@
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             document.getElementById(id).classList.add('active');
             const tabMap = { 'urun': 0, 'satis': 1, 'barkod': 2, 'rapor': 3, 'faturalar': 4, 'admin': 5 };
-            document.querySelectorAll('.tab-btn')[tabMap[id]]?.classList.add('active');
+            const btns = document.querySelectorAll('.tab-btn');
+            if (btns[tabMap[id]]) btns[tabMap[id]].classList.add('active');
+            
             render();
-            if (id === 'rapor') setTimeout(cizGrafikler, 300);
+            
+            if (id === 'rapor') {
+                // Rapor sayfasına geçince istatistikleri ve grafikleri güncelle
+                setTimeout(() => {
+                    raporIstatistikGuncelle();
+                    cizGrafikler();
+                }, 200);
+            }
             if (id === 'faturalar') faturaGecmisiGoster();
             if (id === 'admin') temalariYukle();
             if (id !== 'barkod') barkodDurdur();
         }
 
-        // ============ BARKOD OKUYUCU (BarcodeDetector API + Manuel) ============
+        // ============ RAPOR İSTATİSTİK GÜNCELLEME ============
+        function raporIstatistikGuncelle() {
+            const toplamStok = urunler.reduce((a, b) => a + b.stok, 0);
+            const stokDegeri = urunler.reduce((a, b) => a + (b.fiyat * b.stok), 0);
+            const toplamCiro = sonSatislar.reduce((a, b) => a + b.toplam, 0);
+            const nakitCiro = sonSatislar.filter(f => f.odemeTuru === 'Nakit').reduce((a, b) => a + b.toplam, 0);
+            const kartCiro = sonSatislar.filter(f => f.odemeTuru === 'Kredi Kartı' || f.odemeTuru === 'Banka Kartı').reduce((a, b) => a + b.toplam, 0);
+            const ortalamaFatura = sonSatislar.length > 0 ? toplamCiro / sonSatislar.length : 0;
+
+            document.getElementById('statUrun').textContent = urunler.length;
+            document.getElementById('statStok').textContent = toplamStok;
+            document.getElementById('statKasa').textContent = kasa.toFixed(2) + ' ₺';
+            document.getElementById('statDeger').textContent = stokDegeri.toFixed(2) + ' ₺';
+            document.getElementById('statFatura').textContent = sonSatislar.length;
+            document.getElementById('statCiro').textContent = toplamCiro.toFixed(2) + ' ₺';
+            document.getElementById('statNakit').textContent = nakitCiro.toFixed(2) + ' ₺';
+            document.getElementById('statKart').textContent = kartCiro.toFixed(2) + ' ₺';
+            document.getElementById('statOrtalama').textContent = ortalamaFatura.toFixed(2) + ' ₺';
+        }
+
+        // ============ BARKOD ============
         async function barkodOkut() {
             const scannerArea = document.getElementById('scannerArea');
-            
-            if (scannerArea.style.display === 'block') {
-                barkodDurdur();
-                return;
-            }
+            if (scannerArea.style.display === 'block') { barkodDurdur(); return; }
 
-            // BarcodeDetector API desteğini kontrol et
             if ('BarcodeDetector' in window) {
                 try {
                     scannerArea.style.display = 'block';
@@ -480,7 +511,6 @@
                     await video.play();
                     
                     barkodOkuyucu = new BarcodeDetector({ formats: ['ean_13', 'ean_8', 'upc_a', 'upc_e', 'code_128', 'code_39', 'code_93', 'codabar', 'itf', 'qr_code', 'data_matrix', 'pdf417', 'aztec'] });
-                    
                     document.getElementById('scannerStatus').textContent = '🔍 Barkodu kameraya gösterin...';
                     
                     const scanLoop = async () => {
@@ -488,47 +518,39 @@
                         try {
                             const barcodes = await barkodOkuyucu.detect(video);
                             if (barcodes.length > 0) {
-                                const barkod = barcodes[0].rawValue;
-                                barkodBulundu(barkod);
+                                barkodBulundu(barcodes[0].rawValue);
                                 return;
                             }
                         } catch (e) {}
                         requestAnimationFrame(scanLoop);
                     };
                     scanLoop();
-                    
                 } catch (err) {
-                    console.log('BarcodeDetector API kullanılamadı:', err);
-                    toast('⚠️ Barkod API desteklenmiyor. Manuel giriş yapın veya Chrome/Edge kullanın.', 'error');
+                    console.log('BarcodeDetector API hatası:', err);
+                    toast('⚠️ Barkod API kullanılamadı. Manuel giriş yapın.', 'error');
                     barkodDurdur();
                 }
             } else {
-                toast('⚠️ Tarayıcınız barkod okumayı desteklemiyor. Chrome/Edge tarayıcı kullanın veya manuel giriş yapın.', 'error');
+                toast('⚠️ Tarayıcınız barkod okumayı desteklemiyor. Chrome/Edge kullanın.', 'error');
             }
         }
 
         function barkodBulundu(barkod) {
             document.getElementById('scannerStatus').textContent = `✅ Okundu: ${barkod}`;
             document.getElementById('scannerStatus').style.color = 'var(--primary)';
-            
             const urun = urunler.find(u => u.kod === barkod);
             const resultEl = document.getElementById('scannerResult');
-            
             if (urun) {
                 resultEl.innerHTML = `<div style="color:var(--primary);">✅ <b>${urun.ad}</b> - ${urun.fiyat.toFixed(2)} ₺ | Stok: ${urun.stok}</div>`;
             } else {
                 resultEl.innerHTML = `<div style="color:var(--warning);">⚠️ Kayıtsız: <b>${barkod}</b></div>`;
             }
-            
             document.getElementById('manuelBarkod').value = barkod;
             toast(`✅ Barkod: ${barkod}`);
         }
 
         function barkodDurdur() {
-            if (barkodStream) {
-                barkodStream.getTracks().forEach(t => t.stop());
-                barkodStream = null;
-            }
+            if (barkodStream) { barkodStream.getTracks().forEach(t => t.stop()); barkodStream = null; }
             barkodOkuyucu = null;
             document.getElementById('scannerArea').style.display = 'none';
             document.getElementById('btnBarkod').style.display = 'inline-block';
@@ -547,7 +569,9 @@
         function odemeSec(tip) {
             seciliOdeme = tip;
             document.querySelectorAll('.odeme-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById('odeme' + (tip === 'Nakit' ? 'Nakit' : tip === 'Kredi Kartı' ? 'Kart' : 'Banka')).classList.add('active');
+            if (tip === 'Nakit') document.getElementById('odemeNakit').classList.add('active');
+            else if (tip === 'Kredi Kartı') document.getElementById('odemeKart').classList.add('active');
+            else document.getElementById('odemeBanka').classList.add('active');
         }
 
         // ============ LOGO ============
@@ -564,14 +588,10 @@
         
         function logoGuncelle() {
             const logoPreview = document.getElementById('logoPreview');
-            const loginLogo = document.getElementById('loginLogoEmoji');
             if (logoData) {
                 logoPreview.innerHTML = `<img src="${logoData}" style="max-width:100%;max-height:100%;object-fit:contain;">`;
-                loginLogo.style.display = 'none';
-                document.getElementById('loginLogoContainer') || (document.querySelector('.login-container').insertBefore(Object.assign(document.createElement('div'), {id:'loginLogoContainer',innerHTML:`<img src="${logoData}" style="width:100px;height:100px;object-fit:contain;margin:0 auto 10px;border-radius:20px;animation:pulse 2s infinite;">`}), document.querySelector('.login-title')));
             } else {
                 logoPreview.innerHTML = '<span style="font-size:50px;">🛒</span>';
-                loginLogo.style.display = 'block';
             }
         }
 
@@ -688,7 +708,7 @@
         }
 
         function filtre() {
-            const q = document.getElementById('ara').value.toLowerCase();
+            const q = document.getElementById('ara')?.value?.toLowerCase() || '';
             const urunSec = document.getElementById('urunSec');
             if (!urunSec) return;
             
@@ -718,28 +738,35 @@
 
         // ============ RENDER ============
         function render() {
-            document.getElementById('kasaText').innerText = kasa.toFixed(2);
-            document.getElementById('urunSayisi').innerText = `${urunler.length} ürün`;
+            // Kasa
+            const kasaEl = document.getElementById('kasaText');
+            if (kasaEl) kasaEl.innerText = kasa.toFixed(2);
+            
+            // Ürün sayısı
+            const urunSayisiEl = document.getElementById('urunSayisi');
+            if (urunSayisiEl) urunSayisiEl.innerText = `${urunler.length} ürün`;
 
             // Ürün listesi (yönetim)
             const ul = document.getElementById('urunList');
-            if (urunler.length === 0) {
-                ul.innerHTML = '<div class="card" style="text-align:center;padding:30px;">📦 Henüz ürün yok</div>';
-            } else {
-                ul.innerHTML = urunler.map((u,i) => `
-                    <div class="card" style="background:${u.stok===0?'#1a0a0a':''}">
-                        <div class="card-header">
-                            <span class="card-title">${u.emoji||'📦'} ${u.ad} <small style="color:var(--text-secondary);">[${u.kategori||'Diğer'}]</small></span>
-                            <span class="card-price">${u.fiyat.toFixed(2)} ₺</span>
-                        </div>
-                        <span class="card-stock ${u.stok===0?'stock-out':u.stok<5?'stock-low':''}">📊 Stok: ${u.stok} ${u.stok===0?'❌':''}</span>
-                        ${u.kod?`<br><span style="font-size:0.8em;color:#666;">🏷️ ${u.kod}</span>`:''}
-                        <div class="card-actions">
-                            <button class="btn-sm btn-success" onclick="stokGuncelle(${i})">📦 Stok</button>
-                            <button class="btn-sm" style="background:var(--warning);color:#000;" onclick="fiyatGuncelle(${i})">💲 Fiyat</button>
-                            <button class="btn-sm btn-danger" onclick="urunSil(${i})">🗑️ Sil</button>
-                        </div>
-                    </div>`).join('');
+            if (ul) {
+                if (urunler.length === 0) {
+                    ul.innerHTML = '<div class="card" style="text-align:center;padding:30px;">📦 Henüz ürün yok</div>';
+                } else {
+                    ul.innerHTML = urunler.map((u,i) => `
+                        <div class="card" style="background:${u.stok===0?'#1a0a0a':''}">
+                            <div class="card-header">
+                                <span class="card-title">${u.emoji||'📦'} ${u.ad} <small style="color:var(--text-secondary);">[${u.kategori||'Diğer'}]</small></span>
+                                <span class="card-price">${u.fiyat.toFixed(2)} ₺</span>
+                            </div>
+                            <span class="card-stock ${u.stok===0?'stock-out':u.stok<5?'stock-low':''}">📊 Stok: ${u.stok} ${u.stok===0?'❌':''}</span>
+                            ${u.kod?`<br><span style="font-size:0.8em;color:#666;">🏷️ ${u.kod}</span>`:''}
+                            <div class="card-actions">
+                                <button class="btn-sm btn-success" onclick="stokGuncelle(${i})">📦 Stok</button>
+                                <button class="btn-sm" style="background:var(--warning);color:#000;" onclick="fiyatGuncelle(${i})">💲 Fiyat</button>
+                                <button class="btn-sm btn-danger" onclick="urunSil(${i})">🗑️ Sil</button>
+                            </div>
+                        </div>`).join('');
+                }
             }
 
             // Kategori listesi (satış)
@@ -769,26 +796,33 @@
                             <button class="btn-icon danger" onclick="sepettenCikar(${i})">➖</button>
                             <button class="btn-icon danger" onclick="sepettenTamamenCikar(${i})">✖️</button>
                         </div>`).join('');
-                document.getElementById('toplam').innerText = sepet.reduce((a,b)=>a+(b.fiyat*b.adet),0).toFixed(2);
+                const toplamEl = document.getElementById('toplam');
+                if (toplamEl) toplamEl.innerText = sepet.reduce((a,b)=>a+(b.fiyat*b.adet),0).toFixed(2);
             }
 
-            // Rapor
-            document.getElementById('statUrun').innerText = urunler.length;
-            document.getElementById('statStok').innerText = urunler.reduce((a,b)=>a+b.stok,0);
-            document.getElementById('statKasa').innerText = kasa.toFixed(2)+' ₺';
-            document.getElementById('statFatura').innerText = sonSatislar.length;
+            // Rapor istatistiklerini güncelle (eğer rapor sayfası aktifse)
+            if (document.getElementById('rapor').classList.contains('active')) {
+                raporIstatistikGuncelle();
+            }
         }
 
         function kategoriSec(kat) {
             seciliKategori = kat;
             document.querySelectorAll('.kategori-card').forEach(k => k.classList.remove('active'));
-            event.target.closest('.kategori-card').classList.add('active');
+            // Tıklanan kartı bul ve active yap
+            const cards = document.querySelectorAll('.kategori-card');
+            cards.forEach(card => {
+                if (card.querySelector('.kategori-ad').textContent === kat) {
+                    card.classList.add('active');
+                }
+            });
             filtre();
         }
 
         // ============ FATURA GEÇMİŞİ ============
         function faturaGecmisiGoster(f = '') {
             const el = document.getElementById('faturaGecmisiList');
+            if (!el) return;
             let list = sonSatislar;
             if (f) list = sonSatislar.filter(x => x.faturaNo.toLowerCase().includes(f) || new Date(x.tarih).toLocaleString('tr-TR').includes(f));
             el.innerHTML = list.length === 0 ? '<div class="card" style="text-align:center;padding:30px;">📋 Fatura yok</div>' :
@@ -810,6 +844,164 @@
             const wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, ws, "Faturalar");
             XLSX.writeFile(wb, `Faturalar_${new Date().toISOString().slice(0,10)}.xlsx`);
             toast('📥 Excel indirildi!');
+        }
+
+        // ============ GRAFİKLER ============
+        function cizGrafikler() {
+            // Stok Grafiği
+            const stokCanvas = document.getElementById('stokChart');
+            if (stokCanvas && urunler.length > 0) {
+                const ctx = stokCanvas.getContext('2d');
+                if (stokChartInstance) stokChartInstance.destroy();
+                stokChartInstance = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: urunler.map(u => u.ad),
+                        datasets: [{
+                            label: 'Stok Miktarı',
+                            data: urunler.map(u => u.stok),
+                            backgroundColor: urunler.map(u => u.stok === 0 ? '#ff4757' : u.stok < 5 ? '#ffa502' : temaRengi),
+                            borderRadius: 8,
+                            borderWidth: 0
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: true,
+                        plugins: {
+                            legend: { display: false }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: { color: '#aaa', stepSize: 1 },
+                                grid: { color: '#333' }
+                            },
+                            x: {
+                                ticks: { color: '#aaa', maxRotation: 45, minRotation: 0 },
+                                grid: { display: false }
+                            }
+                        }
+                    }
+                });
+            }
+
+            // Ödeme Dağılımı Grafiği
+            const odemeCanvas = document.getElementById('odemeChart');
+            if (odemeCanvas) {
+                const ctx = odemeCanvas.getContext('2d');
+                if (odemeChartInstance) odemeChartInstance.destroy();
+                
+                const nakitToplam = sonSatislar.filter(f => f.odemeTuru === 'Nakit').reduce((a, b) => a + b.toplam, 0);
+                const kartToplam = sonSatislar.filter(f => f.odemeTuru === 'Kredi Kartı').reduce((a, b) => a + b.toplam, 0);
+                const bankaToplam = sonSatislar.filter(f => f.odemeTuru === 'Banka Kartı').reduce((a, b) => a + b.toplam, 0);
+                
+                odemeChartInstance = new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Nakit 💵', 'Kredi Kartı 💳', 'Banka Kartı 🏦'],
+                        datasets: [{
+                            data: [nakitToplam, kartToplam, bankaToplam],
+                            backgroundColor: ['#00d084', '#3b82f6', '#f59e0b'],
+                            borderWidth: 3,
+                            borderColor: '#0a0a0a'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: true,
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: { color: '#aaa', padding: 15 }
+                            }
+                        }
+                    }
+                });
+            }
+
+            // Ciro Grafiği
+            const ciroCanvas = document.getElementById('ciroChart');
+            if (ciroCanvas && sonSatislar.length > 0) {
+                const ctx = ciroCanvas.getContext('2d');
+                if (ciroChartInstance) ciroChartInstance.destroy();
+                
+                const son10 = sonSatislar.slice(0, 10).reverse();
+                
+                ciroChartInstance = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: son10.map(f => new Date(f.tarih).toLocaleDateString('tr-TR', {day: '2-digit', month: '2-digit'})),
+                        datasets: [{
+                            label: 'Ciro (₺)',
+                            data: son10.map(f => f.toplam),
+                            borderColor: temaRengi,
+                            backgroundColor: temaRengi + '33',
+                            fill: true,
+                            tension: 0.4,
+                            pointRadius: 5,
+                            pointBackgroundColor: temaRengi
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: true,
+                        plugins: {
+                            legend: { labels: { color: '#aaa' } }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: { color: '#aaa' },
+                                grid: { color: '#333' }
+                            },
+                            x: {
+                                ticks: { color: '#aaa' },
+                                grid: { display: false }
+                            }
+                        }
+                    }
+                });
+            }
+
+            // Kategori Dağılımı Grafiği
+            const kategoriCanvas = document.getElementById('kategoriChart');
+            if (kategoriCanvas && urunler.length > 0) {
+                const ctx = kategoriCanvas.getContext('2d');
+                if (kategoriChartInstance) kategoriChartInstance.destroy();
+                
+                // Kategorilere göre ürün sayısı
+                const kategoriSayilari = {};
+                urunler.forEach(u => {
+                    const kat = u.kategori || 'Diğer';
+                    kategoriSayilari[kat] = (kategoriSayilari[kat] || 0) + 1;
+                });
+                
+                const renkler = ['#00d084', '#3b82f6', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899', '#06b6d4', '#84cc16'];
+                
+                kategoriChartInstance = new Chart(ctx, {
+                    type: 'pie',
+                    data: {
+                        labels: Object.keys(kategoriSayilari),
+                        datasets: [{
+                            data: Object.values(kategoriSayilari),
+                            backgroundColor: renkler.slice(0, Object.keys(kategoriSayilari).length),
+                            borderWidth: 2,
+                            borderColor: '#0a0a0a'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: true,
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: { color: '#aaa', padding: 10 }
+                            }
+                        }
+                    }
+                });
+            }
         }
 
         function verileriYedekle() {
@@ -844,23 +1036,23 @@
             }
         }
 
-        function cizGrafikler() {
-            const sc = document.getElementById('stokChart');
-            if (sc && urunler.length > 0) {
-                const ctx = sc.getContext('2d'); if (stokChartInstance) stokChartInstance.destroy();
-                stokChartInstance = new Chart(ctx, {type:'bar',data:{labels:urunler.map(u=>u.ad),datasets:[{label:'Stok',data:urunler.map(u=>u.stok),backgroundColor:urunler.map(u=>u.stok===0?'#ff4757':u.stok<5?'#ffa502':temaRengi),borderRadius:8}]},options:{responsive:true}});
-            }
-            const kc = document.getElementById('kasaChart');
-            if (kc) {
-                const ctx = kc.getContext('2d'); if (kasaChartInstance) kasaChartInstance.destroy();
-                kasaChartInstance = new Chart(ctx, {type:'doughnut',data:{labels:['Nakit','Kart','Banka'],datasets:[{data:[sonSatislar.filter(f=>f.odemeTuru==='Nakit').reduce((a,b)=>a+b.toplam,0),sonSatislar.filter(f=>f.odemeTuru==='Kredi Kartı').reduce((a,b)=>a+b.toplam,0),sonSatislar.filter(f=>f.odemeTuru==='Banka Kartı').reduce((a,b)=>a+b.toplam,0)],backgroundColor:['#00d084','#3b82f6','#f59e0b'],borderWidth:2}]},options:{responsive:true,plugins:{title:{display:true,text:'💰 Ödeme Dağılımı',color:'#fff'}}}});
-            }
-        }
-
         function excelIndir() {
             if (!urunler.length) return;
             const ws = XLSX.utils.json_to_sheet(urunler.map((u,i)=>({'No':i+1,'Ürün':u.ad,'Kategori':u.kategori||'Diğer','Fiyat':u.fiyat,'Stok':u.stok,'Barkod':u.kod||'-','Değer':(u.fiyat*u.stok).toFixed(2)})));
             const wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb,ws,"Ürünler");
+            
+            // Özet sayfası
+            const ozet = [{
+                'Toplam Ürün': urunler.length,
+                'Toplam Stok': urunler.reduce((a,b)=>a+b.stok,0),
+                'Stok Değeri': urunler.reduce((a,b)=>a+(b.fiyat*b.stok),0).toFixed(2)+' ₺',
+                'Kasa': kasa.toFixed(2)+' ₺',
+                'Toplam Fatura': sonSatislar.length,
+                'Toplam Ciro': sonSatislar.reduce((a,b)=>a+b.toplam,0).toFixed(2)+' ₺'
+            }];
+            const ws2 = XLSX.utils.json_to_sheet(ozet);
+            XLSX.utils.book_append_sheet(wb, ws2, "Özet");
+            
             XLSX.writeFile(wb,`Rapor_${new Date().toISOString().slice(0,10)}.xlsx`);
             toast('📥 Excel indirildi!');
         }
@@ -887,8 +1079,9 @@
 
         temalariYukle();
         render();
-        console.log('🚀 ATEŞOĞLU MARKET PRO - BarcodeDetector API ile Barkod Okuma');
-        console.log('📷 Chrome/Edge tarayıcılarda BarcodeDetector API kullanılır');
+        
+        console.log('🚀 ATEŞOĞLU MARKET PRO Hazır!');
+        console.log('📊 Raporlar sayfası düzeltildi - Tüm grafikler ve istatistikler çalışıyor');
     </script>
 
 </body>
